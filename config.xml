@@ -14,4 +14,9 @@
 Vikings
 </author>
 
+<icon src="ldpi.png" gap:platform="android" gap:qualifier="ldpi" />
+<icon src="mdpi.png" gap:platform="android" gap:qualifier="mdpi" />
+<icon src="hdpi.png" gap:platform="android" gap:qualifier="hdpi" />
+<icon src="xhdpi.png" gap:platform="android" gap:qualifier="xhdpi" />
+
 </widget>
