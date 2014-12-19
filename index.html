@@ -2,6 +2,8 @@
 <head>
 <meta charset="utf-8">
 <title>五金APP</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+
 <link href="jquery.mobile-1.0.min.css" rel="stylesheet" type="text/css"/>
 <script src="jquery-1.6.4.min.js" type="text/javascript"></script>
 <script src="jquery.mobile-1.0.min.js" type="text/javascript"></script>
@@ -34,9 +36,54 @@ $(function(){
             });  
 </script>
 
+<!--script type="text/javascript" src="iscroll.js"></script>
+
+<script type="text/javascript">
+
+var myScroll;
+
+function loaded () {
+	myScroll = new IScroll('#wrapper', {
+		scrollbars: true,
+		mouseWheel: true,
+		interactiveScrollbars: true,
+		shrinkScrollbars: 'scale',
+		fadeScrollbars: true
+	});
+}
+
+document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
+
+</script-->
+
 <style>
-.home_image { background: url(images/head-backgroup.png) 50% 50% repeat; background-size: 25px 25px; }
+.home_image { background: url(images/head-backgroup.png) 50% 50% repeat; background-size: 25px 25px;
+ }
 .search_image {background: url(images/search-bg.png) 50% 50% repeat; background-size: 40px 25px;}
+.wrapper {
+	position: absolute;
+	z-index: 1;
+	top: 45px;
+	bottom: 48px;
+	left: 0;
+	width: 100%;
+	background: #ccc;
+	overflow: hidden;
+}
+
+
+.footer {
+	position: absolute;
+	z-index: 99;
+	top: 375px;
+	left: 0;
+	width: 100%;
+	height: 60px;
+	background: #444;
+	padding: 0;
+	border-top: 1px solid #444;
+}
+
 </style>
 </head> 
 <body> 
@@ -45,27 +92,33 @@ $(function(){
 	<div data-role="header" class="home_image">
 	
 	  <div class="ui-grid-b">
-	    <div class="ui-block-a" align="right"><img src="images/logo.png" height="30" /></div>
-	    <div class="ui-block-b" align="left"><input type="text" name="textinput"  id="textinput" value="搜索商品" style="background-image:url(images/search-bg.png);border:0px;" /></div>
-	    <div class="ui-block-c" align="left"><img src="images/search.png" height="30" /></div>
+	    <div class="ui-block-a" align="right"><img src="images/logo.png" height="40" /></div>
+	    <div class="ui-block-b" align="left"><dfn>
+        <input type="text"  name="textinput"  id="textinput" value="搜索商品" style="background-image:url(images/search-bg.png);border:0px; height:40" />
+	    </dfn></div>
+	    <div class="ui-block-c" align="left"><img src="images/search.png" height="40" /></div>
       </div>
-      
+ 
+		
 	</div>
-	<div data-role="content">	
+	<div data-role="content" class="wrapper">
+
     <!--幻灯片显示功能add by vikings 20121219 -->
                 	<div id="KinSlideshow" ><a href="#" title="">
-                	<img src="images/home-promote.png" width="448" height="148" alt=""/></a></div>
-    <div class="ui-grid-a">
-                	  <div class="ui-block-a"><img src="images/home-temp.png" width="448"></div>
-              	  </div>
+                	<img src="images/home-promote.png" width="290" height="90" alt=""/></a></div>
+      <span class="ui-block-a"><img src="images/home-temp.png" width="290"></span>
+      <div class="ui-grid-a">
+                	  <div class="ui-block-a"></div>
+</div>
+
      </div>
-	<div data-role="footer">
+	<div data-role="footer" class="footer">
 		   <div  data-role="navbar">
         <ul>
-          <li><a href="#5ghomepage" data-transition="slide" data-direction="reverse"><img src="images/1.png"></a></li>
-          <li><a href="#5gshoplist" data-transition="slide" data-direction="reverse"><img src="images/2.png"></a></li>
-          <li><a href="#5gshopcart" data-transition="slide" data-direction="reverse"><img src="images/3.png"></a></li>
-          <li><a href="#5gmypersonal" data-transition="slide" data-direction="reverse"><img src="images/4.png"></a></li>        
+          <li><a href="#5ghomepage" data-transition="slide" data-direction="reverse"><img src="images/1.png" height="40"></a></li>
+          <li><a href="#5gshoplist" data-transition="slide" data-direction="reverse"><img src="images/2.png" height="40"></a></li>
+          <li><a href="#5gshopcart" data-transition="slide" data-direction="reverse"><img src="images/3.png" height="40"></a></li>
+          <li><a href="#5gmypersonal" data-transition="slide" data-direction="reverse"><img src="images/4.png" height="40"></a></li>        
         </ul>
         </div>
 	</div>
@@ -73,16 +126,18 @@ $(function(){
 
 <div data-role="page" id="5gshoplist">
 	<div data-role="header" class="home_image">
-	 
-      <div class="ui-grid-b">
-	    <div class="ui-block-a" align="right"><img src="images/logo.png" height="30" /></div>
-	    <div class="ui-block-b" align="left"><input type="text" name="textinput"  id="textinput" value="搜索商品" style="background-image:url(images/search-bg.png);border:0px;" /></div>
-	    <div class="ui-block-c" align="left"><img src="images/search.png" height="30" /></div>
+	
+	  <div class="ui-grid-b">
+	    <div class="ui-block-a" align="right"><img src="images/logo.png" height="40" /></div>
+	    <div class="ui-block-b" align="left"><dfn>
+        <input type="text"  name="textinput"  id="textinput" value="搜索商品" style="background-image:url(images/search-bg.png);border:0px; height:40" />
+	    </dfn></div>
+	    <div class="ui-block-c" align="left"><img src="images/search.png" height="40" /></div>
       </div>
  
 		
 	</div>
-	<div data-role="content">	
+	<div data-role="content" class="wrapper">	
 		<ul data-role="listview">
 			<li><a href="#5gshopsecondlist"><img src="images/cat1.png" width="92" height="95"><h1>服饰内衣</h1><p>女装/男装/内衣</p></a></li>
               	<li><a href="#5gshopsecondlist"><img src="images/cat2.png" width="92" height="95"><h1>鞋靴</h1><p>流行男鞋/时尚女鞋</p></a></li>
@@ -90,13 +145,13 @@ $(function(){
 		</ul>
        		
 	</div>
-	<div data-role="footer">
+	<div data-role="footer" class="footer">
 		   <div  data-role="navbar">
         <ul>
-          <li><a href="#5ghomepage" data-transition="slide" data-direction="reverse"><img src="images/1.png"></a></li>
-          <li><a href="#5gshoplist" data-transition="slide" data-direction="reverse"><img src="images/2.png"></a></li>
-          <li><a href="#5gshopcart" data-transition="slide" data-direction="reverse"><img src="images/3.png"></a></li>
-          <li><a href="#5gmypersonal" data-transition="slide" data-direction="reverse"><img src="images/4.png"></a></li>        
+          <li><a href="#5ghomepage" data-transition="slide" data-direction="reverse"><img src="images/1.png" height="40"></a></li>
+          <li><a href="#5gshoplist" data-transition="slide" data-direction="reverse"><img src="images/2.png" height="40"></a></li>
+          <li><a href="#5gshopcart" data-transition="slide" data-direction="reverse"><img src="images/3.png" height="40"></a></li>
+          <li><a href="#5gmypersonal" data-transition="slide" data-direction="reverse"><img src="images/4.png" height="40"></a></li>        
         </ul>
         </div>
 	</div>
@@ -106,14 +161,18 @@ $(function(){
 
 <div data-role="page" id="5gshopsecondlist">
 	<div data-role="header" class="home_image">
+	
 	  <div class="ui-grid-b">
-	    <div class="ui-block-a" align="right"><img src="images/logo.png" height="30" /></div>
-	    <div class="ui-block-b" align="left"><input type="text" name="textinput"  id="textinput" value="搜索商品" style="background-image:url(images/search-bg.png);border:0px;" /></div>
-	    <div class="ui-block-c" align="left"><img src="images/search.png" height="30" /></div>
+	    <div class="ui-block-a" align="right"><img src="images/logo.png" height="40" /></div>
+	    <div class="ui-block-b" align="left"><dfn>
+        <input type="text"  name="textinput"  id="textinput" value="搜索商品" style="background-image:url(images/search-bg.png);border:0px; height:40" />
+	    </dfn></div>
+	    <div class="ui-block-c" align="left"><img src="images/search.png" height="40" /></div>
       </div>
+ 
 		
 	</div>
-	<div data-role="content">	
+	<div data-role="content" class="wrapper">	
 		<ul data-role="listview" id="shlist" data-inset="true">
 			<li><a href="#5gshopdetail"><h1>商务休闲鞋</h1></a></li>
               	<li><a href="#5gshopdetail"><h1>正装鞋</h1></a></li>
@@ -126,13 +185,13 @@ $(function(){
                  <!--li><a href="#" data-role="button" id="more" >更多...</a></li-->
 		</ul>		
 	</div>
-	<div data-role="footer">
+	<div data-role="footer" class="footer">
 		   <div  data-role="navbar">
         <ul>
-          <li><a href="#5ghomepage" data-transition="slide" data-direction="reverse"><img src="images/1.png"></a></li>
-          <li><a href="#5gshoplist" data-transition="slide" data-direction="reverse"><img src="images/2.png"></a></li>
-          <li><a href="#5gshopcart" data-transition="slide" data-direction="reverse"><img src="images/3.png"></a></li>
-          <li><a href="#5gmypersonal" data-transition="slide" data-direction="reverse"><img src="images/4.png"></a></li>        
+          <li><a href="#5ghomepage" data-transition="slide" data-direction="reverse"><img src="images/1.png" height="40"></a></li>
+          <li><a href="#5gshoplist" data-transition="slide" data-direction="reverse"><img src="images/2.png" height="40"></a></li>
+          <li><a href="#5gshopcart" data-transition="slide" data-direction="reverse"><img src="images/3.png" height="40"></a></li>
+          <li><a href="#5gmypersonal" data-transition="slide" data-direction="reverse"><img src="images/4.png" height="40"></a></li>        
         </ul>
         </div>
 	</div>
@@ -141,27 +200,31 @@ $(function(){
 
 <div data-role="page" id="5gshopdetail">
 	<div data-role="header" class="home_image">
+	
 	  <div class="ui-grid-b">
-	    <div class="ui-block-a" align="right"><img src="images/logo.png" height="30" /></div>
-	    <div class="ui-block-b" align="left"><input type="text" name="textinput"  id="textinput" value="搜索商品" style="background-image:url(images/search-bg.png);border:0px;" /></div>
-	    <div class="ui-block-c" align="left"><img src="images/search.png" height="30" /></div>
+	    <div class="ui-block-a" align="right"><img src="images/logo.png" height="40" /></div>
+	    <div class="ui-block-b" align="left"><dfn>
+        <input type="text"  name="textinput"  id="textinput" value="搜索商品" style="background-image:url(images/search-bg.png);border:0px; height:40" />
+	    </dfn></div>
+	    <div class="ui-block-c" align="left"><img src="images/search.png" height="40" /></div>
       </div>
+ 
 		
 	</div>
-	<div data-role="content">	
+	<div data-role="content" class="wrapper">	
 		<ul data-role="listview" id="shlist" data-inset="true">
 			<li><a href="#"><img src="images/2-03.png"/> <h1>花花公子皮鞋 男 商务休闲鞋 正装系带皮鞋 英伦真皮婚鞋男3251...</h1><font color="#FF0000">¥298.00</font><s><font color="grey">¥599.00</font></s></a></li>
               	<li><a href="#"><img src="images/2-06.png"/> <h1>西卡杰森(sikajess)男士商务休闲鞋带单鞋欧美风雕花布洛克...</h1><font color="#FF0000">¥228.00</font><s><font color="grey">¥1198.00</font></s></a></li>
          
 		</ul>		
 	</div>
-	<div data-role="footer">
+	<div data-role="footer" class="footer">
 		   <div  data-role="navbar">
         <ul>
-          <li><a href="#5ghomepage" data-transition="slide" data-direction="reverse"><img src="images/1.png"></a></li>
-          <li><a href="#5gshoplist" data-transition="slide" data-direction="reverse"><img src="images/2.png"></a></li>
-          <li><a href="#5gshopcart" data-transition="slide" data-direction="reverse"><img src="images/3.png"></a></li>
-          <li><a href="#5gmypersonal" data-transition="slide" data-direction="reverse"><img src="images/4.png"></a></li>        
+          <li><a href="#5ghomepage" data-transition="slide" data-direction="reverse"><img src="images/1.png" height="40"></a></li>
+          <li><a href="#5gshoplist" data-transition="slide" data-direction="reverse"><img src="images/2.png" height="40"></a></li>
+          <li><a href="#5gshopcart" data-transition="slide" data-direction="reverse"><img src="images/3.png" height="40"></a></li>
+          <li><a href="#5gmypersonal" data-transition="slide" data-direction="reverse"><img src="images/4.png" height="40"></a></li>        
         </ul>
         </div>
 	</div>
@@ -170,27 +233,31 @@ $(function(){
 
 <div data-role="page" id="5gshopdetail">
 	<div data-role="header" class="home_image">
+	
 	  <div class="ui-grid-b">
-	    <div class="ui-block-a" align="right"><img src="images/logo.png" height="30" /></div>
-	    <div class="ui-block-b" align="left"><input type="text" name="textinput"  id="textinput" value="搜索商品" style="background-image:url(images/search-bg.png);border:0px;" /></div>
-	    <div class="ui-block-c" align="left"><img src="images/search.png" height="30" /></div>
+	    <div class="ui-block-a" align="right"><img src="images/logo.png" height="40" /></div>
+	    <div class="ui-block-b" align="left"><dfn>
+        <input type="text"  name="textinput"  id="textinput" value="搜索商品" style="background-image:url(images/search-bg.png);border:0px; height:40" />
+	    </dfn></div>
+	    <div class="ui-block-c" align="left"><img src="images/search.png" height="40" /></div>
       </div>
+ 
 		
 	</div>
-	<div data-role="content">	
+	<div data-role="content" class="wrapper">	
 		<ul data-role="listview" id="shlist" data-inset="true">
-			<li><a href="shopdesc.html"  rel="external"><img src="images/2_03.png"/> <h1>花花公子皮鞋 男 商务休闲鞋 正装系带皮鞋 英伦真皮婚鞋男3251...</h1><font color="#FF0000">¥298.00</font><s><font color="grey">¥599.00</font></s></a></li>
-              	<li><a href="shopdesc.html"  rel="external"><img src="images/2_06.png"/> <h1>西卡杰森(sikajess)男士商务休闲鞋带单鞋欧美风雕花布洛克...</h1><font color="#FF0000">¥228.00</font><s><font color="grey">¥1198.00</font></s></a></li>
+			<li><a href="shopdesc.html"  rel="external"><img src="images/2-03.png"/> <h1>花花公子皮鞋 男 商务休闲鞋 正装系带皮鞋 英伦真皮婚鞋男3251...</h1><font color="#FF0000">¥298.00</font><s><font color="grey">¥599.00</font></s></a></li>
+              	<li><a href="shopdesc.html"  rel="external"><img src="images/2-06.png"/> <h1>西卡杰森(sikajess)男士商务休闲鞋带单鞋欧美风雕花布洛克...</h1><font color="#FF0000">¥228.00</font><s><font color="grey">¥1198.00</font></s></a></li>
          
 		</ul>		
 	</div>
-	<div data-role="footer">
+	<div data-role="footer" class="footer">
 		   <div  data-role="navbar">
         <ul>
-          <li><a href="#5ghomepage" data-transition="slide" data-direction="reverse"><img src="images/1.png"></a></li>
-          <li><a href="#5gshoplist" data-transition="slide" data-direction="reverse"><img src="images/2.png"></a></li>
-          <li><a href="#5gshopcart" data-transition="slide" data-direction="reverse"><img src="images/3.png"></a></li>
-          <li><a href="#5gmypersonal" data-transition="slide" data-direction="reverse"><img src="images/4.png"></a></li>        
+          <li><a href="#5ghomepage" data-transition="slide" data-direction="reverse"><img src="images/1.png" height="40"></a></li>
+          <li><a href="#5gshoplist" data-transition="slide" data-direction="reverse"><img src="images/2.png" height="40"></a></li>
+          <li><a href="#5gshopcart" data-transition="slide" data-direction="reverse"><img src="images/3.png" height="40"></a></li>
+          <li><a href="#5gmypersonal" data-transition="slide" data-direction="reverse"><img src="images/4.png" height="40"></a></li>        
         </ul>
         </div>
 	</div>
@@ -201,18 +268,18 @@ $(function(){
 	<div data-role="header" class="home_image">
 		<h1>购物车</h1>
 	</div>
-	<div data-role="content">
+	<div data-role="content" class="wrapper">
     <img src="images/cart-temp.png" width="100%" >
     </div>
-<div data-role="footer">
-	     <div  data-role="navbar">
+<div data-role="footer" class="footer">
+		   <div  data-role="navbar">
         <ul>
-          <li><a href="#5ghomepage" data-transition="slide" data-direction="reverse"><img src="images/1.png"></a></li>
-          <li><a href="#5gshoplist" data-transition="slide" data-direction="reverse"><img src="images/2.png"></a></li>
-          <li><a href="#5gshopcart" data-transition="slide" data-direction="reverse"><img src="images/3.png"></a></li>
-          <li><a href="#5gmypersonal" data-transition="slide" data-direction="reverse"><img src="images/4.png"></a></li>        
+          <li><a href="#5ghomepage" data-transition="slide" data-direction="reverse"><img src="images/1.png" height="40"></a></li>
+          <li><a href="#5gshoplist" data-transition="slide" data-direction="reverse"><img src="images/2.png" height="40"></a></li>
+          <li><a href="#5gshopcart" data-transition="slide" data-direction="reverse"><img src="images/3.png" height="40"></a></li>
+          <li><a href="#5gmypersonal" data-transition="slide" data-direction="reverse"><img src="images/4.png" height="40"></a></li>        
         </ul>
-    </div>
+        </div>
 	</div>
 </div>
 
@@ -220,7 +287,7 @@ $(function(){
 	<div data-role="header" class="home_image">
 		<h1>我 的</h1>
 	</div>
-	<div data-role="content">	
+	<div data-role="content" class="wrapper">	
     <img src="images/myperson-temp.png" width="100%"> 
     
     <ul data-role="listview">
@@ -228,13 +295,13 @@ $(function(){
              <li><a href="#"><img src="images/orderfollow.png" width="32" height="32" style="padding-left:60px;padding-top:13px"><h1>订单跟踪</h1></a></li>
 		</ul>		
     </div>
-	<div data-role="footer">
+<div data-role="footer" class="footer">
 		   <div  data-role="navbar">
         <ul>
-          <li><a href="#5ghomepage" data-transition="slide" data-direction="reverse"><img src="images/1.png"></a></li>
-          <li><a href="#5gshoplist" data-transition="slide" data-direction="reverse"><img src="images/2.png"></a></li>
-          <li><a href="#5gshopcart" data-transition="slide" data-direction="reverse"><img src="images/3.png"></a></li>
-          <li><a href="#5gmypersonal" data-transition="slide" data-direction="reverse"><img src="images/4.png"></a></li>        
+          <li><a href="#5ghomepage" data-transition="slide" data-direction="reverse"><img src="images/1.png" height="40"></a></li>
+          <li><a href="#5gshoplist" data-transition="slide" data-direction="reverse"><img src="images/2.png" height="40"></a></li>
+          <li><a href="#5gshopcart" data-transition="slide" data-direction="reverse"><img src="images/3.png" height="40"></a></li>
+          <li><a href="#5gmypersonal" data-transition="slide" data-direction="reverse"><img src="images/4.png" height="40"></a></li>        
         </ul>
         </div>
 	</div>
