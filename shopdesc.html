@@ -9,18 +9,23 @@
     $(function() {  
   
         $("#5gshopdescimg1").bind("swiperight", function() {  
-  
-            $.mobile.changePage("#5gshopdescimg2");  
-  
+            $.mobile.changePage("#5gshopdescimg2");
         });  
-  
-        $("#5gshopdescimg2").bind("swipeleft", function() {  
-  
+         $("#5gshopdescimg1").bind("swipeleft", function() {  
+            $.mobile.changePage("#5gshopdescimg2");
+        });  
+		
+		 $("#5gshopdescimg2").bind("swipeleft", function() {  
             $.mobile.changePage("#5gshopdescimg1", {  
                 transition : "slide",  
                 reverse : true  
             }, true, true);  
-  
+        });  
+        $("#5gshopdescimg2").bind("swiperight", function() {  
+            $.mobile.changePage("#5gshopdescimg1", {  
+                transition : "slide",  
+                reverse : true  
+            }, true, true);  
         });  
   
     });  

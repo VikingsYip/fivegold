@@ -19,6 +19,8 @@ function loaded() {
 		myScroll[1] = new iScroll('wrapper2');
 		myScroll[2] = new iScroll('wrapper3');
 		myScroll[3] = new iScroll('wrapper4');
+		myScroll[4] = new iScroll('wrapper5');
+		myScroll[5] = new iScroll('wrapper6');
 }
 
 document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
@@ -81,39 +83,7 @@ function selectLayer1(i)
 	background: #ccc;
 	overflow: hidden;
 }
-#wrapper2 {
-	position: absolute;
-	z-index: 1;
-	top: 45px;
-	bottom: 40px;
-	left: 0;
-	width: 100%;
-	background: #ccc;
-	overflow: hidden;
-}
-
-#wrapper3 {
-	position: absolute;
-	z-index: 1;
-	top: 45px;
-	bottom: 40px;
-	left: 0;
-	width: 100%;
-	background: #ccc;
-	overflow: hidden;
-}
-
-#wrapper4 {
-	position: absolute;
-	z-index: 1;
-	top: 45px;
-	bottom: 40px;
-	left: 0;
-	width: 100%;
-	background: #ccc;
-	overflow: hidden;
-}
-#wrapper5 {
+#wrapper2,#wrapper3,#wrapper4,#wrapper5,#wrapper6 {
 	position: absolute;
 	z-index: 1;
 	top: 45px;
@@ -134,7 +104,7 @@ function selectLayer1(i)
 	display:inline;
 	}
 	
-	 #scroller1,#scroller2,#scroller3,#scroller4,#scroller5{
+	 #scroller1,#scroller2,#scroller3,#scroller4,#scroller5,#scroller6{
             position:absolute; z-index:1;
         /*	-webkit-touch-callout:none;*/
             -webkit-tap-highlight-color:rgba(0,0,0,0);
@@ -151,9 +121,8 @@ function selectLayer1(i)
      <img src="icon.png" height="40" style="vertical-align:middle" />
     </div>
      <div class="left">
-    <input type="text"  name="textinput"  id="textinput" value="搜索商品" style="background-image:url(images/search-bg.png);border:0px; height:40" />
+    <input type="text"  name="textinput"  id="textinput" value="搜索商品" style="background-image:url(images/search-bg.png);border:0px; height:40;width:280;overflow-x:visible;overflow-y:visible;" />
     </div>
-     <img src="images/search.png" height="40" style="vertical-align:middle" />
      </div>
      
      	<div id="wrapper1">
@@ -211,9 +180,8 @@ function selectLayer1(i)
      <img src="icon.png" height="40" style="vertical-align:middle" />
     </div>
      <div class="left">
-    <input type="text"  name="textinput"  id="textinput" value="搜索商品" style="background-image:url(images/search-bg.png);border:0px; height:40" />
+    <input type="text"  name="textinput"  id="textinput" value="搜索商品" style="background-image:url(images/search-bg.png);border:0px; height:40;width:280;overflow-x:visible;overflow-y:visible;" />
     </div>
-     <img src="images/search.png" height="40" style="vertical-align:middle" />
      </div>
      	<div id="wrapper2">
 			<div id="scroller2">
@@ -246,9 +214,8 @@ function selectLayer1(i)
      <img src="icon.png" height="40" style="vertical-align:middle" />
     </div>
      <div class="left">
-    <input type="text"  name="textinput"  id="textinput" value="搜索商品" style="background-image:url(images/search-bg.png);border:0px; height:40" />
+    <input type="text"  name="textinput"  id="textinput" value="搜索商品" style="background-image:url(images/search-bg.png);border:0px; height:40;width:280;overflow-x:visible;overflow-y:visible;" />
     </div>
-     <img src="images/search.png" height="40" style="vertical-align:middle" />
      </div>
      <div id="wrapper3">
 			<div id="scroller3">
@@ -285,9 +252,8 @@ function selectLayer1(i)
      <img src="icon.png" height="40" style="vertical-align:middle" />
     </div>
      <div class="left">
-    <input type="text"  name="textinput"  id="textinput" value="搜索商品" style="background-image:url(images/search-bg.png);border:0px; height:40" />
+    <input type="text"  name="textinput"  id="textinput" value="搜索商品" style="background-image:url(images/search-bg.png);border:0px; height:40;width:280;overflow-x:visible;overflow-y:visible;" />
     </div>
-     <img src="images/search.png" height="40" style="vertical-align:middle" />
      </div>
       <div id="wrapper4">
 			<div id="scroller4">
@@ -317,11 +283,14 @@ function selectLayer1(i)
 	<div data-role="header" class="home_image">
 		<h1>购物车</h1>
 	</div>
-    
+    <div id="wrapper5">
+			<div id="scroller5">
 	<div data-role="content" class="wrapper">
     <img src="images/cart-temp.png" width="100%" >
     </div>
-<div data-role="footer" class="footer">
+    </div>
+    </div>
+	<div data-role="footer" style="width:100%;height:60px;" id="footer">
 		   <div  data-role="navbar">
         <ul>
           <li><a href="#5ghomepage" data-transition="slide" data-direction="reverse"><img src="images/1.png" height="40"></a></li>
@@ -337,8 +306,8 @@ function selectLayer1(i)
 	<div data-role="header" class="home_image">
 		<h1>我 的</h1>
 	</div>
-        <div id="wrapper5">
-			<div id="scroller5">
+        <div id="wrapper6">
+			<div id="scroller6">
 	<div data-role="content" class="wrapper">	
     <img src="images/myperson-temp.png" width="100%"> 
     
