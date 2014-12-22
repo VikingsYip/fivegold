@@ -31,7 +31,7 @@ function makeList() {
 	  		if (objData.goods_list.length>0){
 			 $.each(objData.goods_list, function (index, term) {
 			 //alert (term.goods_img);
-               html+='<li><img src="'+term.goods_img+'"/><h1>'+term.goods_name+'</h1><p>数量:'+term.goods_number+'</p><font color="black">'+term.market_price+'</font></li>';
+               html+='<li><a href="shopdesc.html?shopid='+term.goods_id+'" rel="external"  ><img src="'+term.goods_img+'"/><h1>'+term.goods_name+'</h1><p>数量:'+term.goods_number+'</p><font color="black">'+term.market_price+'</font></a></li>';
 			   });
 					 //alert(html);
             $('#listallcat').append($(html));

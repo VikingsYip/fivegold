@@ -18,7 +18,8 @@
 
 <script>  
 var shopid = request('shopid') ;
-
+var imagecount = 0;
+var currentimage = 0;
 function makeList() {
 	var xhr = new XMLHttpRequest();
 	xhr.open("GET", "http://120.24.209.210/api/mobile.php?act=goodsdesc&goods_id="+shopid, true);
@@ -31,8 +32,12 @@ function makeList() {
 			var html ='';
 	  		
 			 $.each(objData.listallcat, function (index, term) {	
-			  html+='<img src='+term.bought_goods[0].img_url+' id="shopimg" width="100%">';
-               html+='<li><h1>商品名称</h1><p>'+term.goods_name+'</p></li>';
+			  imagecount = term.bought_goods.length;
+			  if (imagecount>0)
+			  {//初始化显示第一个图片
+			  html+='<img src='+term.bought_goods[currentimage].img_url+' id="shopimg" width="100%">';
+			  }
+			   html+='<li><h1>商品名称</h1><p>'+term.goods_name+'</p></li>';
 			   html+='<li><h1>商品货号</h1><p>'+term.goods_sn+'</p></li>';
 			   html+='<li><h1>商品简单说明</h1><p>'+term.goods_brief+'</p></li>';
 			   html+='<li><h1>详细描述</h1><p>'+term.goods_desc+'</p></li>';
@@ -52,6 +57,16 @@ function makeList() {
 
 $("#5gshoplist").live('pagebeforeshow', function(event) {
     makeList();
+	//为页面添加swip 事件
+    //当我们向右滑动的时候,进入下一图片
+    $('#5gshoplist').bind("swiperight",  function(){
+            showNextImage();
+     });
+	//当我们向左滑动的时候,进入下一图片
+    $('#5gshoplist').bind("swipeleft",  function(){
+            showNextImage();
+     });
+     
 });
 
 function addtocart(){
@@ -70,8 +85,45 @@ var xhr = new XMLHttpRequest();
 	xhr.send();
 }
 
+function showNextImage(){
+var xhr = new XMLHttpRequest();
+	xhr.open("GET", "http://120.24.209.210/api/mobile.php?act=goodsdesc&goods_id="+shopid, true);
+	xhr.onreadystatechange = function() {
+  		 if (xhr.readyState==4 && xhr.status==200){
+    		var resultfromphp = xhr.responseText;
+			//alert(resultfromphp);
+      		  var objData = jQuery.parseJSON(resultfromphp);
+			 
+			 $.each(objData.listallcat, function (index, term) {	
+			  //alert(imagecount);
+			  //alert(currentimage);
+			  
+			  if (imagecount>0 && currentimage<imagecount-1)
+			  {
+		      //alert(document.getElementById('shopimg').src);
+			  //alert(term.bought_goods[++currentimage].img_url);
+			  //显示下一张图片
+			  document.getElementById('shopimg').src=term.bought_goods[++currentimage].img_url;
+			  }else{
+				 currentimage=0;
+				 document.getElementById('shopimg').src=term.bought_goods[currentimage].img_url;
+			  }
+			   });
+			
+  		}
+	};
+	xhr.send();	
+}
 	
-	
+/*
+            //在页面初始化的时候,利用phonegap初始化我们的应用
+            $('body').live("pageinit",function(){
+               init();
+            });
+           
+           */
+ 
+       	
 /*
     $(function() {  
   
@@ -124,7 +176,7 @@ var xhr = new XMLHttpRequest();
  <div class="ui-grid-b">
 	    <div class="ui-block-a"><img src="images/focus.png"  height="40"></div>
 	    <div class="ui-block-b"><a href="javascript:addtocart();"><img src="images/addtocart.png" height="40"></a></div>
-	    <div class="ui-block-c" align="right"><img src="images/cart.png"  height="40"></div>
+	    <div class="ui-block-c" align="right"><a href="shopcart.html"  rel="external" data-transition="slide"><img src="images/cart.png"  height="40"></a></div>
       </div>
     
 	</div>

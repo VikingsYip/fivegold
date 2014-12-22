@@ -19,4 +19,6 @@ Vikings
 <icon src="hdpi.png" gap:platform="android" gap:qualifier="hdpi" />
 <icon src="xhdpi.png" gap:platform="android" gap:qualifier="xhdpi" />
 
+<preference name="orientation" value="portrait" />
+
 </widget>
