@@ -15,6 +15,13 @@
 
 
 <script language="javascript">
+function hide(){
+$.mobile.hidePageLoadingMsg();
+}
+$(document).ready(function() {
+    setTimeout("hide()",1000);
+    $.mobile.showPageLoadingMsg();
+});
 var firstcatid = 1;
 var secondcatid = request('firstcatid');
 

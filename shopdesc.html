@@ -35,7 +35,9 @@ function makeList() {
 			  imagecount = term.bought_goods.length;
 			  if (imagecount>0)
 			  {//初始化显示第一个图片
-			  html+='<img src='+term.bought_goods[currentimage].img_url+' id="shopimg" width="100%">';
+			  //html+='<img src='+term.bought_goods[currentimage].img_url+' id="shopimg" width="100%">';
+			   //alert (term.bought_goods[currentimage].img_url);
+			   document.getElementById('shopimg').src=term.bought_goods[currentimage].img_url;
 			  }
 			   html+='<li><h1>商品名称</h1><p>'+term.goods_name+'</p></li>';
 			   html+='<li><h1>商品货号</h1><p>'+term.goods_sn+'</p></li>';
@@ -59,14 +61,23 @@ $("#5gshoplist").live('pagebeforeshow', function(event) {
     makeList();
 	//为页面添加swip 事件
     //当我们向右滑动的时候,进入下一图片
-    $('#5gshoplist').bind("swiperight",  function(){
+    $('#shopimg').bind("swiperight",  function(){
+           //alert('swiperight');
             showNextImage();
      });
 	//当我们向左滑动的时候,进入下一图片
-    $('#5gshoplist').bind("swipeleft",  function(){
+    $('#shopimg').bind("swipeleft",  function(){
+    //alert('swipeleft');
             showNextImage();
      });
-     
+});
+
+function hide(){
+$.mobile.hidePageLoadingMsg();
+}
+$(document).ready(function() {
+    setTimeout("hide()",2000);
+    $.mobile.showPageLoadingMsg();
 });
 
 function addtocart(){
@@ -167,7 +178,7 @@ var xhr = new XMLHttpRequest();
 	<div data-role="content" >
        
 <ul data-role="listview" id="listallcat">
-  
+  <img src="xhdpi.png" id="shopimg" width="100%"/>
 </ul>
        </div>
        </div>		

@@ -1,4 +1,7 @@
 // JavaScript Document
+function hide(){
+$.mobile.hidePageLoadingMsg();
+}
 
 function request(paras){ 
 var url = location.href;  

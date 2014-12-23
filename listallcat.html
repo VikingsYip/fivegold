@@ -14,7 +14,16 @@
       				<script type="text/javascript" src="iscroll.js"></script>
 <script type="text/javascript" src="fivegold.js"></script>
 
+
 <script language="javascript">
+function hide(){
+$.mobile.hidePageLoadingMsg();
+}
+$(document).ready(function() {
+    setTimeout("hide()",1000);
+    $.mobile.showPageLoadingMsg();
+});
+
 var firstcatid = 0;
 var secondcatid = 0;
 
