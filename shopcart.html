@@ -26,28 +26,19 @@ function delcart(recid){
   		 if (xhr.readyState==4 && xhr.status==200){
     		var resultfromphp = xhr.responseText;
 				//alert (resultfromphp);
-				
+			alert ('删除成功');
+			 //$('#listallcat').removeData(;
+			 document.location.href="shopcart.html";
+				// makeList();
   		}
 	};
 	xhr.send();
 }
 
-function editcart(recid){
-	var newnumber=document.getElementById('goods'+recid).value;
-	//alert(newnumber);
-    var xhr = new XMLHttpRequest();
-	xhr.open("GET", "http://120.24.209.210/api/mobile.php?act=edltbuycart&rec_id="+recid+"&new_number="+newnumber, true);
-	xhr.onreadystatechange = function() {
-  		 if (xhr.readyState==4 && xhr.status==200){
-    		var resultfromphp = xhr.responseText;
-    		var objData = jQuery.parseJSON(resultfromphp);
-    		alert (objData.rsgmsg);
-		 }
-	};
-	xhr.send();
-}
 
 function addOrder(){
+
+      document.location.href="addressMange.html";
 	/*(var xhr = new XMLHttpRequest();
 	xhr.open("GET", "http://120.24.209.210/api/mobile.php?act=buylistcart&user_id=24", true);
 	xhr.onreadystatechange = function() {
@@ -73,7 +64,7 @@ function makeList() {
 	  		if (objData.goods_list.length>0){
 			 $.each(objData.goods_list, function (index, term) {
 			 //alert (term.goods_img);
-               html+='<li><img src="'+term.goods_img+'"/><h1>'+term.goods_name+'</h1><p>数量:<input type="text" maxlength="2" id="goods'+term.rec_id+'" value="'+term.goods_number+'"/></p><p><font color="red">价格:'+term.goods_price+'</font></p><p>市场价格:'+term.market_price+'</p></li><a href="javascript:editcart('+term.rec_id+')">修改</a><a href="javascript:delcart('+term.rec_id+')">删除</a>';
+               html+='<li><a href="shopcartdialog.html?goodsnum='+term.goods_number+'&recid='+term.rec_id+'" data-inline="true" rel="external"  data-rel="dialog" data-transition="pop" ><img src="'+term.goods_img+'"/><h1 >'+term.goods_name+'</h1><p>数量:'+term.goods_number+'</span></p><p><font color="red">价格:'+term.goods_price+'</font></p><p>市场价格:'+term.market_price+'</p></a><a href="javascript:delcart('+term.rec_id+')">删除</a></li>';
 			   });
 			   html+='<li><h1><font color="red">总计:'+objData.total.goods_price+'</font></h1><p><font color="black">市场价格:<s>'+objData.total.market_price+'</font></s></p></li>';
 					 //alert(html);
@@ -105,9 +96,9 @@ $("#5gshoplist").live('pagebeforeshow', function(event) {
 <div data-role="page" id="5gshoplist">
 	<div data-role="header" data-theme="none" id="header" class="home_image">
             <div class="ui-grid-b">
-	    <div class="ui-block-a" align="left"><a href="javascript:addOrder()" style="-webkit-border-radius:5px; background:-webkit-gradient(linear, 0 0, 0 100%, from(#ffd167), to(#efa823));border:1px solid #b77012;color:#854d00; text-decoration:none;width:80px;height:38px; display:block; text-align:center; line-height:41px;text-shadow:none;font-size:16px;margin-top:1px;">编辑</a></div>
-	    <div class="ui-block-b" align="left"></div>
-	    <div class="ui-block-c" align="left"></div>
+	    <div class="ui-block-a" align="left"></div>
+	    <div class="ui-block-b" align="center"><font color="white"><p>购物车</p></font></div>
+	    <div class="ui-block-c" align="right"><a href="javascript:addOrder()" style="-webkit-border-radius:5px; background:-webkit-gradient(linear, 0 0, 0 100%, from(#ffd167), to(#efa823));border:1px solid #b77012;color:#854d00; text-decoration:none;width:80px;height:38px; display:block; text-align:center; line-height:41px;text-shadow:none;font-size:16px;margin-top:1px;">下订单</a></div>
      </div>
      </div>
      		 <div id="wrapper">
@@ -131,7 +122,6 @@ $("#5gshoplist").live('pagebeforeshow', function(event) {
         </div>
 	</div>
 </div>
-
 
 </body>
 </html>
