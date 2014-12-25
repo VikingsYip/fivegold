@@ -19,28 +19,30 @@ function newaddress(){
 	//var userid=request('recid');
 	//alert (recid);
 	
-	/*var country=document.getElementById('country').value;
-	var province=document.getElementById('province').value;
-	var city=document.getElementById('city').value;
-	var district=document.getElementById('district').value;*/
-	var address=document.getElementById('address').value;
-	var consignee=document.getElementById('consignee').value;
-	var email=document.getElementById('email').value;	
-	var tel=document.getElementById('tel').value;	
-	var mobile=document.getElementById('mobile').value;	
-	//var zipcode=document.getElementById('zipcode').value;						
-	
-	//var posturl ="http://120.24.209.210/api/mobile.php?act=newaddress&user_id=24&country="+country+"&province="+province+"&city="+city+"&district="+district+"&address="+address+"&consignee="+consignee+"&email="+email+"&tel="+tel+"&mobile="+mobile+"&zipcode="+zipcode;
-     var posturl ="http://120.24.209.210/api/mobile.php?act=newaddress&user_id=24&address="+address+"&consignee="+consignee+"&email="+email+"&tel="+tel+"&mobile="+mobile;
-     alert(posturl);
+	/*var country=encodeURIComponent(document.getElementById('country').value);
+	var province=encodeURIComponent(document.getElementById('province').value);
+	var city=encodeURIComponent(document.getElementById('city').value);
+	var district=encodeURIComponent(document.getElementById('district').value)*/;
+	var address=encodeURIComponent(document.getElementById('address').value);
+	var consignee=encodeURIComponent(document.getElementById('consignee').value);
+	var email=encodeURIComponent(document.getElementById('email').value);	
+	var tel=encodeURIComponent(document.getElementById('tel').value);	
+	var mobile=encodeURIComponent(document.getElementById('mobile').value);	
+	//var zipcode=encodeURIComponent(document.getElementById('zipcode').value);						
+	var zipcode = 0;
+	var posturl ="http://120.24.209.210/api/mobile.php?act=newaddress&user_id=24&country=0&province=0&city=0&district=0&address="+address+"&consignee="+consignee+"&email="+email+"&tel="+tel+"&mobile="+mobile+"&zipcode="+zipcode+"&mode=test";
+     //var posturl ="http://120.24.209.210/api/mobile.php?act=newaddress&user_id=24&address="+address+"&consignee="+consignee+"&email="+email+"&tel="+tel+"&mobile="+mobile;
+     //alert(posturl);
+     //posturl=encodeURIComponent(posturl);
+     
       var xhr = new XMLHttpRequest();
-	xhr.open("POST", posturl, true);
+	xhr.open("GET", posturl, true);
 	xhr.onreadystatechange = function() {
   		 if (xhr.readyState==4 && xhr.status==200){
     		var resultfromphp = xhr.responseText;
-    		alert (resultfromphp);
+    		//alert (resultfromphp);
     		var objData = jQuery.parseJSON(resultfromphp);
-    		//alert (objData.rsgmsg);
+    		alert (objData.rsgmsg);
     		document.location.href="addressMange.html";
 		 }
 	};

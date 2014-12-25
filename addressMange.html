@@ -14,6 +14,26 @@
 <script type="text/javascript" src="fivegold.js"></script>
 
 <script>
+function deladdress(id){
+   //alert(id);
+    var xhr = new XMLHttpRequest();
+	xhr.open("GET", "http://120.24.209.210/api/mobile.php?act=deladdress&id="+id+"&user_id=24", true);
+	
+	xhr.onreadystatechange = function() {
+  		 if (xhr.readyState==4 && xhr.status==200){
+    		var resultfromphp = xhr.responseText;
+				//alert (resultfromphp);
+			//alert ('删除成功');
+			var objData = jQuery.parseJSON(resultfromphp);
+			alert(objData.rsgmsg);
+			 //$('#listallcat').removeData(;
+			 document.location.href="addressMange.html";
+				// makeList();
+  		}
+	};
+	xhr.send();
+}
+
 
 function makeList() {
 	var xhr = new XMLHttpRequest();
@@ -22,16 +42,32 @@ function makeList() {
   		 if (xhr.readyState==4 && xhr.status==200){
     		var resultfromphp = xhr.responseText;
 			//alert(resultfromphp);
-      		  var objData = jQuery.parseJSON(resultfromphp);
+      		  //var objData = jQuery.parseJSON(resultfromphp);
 			  //alert(objData);
+		 var objData = jQuery.parseJSON(resultfromphp);
+			  //alert(objData.goods_list.length);
 			var html ='';
-			   html+='<li><h1>收货人:'+objData.consignee+'</h1><p>地址:'+objData.address+'</p><p>电话:'+objData.tel+'</p><p>移动电话:'+objData.mobile+'</p><p>电子邮件:'+objData.email+'</p></li>';
-				
-              html+='<li><a href="addressdialog.html" data-role="button" data-inline="true" rel="external"  data-rel="dialog" data-transition="pop" >新增地址</a></li>';
+	  		if (objData.listallcat.length>0){
+			 $.each(objData.listallcat, function (index, term) {
+                 html+='<li><a href="#" data-inline="true" ><h1>收货人:'+term.consignee+'</h1><p>地址:'+term.address+'</p><p>电话:'+term.tel+'</p><p>移动电话:'+term.mobile+'</p><p>电子邮件:'+term.email+'</p></a><a href="javascript:deladdress('+term.address_id+')">删除</a></li>';
+					   });
+			html+='<li><a href="addressdialog.html" data-role="button" data-inline="true" rel="external"  data-rel="dialog" data-transition="pop" >新增地址</a></li>';
+           
+				 //alert(html);
+					 
+            $('#listallcat').append($(html));
+            $('#listallcat').trigger('create');    
+            $('#listallcat').listview('refresh');
+            
+            }else{
+                  html+='<li><a href="addressdialog.html" data-role="button" data-inline="true" rel="external"  data-rel="dialog" data-transition="pop" >新增地址</a></li>';
               //alert(html);
                 $('#listallcat').append($(html));
             $('#listallcat').trigger('create');    
             $('#listallcat').listview('refresh');
+            }
+				
+        
            // }
   		}
 	};
@@ -51,9 +87,9 @@ $("#5gshoplist").live('pagebeforeshow', function(event) {
 <div data-role="page" id="5gshoplist">
 	<div data-role="header" data-theme="none" id="header" class="home_image">
             <div class="ui-grid-b">
-	    <div class="ui-block-a" align="left"><a href="javascript:history.go(-1)" style="-webkit-border-radius:5px; background:-webkit-gradient(linear, 0 0, 0 100%, from(#ffd167), to(#efa823));border:1px solid #b77012;color:#854d00; text-decoration:none;width:80px;height:38px; display:block; text-align:center; line-height:41px;text-shadow:none;font-size:16px;margin-top:1px;">上一步</a></div>
+	    <div class="ui-block-a" align="left"><a href="shopcart.html" rel="external" style="-webkit-border-radius:5px; background:-webkit-gradient(linear, 0 0, 0 100%, from(#ffd167), to(#efa823));border:1px solid #b77012;color:#854d00; text-decoration:none;width:80px;height:38px; display:block; text-align:center; line-height:41px;text-shadow:none;font-size:16px;margin-top:1px;">上一步</a></div>
 	    <div class="ui-block-b" align="center"><font color="white"><p>地址管理</p></font></div>
-	    <div class="ui-block-c" align="right"><a href="javascript:addOrder()" style="-webkit-border-radius:5px; background:-webkit-gradient(linear, 0 0, 0 100%, from(#ffd167), to(#efa823));border:1px solid #b77012;color:#854d00; text-decoration:none;width:80px;height:38px; display:block; text-align:center; line-height:41px;text-shadow:none;font-size:16px;margin-top:1px;">下一步</a></div>
+	    <div class="ui-block-c" align="right"><a href="addorder.html" rel="external"  style="-webkit-border-radius:5px; background:-webkit-gradient(linear, 0 0, 0 100%, from(#ffd167), to(#efa823));border:1px solid #b77012;color:#854d00; text-decoration:none;width:80px;height:38px; display:block; text-align:center; line-height:41px;text-shadow:none;font-size:16px;margin-top:1px;">下一步</a></div>
      </div>
      </div>
      		 <div id="wrapper">
