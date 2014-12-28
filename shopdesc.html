@@ -88,9 +88,9 @@ var xhr = new XMLHttpRequest();
 	xhr.onreadystatechange = function() {
   		 if (xhr.readyState==4 && xhr.status==200){
     	       	var resultfromphp = xhr.responseText;
-			//alert(resultfromphp);
+			alert("添加成功");
       		      var objData = jQuery.parseJSON(resultfromphp);
-			 alert (objData.rsgmsg);
+			 //alert (objData.rsgmsg);
 		}
 	};
 	xhr.send();
@@ -125,6 +125,22 @@ var xhr = new XMLHttpRequest();
 	};
 	xhr.send();	
 }
+function collect(){
+var xhr = new XMLHttpRequest();
+     var posturl = "http://120.24.209.210/api/mobile.php?act=collect&goods_id="+shopid+"&rec_id=24";
+	//alert(posturl);  	
+	xhr.open("GET", posturl, true);
+	xhr.onreadystatechange = function() {
+  		 if (xhr.readyState==4 && xhr.status==200){
+    	       	var resultfromphp = xhr.responseText;
+			alert(resultfromphp);
+			//alert("添加成功");
+      		      var objData = jQuery.parseJSON(resultfromphp);
+			 //alert (objData.rsgmsg);
+		}
+	};
+	xhr.send();
+}	
 	
 /*
             //在页面初始化的时候,利用phonegap初始化我们的应用
@@ -185,7 +201,7 @@ var xhr = new XMLHttpRequest();
 	</div>
 <div data-role="footer" style="width:100%;height:60px;" id="footer">
  <div class="ui-grid-b">
-	    <div class="ui-block-a"><img src="images/focus.png"  height="40"></div>
+	    <div class="ui-block-a"><a href="javascript:collect();"><img src="images/focus.png"  height="40"></a></div>
 	    <div class="ui-block-b"><a href="javascript:addtocart();"><img src="images/addtocart.png" height="40"></a></div>
 	    <div class="ui-block-c" align="right"><a href="shopcart.html"  rel="external" data-transition="slide"><img src="images/cart.png"  height="40"></a></div>
       </div>

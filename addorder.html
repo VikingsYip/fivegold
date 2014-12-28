@@ -16,7 +16,7 @@
 
 <script language="javascript">
 
-function addOrder(){
+function genOrder(){
 
       //document.location.href="addressMange.html";
 	var xhr = new XMLHttpRequest();
@@ -27,20 +27,49 @@ function addOrder(){
 			//alert(resultfromphp);
 			
 			 var objData = jQuery.parseJSON(resultfromphp);
-			  //alert(objData.consignee.consignee);
+			 if (objData.consignee){
+			 //alert(objData.consignee.consignee);
 			var html ='';
 			
-                    html+='<li><h1>收货人信息</h1><p>收货人姓名:'+objData.consignee.consignee+'</p><p>收货人详细地址:'+objData.consignee.address+'</p></li>';
-			 /*if (objData.cart_goods.length>0){
+			 if (objData.consignee.length>0){
+				 html+= '<li><h1>收货人信息</h1><select size="1" class="selector" id="selector_consignee">';
+				 $.each(objData.consignee, function (index, term) {
+		  	 	 html+=' <option value="'+term.address_id+'">'+term.consignee+'('+term.address+')('+term.tel+')</option>';
+		     		});
+		     		html+='</select></li>';
+			 }
+
+                   // html+='<li><h1>收货人信息</h1><p>收货人姓名:'+objData.consignee.consignee+'</p><p>收货人详细地址:'+objData.consignee.address+'</p></li>';
+			if (objData.cart_goods.length>0){
 				 $.each(objData.cart_goods, function (index, term) {
-			 	html+='<li><h1>购物车商品</h1><p>商品名称:'+term.goods_name+'</p><p>商品数量:'+objData.term.goods_number+'</p><p>商品价格:'+term.goods_price+'</p></li>';
+			 	html+='<li><img src="'+term.goods_thumb+'"/><h1>购物车商品</h1><p>商品名称:'+term.goods_name+'</p><p>商品数量:'+term.goods_number+'</p><p>商品价格:¥'+term.goods_price+'</p></li>';
 			 	});
-			 }*/
-			 html+='<li><h1>总计</h1><p>商品数量:'+objData.total.real_goods_count+'</p><p>商品总价:'+objData.total.goods_price+'</p><p>市场总价:'+objData.total.market_price+'</p><p>节省了:'+objData.total.saving_formated+'</p></li>';
-		
+			 }
+			 html+='<li><h1>总计</h1><p>商品数量:'+objData.total.real_goods_count+'</p><p>商品总价:¥'+objData.total.goods_price+'</p><p><s>市场总价:¥'+objData.total.market_price+'</s></p><p>节省了:¥'+objData.total.saving_formated+'</p></li>';
+		       if (objData.shipping_list.length>0){
+				 html+= '<li><h1>快递方式</h1><select size="1" class="selector" id="selector_ship">';
+				 $.each(objData.shipping_list, function (index, term) {
+		  	 	 html+=' <option value="'+term.shipping_id+'">'+term.shipping_name+'(¥'+term.shipping_fee+')</option>';
+		     		});
+		     		html+='</select></li>';
+			 }
+			 if (objData.payment_list.length>0){
+				 html+= '<li><h1>支付方式</h1><select size="1" class="selector" id="selector_payment">';
+				 $.each(objData.payment_list, function (index, term) {
+			       html+=' <option value="'+term.pay_id+'">'+term.pay_name+'(手续费:¥'+term.format_pay_fee+')</option>';
+			 		});
+			 		html+='</select></li>';
+			 }
+		      
 			 $('#listallcat').append($(html));
                     $('#listallcat').trigger('create');    
                    $('#listallcat').listview('refresh');
+                   }
+                   if (objData.rsgcode){
+			 	alert(objData.rsgmsg);
+			 	document.location.href="shopcart.html";
+			 }
+			 
   		}
 	};
 	xhr.send();
@@ -48,9 +77,33 @@ function addOrder(){
 }
 
 $("#5gshoplist").live('pagebeforeshow', function(event) {
-    addOrder();
+    genOrder();
 });
 
+function addOrder(){
+     var shippingid = $("#selector_ship").val();
+     //alert (shippingid);
+     var paymentid = $("#selector_payment").val();
+     var addressid = $("#selector_consignee").val()
+    var need_inv=0;//1要，0不要;
+    var inv_type=' ';//发票类型
+    var postscript=' ';	//用户备注
+   var posturl="http://120.24.209.210/api/mobile.php?act=orderconfirmation&user_id=24&mode=test&shipping_id="+shippingid+'&pay_id='+paymentid+'&need_inv='+need_inv+'&address_id='+addressid;
+   alert (posturl);
+      var xhr = new XMLHttpRequest();
+	xhr.open("GET", posturl, true);
+	xhr.onreadystatechange = function() {
+  		 if (xhr.readyState==4 && xhr.status==200){
+    		var resultfromphp = xhr.responseText;
+			alert(resultfromphp);
+			
+			 var objData = jQuery.parseJSON(resultfromphp);
+			
+  		}
+	};
+	xhr.send();
+	
+}
 </script>
 
 </head> 

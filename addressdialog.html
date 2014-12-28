@@ -28,9 +28,11 @@ function newaddress(){
 	var email=encodeURIComponent(document.getElementById('email').value);	
 	var tel=encodeURIComponent(document.getElementById('tel').value);	
 	var mobile=encodeURIComponent(document.getElementById('mobile').value);	
+	var defaultval=$(".selector").val();
+	//alert (defaultval);
 	//var zipcode=encodeURIComponent(document.getElementById('zipcode').value);						
 	var zipcode = 0;
-	var posturl ="http://120.24.209.210/api/mobile.php?act=newaddress&user_id=24&country=0&province=0&city=0&district=0&address="+address+"&consignee="+consignee+"&email="+email+"&tel="+tel+"&mobile="+mobile+"&zipcode="+zipcode+"&mode=test";
+	var posturl ="http://120.24.209.210/api/mobile.php?act=newaddress&user_id=24&country=0&province=0&city=0&district=0&address="+address+"&consignee="+consignee+"&email="+email+"&tel="+tel+"&mobile="+mobile+"&zipcode="+zipcode+"&mode=test&default="+defaultval;
      //var posturl ="http://120.24.209.210/api/mobile.php?act=newaddress&user_id=24&address="+address+"&consignee="+consignee+"&email="+email+"&tel="+tel+"&mobile="+mobile;
      //alert(posturl);
      //posturl=encodeURIComponent(posturl);
@@ -68,7 +70,11 @@ $("#download").live('pagebeforeshow', function(event) {
        <input type="text" id="tel" value="电话"/>
          <input type="text" id="mobile" value="移动电话"/>
           <input type="text" id="email" value="电子邮件"/>
-          
+          是否默认地址：
+          <select size="1" class="selector">
+            <option value="1">是</option>
+            <option value="0">否</option>
+          </select>
          
             <!--input type="text" id="zipcode" value="邮政编码"/-->
     
