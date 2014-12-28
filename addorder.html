@@ -89,16 +89,16 @@ function addOrder(){
     var inv_type=' ';//发票类型
     var postscript=' ';	//用户备注
    var posturl="http://120.24.209.210/api/mobile.php?act=orderconfirmation&user_id=24&mode=test&shipping_id="+shippingid+'&pay_id='+paymentid+'&need_inv='+need_inv+'&address_id='+addressid;
-   alert (posturl);
+   //alert (posturl);
       var xhr = new XMLHttpRequest();
 	xhr.open("GET", posturl, true);
 	xhr.onreadystatechange = function() {
   		 if (xhr.readyState==4 && xhr.status==200){
     		var resultfromphp = xhr.responseText;
-			alert(resultfromphp);
+			//alert(resultfromphp);
 			
 			 var objData = jQuery.parseJSON(resultfromphp);
-			
+			 document.location.href="listorder.html";
   		}
 	};
 	xhr.send();
@@ -112,7 +112,7 @@ function addOrder(){
 <div data-role="page" id="5gshoplist">
 	<div data-role="header" data-theme="none" id="header" class="home_image">
             <div class="ui-grid-b">
-	    <div class="ui-block-a" align="left"></div>
+	    <div class="ui-block-a" align="left"><a href="shopcart.html" rel="external" style="-webkit-border-radius:5px; background:-webkit-gradient(linear, 0 0, 0 100%, from(#ffd167), to(#efa823));border:1px solid #b77012;color:#854d00; text-decoration:none;width:80px;height:38px; display:block; text-align:center; line-height:41px;text-shadow:none;font-size:16px;margin-top:1px;">上一步</a></div>
 	    <div class="ui-block-b" align="center"><font color="white"><p>生成订单</p></font></div>
 	    <div class="ui-block-c" align="right"><a href="javascript:addOrder()" style="-webkit-border-radius:5px; background:-webkit-gradient(linear, 0 0, 0 100%, from(#ffd167), to(#efa823));border:1px solid #b77012;color:#854d00; text-decoration:none;width:80px;height:38px; display:block; text-align:center; line-height:41px;text-shadow:none;font-size:16px;margin-top:1px;">下订单</a></div>
      </div>

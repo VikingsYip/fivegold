@@ -1,0 +1,98 @@
+<html>
+<head>
+<meta charset="utf-8">
+<title>五金APP</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+ <meta http-equiv="Access-Control-Allow-Origin" content="*">
+<link href="jquery.mobile-1.0.min.css" rel="stylesheet" type="text/css"/>
+<script src="jquery-1.6.4.min.js" type="text/javascript"></script>
+<script src="jquery.mobile-1.0.min.js" type="text/javascript"></script>
+
+<link href="fivegold.css" rel="stylesheet" type="text/css"/>
+  <script type="text/javascript" src="iscroll-lite.js"></script>
+      				<script type="text/javascript" src="iscroll.js"></script>
+<script type="text/javascript" src="fivegold.js"></script>
+
+
+<script language="javascript">
+
+function genOrder(){
+var orderid = request('orderid');
+      //document.location.href="addressMange.html";
+	var xhr = new XMLHttpRequest();
+	xhr.open("GET", "http://120.24.209.210/api/mobile.php?act=mysaledesc&user_id=24&order_id="+orderid, true);
+	xhr.onreadystatechange = function() {
+  		 if (xhr.readyState==4 && xhr.status==200){
+    		var resultfromphp = xhr.responseText;
+			//alert(resultfromphp);
+			
+			 var objData = jQuery.parseJSON(resultfromphp);
+			
+			var html ='';
+			
+			 
+				 html+= '<li><h1>收货人信息</h1>';
+				
+		  	 	 html+='<p>收货人:'+objData.order.consignee+'</p><p>地址:'+objData.order.address+'</p><p>电话：'+objData.order.tel+'</p><p>移动电话:'+objData.order.mobile+'</p>';
+		     	
+		     		html+='</li>';
+
+			if (objData.goods_list.length>0){
+				 $.each(objData.goods_list, function (index, term) {
+			 	html+='<li><img src="'+term.goods_thumb+'"/><h1>订单商品</h1><p>商品名称:'+term.goods_name+'</p><p>商品数量:'+term.goods_number+'</p><p>商品价格:¥'+term.goods_price+'</p></li>';
+			 	});
+			 }
+			 html+='<li><h1>总计</h1><p>商品总价:¥'+objData.order.total_fee+'</p></li>';
+		       
+			 $('#listallcat').append($(html));
+                    $('#listallcat').trigger('create');    
+                   $('#listallcat').listview('refresh');
+                 
+			 
+  		}
+	};
+	xhr.send();
+	
+}
+
+$("#5gshoplist").live('pagebeforeshow', function(event) {
+    genOrder();
+});
+
+</script>
+
+</head> 
+<body scrolling="no"> 
+
+<div data-role="page" id="5gshoplist">
+	<div data-role="header" data-theme="none" id="header" class="home_image">
+            <div class="ui-grid-b">
+	    <div class="ui-block-a" align="left"></div>
+	    <div class="ui-block-b" align="center"><font color="white"><p>订单详情</p></font></div>
+	    <div class="ui-block-c" align="right"></div>
+     </div>
+     </div>
+     		 <div id="wrapper">
+	<div id="scroller">
+	<div data-role="content" >	
+	      
+		<ul data-role="listview" id="listallcat">
+			
+		</ul>
+       </div>
+       </div>		
+	</div>
+<div data-role="footer" style="width:100%;height:60px;" id="footer">
+		   <div  data-role="navbar">
+        <ul>
+          <li><a href="go.html" rel="external" data-transition="slide"><img src="images/1.png" height="40"></a></li>
+          <li><a href="listallcat.html" rel="external" data-transition="slide"><img src="images/2.png" height="40"></a></li>
+          <li><a href="shopcart.html" rel="external" data-transition="slide" data-direction="reverse"><img src="images/3.png" height="40"></a></li>
+          <li><a href="go.html#5gmypersonal" rel="external" data-transition="slide"><img src="images/4.png" height="40"></a></li>        
+        </ul>
+        </div>
+	</div>
+</div>
+
+</body>
+</html>

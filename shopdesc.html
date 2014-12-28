@@ -133,10 +133,10 @@ var xhr = new XMLHttpRequest();
 	xhr.onreadystatechange = function() {
   		 if (xhr.readyState==4 && xhr.status==200){
     	       	var resultfromphp = xhr.responseText;
-			alert(resultfromphp);
+			//alert(resultfromphp);
 			//alert("添加成功");
       		      var objData = jQuery.parseJSON(resultfromphp);
-			 //alert (objData.rsgmsg);
+			 alert (objData.rsgmsg);
 		}
 	};
 	xhr.send();
