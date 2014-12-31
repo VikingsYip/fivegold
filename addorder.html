@@ -76,10 +76,6 @@ function genOrder(){
 	
 }
 
-$("#5gshoplist").live('pagebeforeshow', function(event) {
-    genOrder();
-});
-
 function addOrder(){
      var shippingid = $("#selector_ship").val();
      //alert (shippingid);
@@ -104,6 +100,10 @@ function addOrder(){
 	xhr.send();
 	
 }
+
+$(document).ready(function() {
+    genOrder();
+ });
 </script>
 
 </head> 

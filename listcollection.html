@@ -29,7 +29,7 @@ var secondcatid = 0;
 
 function makeList() {
 	var xhr = new XMLHttpRequest();
-	xhr.open("GET", "http://120.24.209.210/api/mobile.php?act=collection_list&userid=24", true);
+	xhr.open("GET", "http://120.24.209.210/api/mobile.php?act=collection_list&user_id=24", true);
 	xhr.onreadystatechange = function() {
   		 if (xhr.readyState==4 && xhr.status==200){
     		var resultfromphp = xhr.responseText;
@@ -39,7 +39,7 @@ function makeList() {
 			var html ='';
 	  		
 			 $.each(objData.listallcat, function (index, term) {
-             html+='<li><a href="shopdesc.html?shopid='+term.goods_id+'" data-inline="true" rel="external"><h1>'+term.goods_name+'</h1><p><font color="red">价格:¥'+term.shop_price+'</font></p></a><a href="javascript:delorder('+term.rec_id +')">删除</a></li>';
+             html+='<li><a href="goods.html?shopid='+term.goods_id+'" data-inline="true" rel="external"><h1>'+term.goods_name+'</h1><p><font color="red">价格:¥'+term.shop_price+'</font></p></a><a href="javascript:delorder('+term.rec_id +')">删除</a></li>';
 			
 			   });
 					 //alert(html);
@@ -57,9 +57,10 @@ $("#5gshoplist").live('pagebeforeshow', function(event) {
 });
 
 function delorder(recid){
-
+    var posturl = "http://120.24.209.210/api/mobile.php?act=delete_collection&rec_id="+recid+"&user_id=24";
+    //alert(posturl);
     var xhr = new XMLHttpRequest();
-	xhr.open("GET", "http://120.24.209.210/api/mobile.php?act=delete_collection&rec_id=24&order_id="+recid, true);
+	xhr.open("GET",posturl , true);
 	xhr.onreadystatechange = function() {
   		 if (xhr.readyState==4 && xhr.status==200){
     		var resultfromphp = xhr.responseText;

@@ -38,7 +38,7 @@ function makeList() {
 			var html ='';
 	  		
 			 $.each(objData.listallcat, function (index, term) {
-               html+='<li><a href="shopdesc.html?shopid='+term.goods_id+'" rel="external"  ><img src="'+term.goods_img+'" width="92" height="95"><h1>'+term.goods_name+'</h1><font color="#FF0000">¥'+term.shop_price+'</font><s><font color="grey">¥'+term.market_price+'</font></a></s></li>';
+               html+='<li><a href="goods.html?shopid='+term.goods_id+'" rel="external"  ><img src="'+term.goods_img+'" width="92" height="95"><h1>'+term.goods_name+'</h1><font color="#FF0000">¥'+term.shop_price+'</font><s><font color="grey">¥'+term.market_price+'</font></a></s></li>';
 			   });
 					 //alert(html);
             $('#listallcat').append($(html));
