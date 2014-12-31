@@ -21,11 +21,11 @@
 <script type="text/javascript" src="fivegold.js"></script>
 
 <script>  
-var shopid = request('shopid') ;
+var shopid = request('goodsid') ;
 var imagecount = 0;
 var currentimage = 0;
 function makeList() {
-	 // alert(shopid);
+	 // alert(shopid+specval.label+);
 	var xhr = new XMLHttpRequest();
 	xhr.open("GET", "http://120.24.209.210/api/mobile.php?act=goodsdesc&goods_id="+shopid, true);
 	xhr.onreadystatechange = function() {
@@ -47,8 +47,15 @@ function makeList() {
 			 
 			   document.getElementById('goods_name').innerHTML=term.goods_name;
 			   document.getElementById('goods_sn').innerHTML=term.goods_sn;
-			   //document.getElementById('goods_brief').innerHTML=term.goods_brief;
-			   document.getElementById('market_price').innerHTML='<s>￥'+term.market_price+'</s>';
+			   document.getElementById('goods_brief').innerHTML=term.goods_brief;
+			   var html = "";
+			   $.each(term.specification, function (index, spec) {
+				$.each(spec.values, function (index, specval) {
+			   html+="<span style=\"display:inline-block;margin:2px 2px;\" class=\"label label-default\"  onclick=\"selectGoods(this,"+specval.price+")\" id=\""+specval.id+"\">"+specval.label+"</span>";
+			     });
+				});
+			   document.getElementById('specification').innerHTML=html;
+			   //document.getElementById('market_price').innerHTML='<s>￥'+term.market_price+'</s>';
 			   document.getElementById('shop_price').innerHTML='￥'+term.shop_price;
 			   
 			  }
@@ -70,22 +77,29 @@ function makeList() {
 	xhr.send();
 	
 }
-
+function selectGoods(that,price){
+	document.getElementById('shop_price').innerHTML='￥'+price;
+	//alert(that.id);
+	spec=that.id;		   
+}
 $(document).ready(function() {
 	 makeList();
 });
-
+var spec = 0;
 function addtocart(){
 var xhr = new XMLHttpRequest();
      var goods_num = document.getElementById('goods_num').value;
-     var posturl = "http://120.24.209.210/api/mobile.php?act=addbuycart&goods_id="+shopid+"&number="+goods_num+"&userid=24";
+	
+     var posturl = "http://120.24.209.210/api/mobile.php?act=addbuycart&goods_id="+shopid+"&number="+goods_num+"&userid=24&spec="+spec;
+	 
 	//alert(posturl);  	
 	xhr.open("GET", posturl, true);
 	xhr.onreadystatechange = function() {
   		 if (xhr.readyState==4 && xhr.status==200){
     	       	var resultfromphp = xhr.responseText;
-			alert("添加成功");
+			//alert("添加成功");
       		      var objData = jQuery.parseJSON(resultfromphp);
+		     document.location.href="gencart.html";
 			 //alert (objData.rsgmsg);
 		}
 	};
@@ -93,6 +107,7 @@ var xhr = new XMLHttpRequest();
 }
 
 function showNextImage(){
+	var shopid=request('goodsid');
 var xhr = new XMLHttpRequest();
 	xhr.open("GET", "http://120.24.209.210/api/mobile.php?act=goodsdesc&goods_id="+shopid, true);
 	xhr.onreadystatechange = function() {
@@ -129,10 +144,13 @@ var xhr = new XMLHttpRequest();
 	xhr.onreadystatechange = function() {
   		 if (xhr.readyState==4 && xhr.status==200){
     	       	var resultfromphp = xhr.responseText;
+				
 			//alert(resultfromphp);
 			//alert("添加成功");
       		      var objData = jQuery.parseJSON(resultfromphp);
-			 alert (objData.rsgmsg);
+				  //document.getElementById('prompt').innerHTML = objData.rsgmsg;
+				 //$('#bshop').popup('open');  
+			 //alert (objData.rsgmsg);
 		}
 	};
 	xhr.send();
@@ -214,18 +232,18 @@ function update_minus(){
 <div class="user-ui-info">
 	<table class="table">
 		<tr>
-			<td width="20%">商品名称：</td>
+			<td width="120px">商品名称：</td>
 			<td><span id="goods_name"></span></td>
 		   </tr>
-		<!--tr>
+		<tr>
 		   	<td>简单说明：</td>
 		   	<td><span id="goods_brief"></span></td>
-		</tr-->
+		</tr>
 
 		<tr>
 			<td><label>商品编码：</label></td>
 		    <td>
-		    	<span id="goods_sn">1010100323</span>
+		    	<span id="goods_sn"></span>
 		    </td>
 		</tr>
 
@@ -234,24 +252,23 @@ function update_minus(){
 		    <td>
 		    	<span id="product_bn_id">1010100323</span>
 		    </td>
-		</tr>
+		</tr-->
 
 		<tr>
 		    <td><label>尺寸：</label></td>
 		    <td class="spec_list">
-		     	<span id="13790703402" style="display:inline-block;margin:2px 2px;" class="label label-default"  onclick="selectGoods(this)" spec_id="13790703402">12344</span>
-			 	<span id="13790703403" style="display:inline-block;margin:2px 2px;" class="label label-default"  onclick="selectGoods(this)" spec_id="13790703403">23456</span>
+		     	<span id="specification" ></span>
 			</td>
 		   </tr-->
 
-		   <tr>
+		   <!--tr>
 		     <td>
-		     <label>销售价：</label>
+		     <label>市场价：</label>
 		     </td>
 		     <td>
 		     	<span id="market_price" style="color:#b10000;"></span>
 		     </td>
-		   </tr>
+		   </tr-->
               <tr>
 		     <td>
 		     <label>销售价：</label>
@@ -262,11 +279,7 @@ function update_minus(){
 		   </tr>
 		</table>
 	    <div class="m_10_0" style="padding:0 10px;">
-		<form action="gencart.html" id="goods_spec_form" class="form-inline" role="form">
-           <input type="hidden" name="goods[goods_id]" value="678">
-           <input type="hidden" name="goods[product_id]" value="" id="product_id_id">
-           <input type="hidden" name="obj_type" value="goods">
-           <div id="submit_id">
+		
            	   <div class="form-group">
            	       <input class="btn btn-default" id="minus_product" type="button" onClick="update_minus()" value="-">
 		           <input class="form-control" name="goods[num]" data-role="none" style="width:50px;display:inline-block;" type="text" id="goods_num" min="1" max="10" value="1">
@@ -274,11 +287,10 @@ function update_minus(){
 		       </div>
         	   <div class="alert alert-danger m_5_0" id="tishi" style="display:none;"></div>
         	   <div class="m_5_0">
-			   		<a href="javascript:collect();"><input type="buttom" value="关注" class="btn btn-danger">  </a>  <a href="javascript:addtocart();"> <input type="buttom" value="加入购物车" class="btn btn-danger"></a>
+			   		<a href="javascript:collect();"><input type="buttom" value="关注" class="btn btn-danger" style="width:80px">  </a>  <a href="javascript:addtocart();"> <input type="buttom" value="加入购物车" class="btn btn-danger" ></a>
+                 
 			   </div> 
-           </div>
-		</form>
-		</div>
+          
 		</div>
         
 		<!--div class="m_10_0" style="padding:0 10px;">
@@ -295,13 +307,11 @@ function update_minus(){
 			</div>
 	<!-- /content -->
 		
-
-	
 <!-- /page -->
 <!-- 底部导航  -->
 <!-- S 快捷导航 -->
 <div id="dp_footer" class="dp-footer ">
-    我来了。
+    
 </div>
 <!-- S  快捷导航 -->
 <script type="text/javascript">
