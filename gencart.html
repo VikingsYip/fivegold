@@ -11,6 +11,13 @@
 <link rel="stylesheet" href="css/bootstrap.min.css">
 <script src="css/jquery-1.10.2.min.js"></script>
 <script src="css/bootstrap.min.js"></script>
+<link href="css/base.mobile.css" rel="stylesheet" type="text/css" media="screen, projection" />
+
+
+<link href="fivegold.css" rel="stylesheet" type="text/css"/>
+  <script type="text/javascript" src="iscroll-lite.js"></script>
+      				<script type="text/javascript" src="iscroll.js"></script>
+<script type="text/javascript" src="fivegold.js"></script>
 <style>
 .public_section .href_info {
 	position: relative;
@@ -77,11 +84,11 @@ function makeList() {
 			var html ='';
       		  var objData = jQuery.parseJSON(resultfromphp);
 			   $.each(objData.goods_list, function (index, term) {
-			html+="<table class=\"table\"><tr><td valign=\"top\"><img class=\"img-rounded\" width=\"100\" height=\"100\" src=\""+term.original_img+"\"></td><td><p>"+term.goods_name+"（";
+			html+="<table class=\"table\"><tr><td valign=\"top\" width=\"100px\"><img class=\"img-rounded\" width=\"100\" height=\"100\" src=\""+term.original_img+"\"></td><td><p>"+term.goods_name+"（";
 			$.each(term.goods_attr, function (index, att) 							{
 			html+=att.name+"："+att.value;
 			});
-			html+="）</p><p>单价：￥"+term.goods_price+"</p><div class=\"form-group\"><a class=\"btn btn-info\" id=\"minus_product\"   onClick=\"update_minus('goods_"+term.rec_id+"')\">-</a><input class=\"form-control\" style=\"width:40px;display:inline-block;\" type=\"text\" id=\"goods_"+term.rec_id+"\" min=\"1\" max=\"10\" value=\""+term.goods_number+"\"><a class=\"btn btn-info\" id=\"plus_product\"   onClick=\"update_plus('goods_"+term.rec_id+"')\">+</a></div><section><a href=\"#\" data-ajax=\"false\" data-rel=\"popup\" data-position-to=\"window\" data-transition=\"pop\" data-icon=\"delete\" data-theme=\"d\">删除</a>     </section></td></tr></table>";
+			html+="）</p><p>单价：￥"+term.goods_price+"</p><div class=\"form-group\"><a class=\"btn btn-info\" id=\"minus_product\"   onClick=\"update_minus('goods_"+term.rec_id+"')\">-</a><input class=\"form-control\" style=\"width:40px;display:inline-block;\" type=\"text\" id=\"goods_"+term.rec_id+"\" min=\"1\" max=\"10\" value=\""+term.goods_number+"\"><a class=\"btn btn-info\" id=\"plus_product\"   onClick=\"update_plus('goods_"+term.rec_id+"')\">+</a></div><section><a href=\"javascript:delcart("+term.rec_id+")\" data-ajax=\"false\" data-rel=\"popup\" data-position-to=\"window\" data-transition=\"pop\" data-icon=\"delete\" data-theme=\"d\">删除</a>     </section></td></tr></table>";
 			});
 			   //alert(html);
 			document.getElementById('catHtml').innerHTML=html;
@@ -97,6 +104,26 @@ $(document).ready(function() {
 	//alert('hi');
 	 makeList();
 });
+
+
+function delcart(recid){
+
+    var xhr = new XMLHttpRequest();
+	xhr.open("GET", "http://120.24.209.210/api/mobile.php?act=delbuycart&rec_id="+recid, true);
+	xhr.onreadystatechange = function() {
+  		 if (xhr.readyState==4 && xhr.status==200){
+    		var resultfromphp = xhr.responseText;
+				//alert (resultfromphp);
+			//alert ('删除成功');
+				var objData = jQuery.parseJSON(resultfromphp);
+			//alert(objData.rsgmsg);
+			 //$('#listallcat').removeData(;
+			 document.location.href="gencart.html";
+				// makeList();
+  		}
+	};
+	xhr.send();
+}
 
  function update_minus(e){
 	    	$num = $('#'+e).val();
@@ -145,7 +172,7 @@ $(document).ready(function() {
 </head>
 <body><div class="user-ui-page">
 	<!-- header -->
-	<div class="user-ui-header clearfix">
+	<div class="user-ui-header clearfix" id="header">
 	      <a class="left-bar" href="#">
 	      	<span class="glyphicon glyphicon-home"></span>
 	      </a>
@@ -154,14 +181,16 @@ $(document).ready(function() {
 	      	<span class="glyphicon glyphicon-shopping-cart"></span>
 	      </a>
 	</div>
-	<!-- /header -->
+<!-- /header -->
+     <div id="wrapper">
+	<div id="scroller">
 	<!-- content -->
 	<div class="panel">
 		<div class="panel-body">
 	    <form class="form-inline" action="checkcart.html" method="post" data-ajax="false">
-        <h3>商品列表</h3>
+        <h4>商品列表</h4>
         <div id ="catHtml"></div>
-                <h3>结算信息</h3>
+                <h4>结算信息</h4>
         <div class="alert alert-info">
          <div id ="total"></div>
                     </div>
@@ -172,13 +201,31 @@ $(document).ready(function() {
 	    </form>
 	</div>
 	</div>
+</div>
+
+			</div>
 	<!-- /content -->
 	<!-- footer -->
-	<footer class="user-ui-footer">
-	<div class="container">
-		<div class="copyright">© 轮通之家 </div>
-	</div>
-</footer>	<!-- /footer -->
+	<div class="container dp-menu-box" id="footer">
+		    <a class="pull-left menu-btn" href="go.html">
+		    	<div class="menu-img glyphicon glyphicon-home"></div>
+		    	<div><img src="images/1.png" height="40"></div>
+		    </a>
+		    <a class="pull-left menu-btn" href="listcat.html">
+		    	<div class="menu-img glyphicon glyphicon-th-large"></div>
+		    	<div><img src="images/2.png" height="40"></div>
+		    </a>
+		    <a class="pull-left menu-btn" href="gencart.html">
+		    	<div class="menu-img glyphicon glyphicon-user"></div>
+		    	<div><img src="images/3.png" height="40"></div>
+		    	<div class="login-tag" style="display: none;"></div>
+		    </a>
+		    <a class="pull-left menu-btn" href="#">
+		    	<div class="menu-img glyphicon glyphicon-shopping-cart"></div>
+		    	<div><img src="images/4.png" height="40"></div>
+		    </a>
+		  </div>
+	<!-- /footer -->
 	<script type="text/javascript">
 	    function update_cart(e,n){
 	    	$.ajax({

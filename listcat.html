@@ -13,6 +13,10 @@
 	<script src="css/js/jquery.cookie.js"></script>
 	<script src="css/bootstrap.min.js"></script>
 	<link href="css/base.mobile.css" rel="stylesheet" type="text/css" media="screen, projection" />
+	<link href="fivegold.css" rel="stylesheet" type="text/css"/>
+  <script type="text/javascript" src="iscroll-lite.js"></script>
+      				<script type="text/javascript" src="iscroll.js"></script>
+<script type="text/javascript" src="fivegold.js"></script>
     <script>	
 function makeList() {
 	var xhr = new XMLHttpRequest();
@@ -68,13 +72,13 @@ $(document).ready(function() {
 </head>
 
 <body>
-<div class="dp-header">
+<div class="dp-header"  id="header">
 	<div class="container-fluid" style="background-color:#E0DFDB;margin-bottom:5px;padding:10px 10px;">
 	<div class="row" style="margin:0 0;">
 			<div class="col-xs-12" style="padding:0 0;">
 			<form id="search_form" action="search.html" method="get">
 				<div class="col-xs-99">
-					<img alt="轮通之家" src="img/logo.png" width="45px" border="0">
+					<img alt="轮通之家" src="img/logo.png" width="36px" border="0">
 				</div>
 				<div class="input-group">
 				      <input type="text" class="form-control" name="scontent" value="" placeholder="搜索商品">
@@ -87,7 +91,8 @@ $(document).ready(function() {
 	</div>
 	</div>	<!-- search end -->
 	</div>
-	
+     <div id="wrapper">
+	<div id="scroller">	
 <div class="dp-main">
 	<div class="container">
 		<div class="panel-group" id="accordion">
@@ -99,12 +104,29 @@ $(document).ready(function() {
 		</div><!-- panel-group -->
 	</div><!-- /container -->
 </div><!-- /dp-main -->
-
+	</div><!-- /scroller -->
+</div><!-- /wrapper -->
 <!-- 底部导航  -->
 <!-- S 快捷导航 -->
-<div id="dp_footer" class="dp-footer ">
-	
-</div>
+<div class="container dp-menu-box" id="footer">
+		    <a class="pull-left menu-btn" href="go.html">
+		    	<div class="menu-img glyphicon glyphicon-home"></div>
+		    	<div><img src="images/1.png" height="40"></div>
+		    </a>
+		    <a class="pull-left menu-btn" href="listcat.html">
+		    	<div class="menu-img glyphicon glyphicon-th-large"></div>
+		    	<div><img src="images/2.png" height="40"></div>
+		    </a>
+		    <a class="pull-left menu-btn" href="gencart.html">
+		    	<div class="menu-img glyphicon glyphicon-user"></div>
+		    	<div><img src="images/3.png" height="40"></div>
+		    	<div class="login-tag" style="display: none;"></div>
+		    </a>
+		    <a class="pull-left menu-btn" href="#">
+		    	<div class="menu-img glyphicon glyphicon-shopping-cart"></div>
+		    	<div><img src="images/4.png" height="40"></div>
+		    </a>
+		  </div>
 <!-- E 快捷导航 -->
 </body>
 </html>
