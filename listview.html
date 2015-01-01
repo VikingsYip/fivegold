@@ -27,7 +27,7 @@ function makeList() {
 			var html ='';
       		  var objData = jQuery.parseJSON(resultfromphp);
 			   $.each(objData.listallcat, function (index, term) {
-			html+="<div class=\"center-block goods-item\"><a class=\"href_info\" href=\"goods.html?goodsid="+term.goods_id+"\"><img style=\"margin-right:5px;\" class=\"img-rounded pull-left\" src=\"img/aa.jpg\" alt=\""+term.goods_name+"\" width=\"80\" height=\"80\"/><div class=\"clearfix\"><p class=\"product_name\">"+term.goods_name+"</p><p class=\"product_name\">所有的参数</p><div class=\"product_price clearfix\" style=\"line-height:30px;\"><p style=\"font-size:16px;float:left;color:red\">￥"+term.shop_price+"</p></div></div></a></div>";
+			html+="<div class=\"center-block goods-item\"><a class=\"href_info\" href=\"goods.html?goodsid="+term.goods_id+"\"><img style=\"margin-right:5px;\" class=\"img-rounded pull-left\" src=\""+term.goods_img+"\" alt=\""+term.goods_name+"\" width=\"80\" height=\"80\"/><div class=\"clearfix\"><p class=\"product_name\">"+term.goods_name+"</p><p class=\"product_name\">所有的参数</p><div class=\"product_price clearfix\" style=\"line-height:30px;\"><p style=\"font-size:16px;float:left;color:red\">￥"+term.shop_price+"</p></div></div></a></div>";
 			});
 			   //alert(html);
 			document.getElementById('catHtml').innerHTML=html;
