@@ -26,7 +26,7 @@
 
 
 <script language="javascript">
-
+var addressid = 0;
 function genOrder(){
 
       //document.location.href="addressMange.html";
@@ -38,47 +38,81 @@ function genOrder(){
 			//alert(resultfromphp);
 			
 			 var objData = jQuery.parseJSON(resultfromphp);
+			
+			
 			 if (objData.consignee){
-			 //alert(objData.consignee.consignee);
+			 if (objData.consignee.length==0){
+			 	document.location.href="newaddress.html";
+			 }
 			var html ='';
 			
 			 if (objData.consignee.length>0){
-				 html+= '<li><h1>收货人信息</h1><select size="1" class="selector" id="selector_consignee">';
+			      var i = 0;
+				// html+= '<li><h1>收货人信息</h1><select size="1" class="selector" id="selector_consignee">';
 				 $.each(objData.consignee, function (index, term) {
-		  	 	 html+=' <option value="'+term.address_id+'">'+term.consignee+'('+term.address+')('+term.tel+')</option>';
+		  	 	 //html+=' <option value="'+term.address_id+'">'+term.consignee+'('+term.address+')('+term.tel+')</option>';
+		     		  //alert(i);
+		     		  if (i==0){;
+		     		  addressid = term.address_id;
+		     		html+='<section id="address_info" class="address_info">';
+		            html+='<section class="address_name">'+term.consignee+'&nbsp;'+term.mobile+'</section>';
+			     html+='<section class="address_content">'+term.address+'</section>';
+		   		  html+='</section>';
+		   		   i=1;
+		   		  }
 		     		});
-		     		html+='</select></li>';
+		     			document.getElementById('addressHtml').innerHTML=html;
+		     		//html+='</select></li>';
 			 }
 
                    // html+='<li><h1>收货人信息</h1><p>收货人姓名:'+objData.consignee.consignee+'</p><p>收货人详细地址:'+objData.consignee.address+'</p></li>';
 			if (objData.cart_goods.length>0){
+			 html ='';
+		     html +='<section>';
+                 html +=' <ul>';
 				 $.each(objData.cart_goods, function (index, term) {
-			 	html+='<li><img src="'+term.goods_thumb+'"/><h1>购物车商品</h1><p>商品名称:'+term.goods_name+'</p><p>商品数量:'+term.goods_number+'</p><p>商品价格:¥'+term.goods_price+'</p></li>';
+			 	//html+='<li><img src="'+term.goods_thumb+'"/><h1>购物车商品</h1><p>商品名称:'+term.goods_name+'</p><p>商品数量:'+term.goods_number+'</p><p>商品价格:¥'+term.goods_price+'</p></li>';
+			 	     html +='<li class=\"clearfix\" style=\"margin-bottom:5px;\"><a class=\"pro_img\" href=\"#\" data-ajax=\"false\">';
+	            html+='<img alt=\"'+term.goods_name+'\" width=\"60\" height=\"60\" src=\"'+term.goods_thumb+'\"></a>';
+	            html+='<p class=\"pro_name\">'+term.goods_name+'（）</p>';
+	            html+='<p class=\"pro_price\">共'+term.goods_number+'件<span>￥'+term.goods_price+'</span></p></li>';
+              
 			 	});
+			 	
+			 	html +=' </ul>';
+			 	   html +='</section>';          
+			 	 document.getElementById('goodsHtml').innerHTML=html;         
 			 }
-			 html+='<li><h1>总计</h1><p>商品数量:'+objData.total.real_goods_count+'</p><p>商品总价:¥'+objData.total.goods_price+'</p><p><s>市场总价:¥'+objData.total.market_price+'</s></p><p>节省了:¥'+objData.total.saving_formated+'</p></li>';
+			 //html+='<li><h1>总计</h1><p>商品数量:'+objData.total.real_goods_count+'</p><p>商品总价:¥'+objData.total.goods_price+'</p><p><s>市场总价:¥'+objData.total.market_price+'</s></p><p>节省了:¥'+objData.total.saving_formated+'</p></li>';
+		      document.getElementById('goodsprice').innerHTML='¥'+objData.total.goods_price;         
+		    document.getElementById('totalprice').innerHTML='¥'+objData.total.goods_price;         
+		    
+               
 		       if (objData.shipping_list.length>0){
-				 html+= '<li><h1>快递方式</h1><select size="1" class="selector" id="selector_ship">';
+				 //html+= '<li><h1>快递方式</h1><select size="1" class="selector" id="selector_ship">';
 				 $.each(objData.shipping_list, function (index, term) {
-		  	 	 html+=' <option value="'+term.shipping_id+'">'+term.shipping_name+'(¥'+term.shipping_fee+')</option>';
+		  	 	 //html+=' <option value="'+term.shipping_id+'">'+term.shipping_name+'(¥'+term.shipping_fee+')</option>';
+		     		 //document.getElementById('shipprice').innerHTML='¥'+term.shipping_fee;      
+		     		 //alert(term.shipping_fee)	;
 		     		});
-		     		html+='</select></li>';
+		     		
+		     		//html+='</select></li>';
 			 }
-			 if (objData.payment_list.length>0){
+			 /*if (objData.payment_list.length>0){
 				 html+= '<li><h1>支付方式</h1><select size="1" class="selector" id="selector_payment">';
 				 $.each(objData.payment_list, function (index, term) {
 			       html+=' <option value="'+term.pay_id+'">'+term.pay_name+'(手续费:¥'+term.format_pay_fee+')</option>';
 			 		});
 			 		html+='</select></li>';
 			 }
-		      
-			 $('#listallcat').append($(html));
-                    $('#listallcat').trigger('create');    
-                   $('#listallcat').listview('refresh');
+		      */
+			 //$('#listallcat').append($(html));
+                   // $('#listallcat').trigger('create');    
+                   //$('#listallcat').listview('refresh');
                    }
                    if (objData.rsgcode){
-			 	alert(objData.rsgmsg);
-			 	document.location.href="gencart.html";
+			 	//alert(objData.rsgmsg);
+			 	document.location.href="nocart.html";
 			 }
 			 
   		}
@@ -89,14 +123,15 @@ function genOrder(){
 
 
 function addOrder(){
-     var shippingid = $("#selector_ship").val();
+     var shippingid = 1;//$("#selector_ship").val();
      //alert (shippingid);
-     var paymentid = $("#selector_payment").val();
-     var addressid = $("#selector_consignee").val()
+     var paymentid = 1;//$("#selector_payment").val();
+     //var addressid = $("#selector_consignee").val()
+     var memo=$("#memo").val()
     var need_inv=0;//1要，0不要;
     var inv_type=' ';//发票类型
-    var postscript=' ';	//用户备注
-   var posturl="http://120.24.209.210/api/mobile.php?act=orderconfirmation&user_id=24&mode=test&shipping_id="+shippingid+'&pay_id='+paymentid+'&need_inv='+need_inv+'&address_id='+addressid;
+    var postscript=memo;	//用户备注
+   var posturl="http://120.24.209.210/api/mobile.php?act=orderconfirmation&user_id=24&mode=test&shipping_id="+shippingid+'&pay_id='+paymentid+'&need_inv='+need_inv+'&address_id='+addressid+'&postscript='+postscript;
    //alert (posturl);
       var xhr = new XMLHttpRequest();
 	xhr.open("GET", posturl, true);
@@ -105,8 +140,8 @@ function addOrder(){
     		var resultfromphp = xhr.responseText;
 			//alert(resultfromphp);
 			
-			 var objData = jQuery.parseJSON(resultfromphp);
-			 document.location.href="listorder.html";
+			 //var objData = jQuery.parseJSON(resultfromphp);
+			 document.location.href="mmember-orders.html";
   		}
 	};
 	xhr.send();
@@ -142,10 +177,9 @@ $(document).ready(function() {
 	    <!-- 收货地址 -->
 	    <section class="checkout_section address_section">
 	         <section class="checkout_title">收货地址</section>
-	         <section id="address_info" class="address_info">
-		         <section class="address_name">xia&nbsp;13725275140</section>
-			     <section class="address_content">安徽亳州市涡阳县广州</section>
-		     </section>
+	         <div id="addressHtml">
+	        
+		     </div>
 	    </section>
 	    <!-- 支付方式 -->
 	    <section class="checkout_section payment_section">
@@ -163,39 +197,24 @@ $(document).ready(function() {
 
 	            <section class="checkout_section product_section">
               <section class="checkout_title">商品信息（<a href="gencart.html" data-ajax="false">修改</a>）</section>
-              <section>
-              <ul>
-                  <li class="clearfix" style="margin-bottom:5px;">
-	                <a class="pro_img" href="#" data-ajax="false">
-	                <img alt="精梳埃及长绒棉素色条纹毛巾" width="60" height="60" src="img/aa.jpg">
-	                </a>
-	                <p class="pro_name">精梳埃及长绒棉素色条纹毛巾（颜色：浅驼、尺码：34cm×76cm）</p>
-	                <p class="pro_price">共2件<span>￥52</span></p>
-                 </li>
-                 <li class="clearfix" style="margin-bottom:5px;">
-	                <a class="pro_img" href="#" data-ajax="false">
-	                <img alt="中空纱纯棉毛巾" width="60" height="60" src="img/bb.jpg">
-	                </a>
-	                <p class="pro_name">中空纱纯棉毛巾（颜色：本白、尺码：34cm×76cm）</p>
-	                <p class="pro_price">共1件<span>￥19</span></p>
-                 </li>
-              </ul>
-              </section>
+              <div id="goodsHtml">
+            
+              </div>
         </section>
 
         <section class="checkout_section product_section">
               <section class="checkout_title">备注(最多输入50个文字)</section>
 	          <section>
-	              <input type="text" name="memo" maxlength="50">
+	              <input type="text" id="memo" name="memo" maxlength="50">
 	          </section>
         </section>
         <section class="checkout_section price_section">
-              <section class="clearfix"><label>商品总价</label><span>￥71<span></section>
-                            <section class="clearfix"><label>运费金额</label><span>￥15<span></section>
-                            <section class="clearfix"><label>应付金额</label><span>￥86<span></section>
+              <section class="clearfix"><label>商品总价</label><span id='goodsprice'><span></section>
+                            <section class="clearfix"><label>运费金额</label><span id='shipprice'>¥0<span></section>
+                            <section class="clearfix"><label>应付金额</label><span id='totalprice'><span></section>
         </section>
         <section style="padding:5px 5px;">
-	    	<input type="button" value="提交订单" data-theme="f" data-icon="check" data-mini="false" onclick="order_form_submit()">
+	    	<input type="button" value="提交订单" data-theme="f" data-icon="check" data-mini="false" onclick="addOrder()">
 	    </section>
 	    </form>
 	</div>
@@ -203,20 +222,7 @@ $(document).ready(function() {
 	<!-- footer -->
 	<div data-role="footer" data-theme="c">
     </div>
-	<!-- /footer -->
-	<script type="text/javascript">
-	    $("#address_info").click(function(){
-	    	// 重定向到列表页
-	    	location.href="checkout_myaddress.html";
-	    });
-	    
-
-	    function order_form_submit(){
-	    	$('#order_form').submit();
-	    }
-		
-	</script>
-</div>
+	</div>
 <!-- /page -->
 </body>
 </html>

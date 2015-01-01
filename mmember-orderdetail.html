@@ -12,6 +12,87 @@
 <script src="css/jquery-1.10.2.min.js"></script>
 <script src="css/bootstrap.min.js"></script>
 <link href="css/base.mobile.css" rel="stylesheet" type="text/css" media="screen, projection" />
+
+
+<link href="fivegold.css" rel="stylesheet" type="text/css"/>
+  <script type="text/javascript" src="iscroll-lite.js"></script>
+      				<script type="text/javascript" src="iscroll.js"></script>
+<script type="text/javascript" src="fivegold.js"></script>
+
+
+<script language="javascript">
+
+function genOrder(){
+var orderid = request('orderid');
+      //document.location.href="addressMange.html";
+	var xhr = new XMLHttpRequest();
+	xhr.open("GET", "http://120.24.209.210/api/mobile.php?act=mysaledesc&user_id=24&order_id="+orderid, true);
+	xhr.onreadystatechange = function() {
+  		 if (xhr.readyState==4 && xhr.status==200){
+    		var resultfromphp = xhr.responseText;
+			//alert(resultfromphp);
+			
+			 var objData = jQuery.parseJSON(resultfromphp);
+			
+			var html ='';
+			
+			html+='<p>订单状态：<span style="color: red;">'+objData.order.order_status+'</span></p>';
+		    html+='<p>订单编号：</td><td width="70%">'+objData.order.order_sn+'</p>';
+		    html+='<p>订单金额：</td><td>￥'+objData.order.order_amount+'</p>';
+		    html+='<p>下单日期：</td><td>'+objData.order.formated_add_time+'</p>';
+		     document.getElementById('orderHtml').innerHTML=html; 
+		     
+		      html ='';
+			
+			html+='<p>付款方式：支付宝</p>';
+		    html+='<p>商品金额：￥'+objData.order.formated_goods_amount+'</p>';
+		    html+='<p>运费金额：￥'+objData.order.formated_shipping_fee+'</p>';		    
+		    html+='<p>应付金额：￥'+objData.order.formated_total_fee+'</p>';
+		    html+='<p>已付金额：￥'+objData.order.formated_money_paid+'</p>';
+		    html+='<p>付款状态：未付款[未发货]</p>';
+		    //html+='<p>付款时间：</p>';
+		    
+		    document.getElementById('payHtml').innerHTML=html; 
+		      html ='';
+			
+			html+='<p>收货姓名：'+objData.order.consignee+'</p>';
+		    html+='<p>收货地址：'+objData.order.address+'</p>';
+		    html+='<p>手机号码：'+objData.order.mobile+'</p>';
+		     html+='<p>固定电话：'+objData.order.tel+'</p>';
+		      html+='<p>邮编号码：'+objData.order.zipcode+'</p>';
+		     html+='<p>配送方式：快递：网上支付</p>';
+		       document.getElementById('shipHtml').innerHTML=html; 
+		       
+		       document.getElementById('memo').innerHTML="<p>"+objData.order.postscript+"</p>"; 
+			
+			if (objData.goods_list.length>0){
+				   html ='';
+				  html+='<table class="table table-striped">';
+				 $.each(objData.goods_list, function (index, term) {
+			 	html+=' <tr>';
+		  		html+='<td><a href=\"goods.html?goodsid='+term.goods_id+'\"><img width=\"100\" height=\"100\" class=\"img-rounded\" src=\"'+term.goods_thumb+'\"/></a></td>';
+		  		html+='<td><p>'+term.goods_name+'()</p>';
+				html+='	<p>单价：<font style=\"color: red;\">￥'+term.goods_price+'</font></p>';
+				html+='	<p>数量：'+term.goods_number+'</p></td>';
+		  		html+=' </tr>';
+			 	});
+			 		html+='</table>';
+					//alert(html);
+					document.getElementById('goodsHtml').innerHTML=html; 
+			 }
+			   
+  		}
+	};
+	xhr.send();
+	
+}
+
+$(document).ready(function() {
+  genOrder();
+});
+
+
+</script>
 </head>
 <body><!-- page -->
 <div class="user-ui-page">
@@ -32,49 +113,35 @@
 		  <div class="panel-heading">
 		    <h3 class="panel-title">基本信息</h3>
 		  </div>
-		  <div class="panel-body">
-		    <p>订单状态：<span style="color: red;">未付款[未发货]</span></p>
-		    <p>订单编号：</td><td width="70%">20141229154392</p>
-		    <p>订单金额：</td><td>￥34</p>
-		    <p>下单日期：</td><td>2014-12-29 15:36</p>
+		  <div class="panel-body" id="orderHtml">
+		    
 		  </div>
 		</div>
 		<div class="panel panel-default">
 		  <div class="panel-heading">
 		    <h3 class="panel-title">付款信息</h3>
 		  </div>
-		  <div class="panel-body">
-		    <p>付款方式：支付宝</p>
-		    <p>商品金额：￥19</p>
-		    <p>运费金额：￥15</p>
-		    <p>应付金额：￥34</p>
-		    <p>已付金额：￥0</p>
-		    <p>付款状态：未付款[未发货]</p>
-		    <p>付款时间：</p>
+		  <div class="panel-body" id="payHtml">
+		    
 		  </div>
 		</div>
 		<div class="panel panel-default">
 		  <div class="panel-heading">
 		    <h3 class="panel-title">配送信息</h3>
 		  </div>
-		  <div class="panel-body">
-		    <p>收货姓名：xia</p>
-		    <p>收货地址：安徽亳州市涡阳县广州#工作日、双休日与假日均可送货</p>
-		    <p>手机号码：13725275140</p>
-		    <p>固定电话：</p>
-		    <p>邮编号码：225461</p>
-		    <p>配送方式：快递：网上支付</p>
+		  <div class="panel-body" id="shipHtml">
+		   
 		  </div>
 		</div>
 		<div class="panel panel-default">
 		  <div class="panel-heading">
 		    <h3 class="panel-title">备注</h3>
 		  </div>
-		  <div class="panel-body">
+		  <div class="panel-body" id="memo">
 		    <p>无备注...</p>
 		</div>
 		</div>
-		<div class="panel panel-default">
+		<!--div class="panel panel-default">
 		  <div class="panel-heading">
 		    <h3 class="panel-title">订单跟踪</h3>
 		  </div>
@@ -88,19 +155,14 @@
 				<td>订单创建成功！</td>
 			</tr>
 		</table>
-</div>
+</div-->
 		<div class="panel panel-default">
 		  <div class="panel-heading">
 		    <h3 class="panel-title">商品列表</h3>
 		  </div>
-		  <table class="table table-striped">
-			<tr>
-		  		<td><a href="goods.html"><img width="100" height="100" class="img-rounded" src="img/aa.jpg"/></a></td>
-		  		<td><p>中空纱纯棉毛巾(颜色：本白、尺码：34cm×76cm)</p>
-					<p>单价：<font style="color: red;">￥19</font></p>
-					<p>数量：1</p></td>
-		  	</tr>
-		  	</table>
+		  <div id="goodsHtml">
+		
+		  	</div>
 		</div>
 		</div>
 		<!-- /content -->

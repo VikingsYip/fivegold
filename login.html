@@ -1,0 +1,120 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>登陆/注册</title>
+<meta name="keywords" content="">
+<meta name="description" content="">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta content="telephone=no" name="format-detection" />
+
+<link rel="stylesheet" href="css/bootstrap.min.css">
+<script src="css/jquery-1.10.2.min.js"></script>
+<script src="css/bootstrap.min.js"></script>
+
+
+<style>
+
+.user-ui-header{
+	font-size:20px;
+	color:#ffffff;
+	background:#b3a99f;
+	line-height:50px;
+	text-align: center;
+}
+.user-ui-header .left-bar{
+	float:left;
+	padding-left:10px;
+	color:#ffffff;
+}
+
+.user-ui-header .right-bar{
+	float:right;
+	padding-right:10px;
+	color:#ffffff;
+}
+.user-ui-content{
+	padding:10px 10px;
+}
+.user-ui-footer {
+	font-size: 20px;
+	color: #ffffff;
+	background: #b3a99f;
+	line-height: 50px;
+	text-align: center;
+}
+</style>
+
+
+<script>
+
+function newaddress(){
+
+	var username=encodeURIComponent(document.getElementById('username').value);	
+	var password=encodeURIComponent(document.getElementById('password').value);						
+    var posturl ="http://120.24.209.210/api/mobile.php?act=loginusr&mode=test&user="+username+"&password="+password;
+     //alert(posturl);
+     //posturl=encodeURIComponent(posturl);
+     
+      var xhr = new XMLHttpRequest();
+	xhr.open("GET", posturl, true);
+	xhr.onreadystatechange = function() {
+  		 if (xhr.readyState==4 && xhr.status==200){
+    		var resultfromphp = xhr.responseText;
+    		//alert (resultfromphp);
+    		var objData = jQuery.parseJSON(resultfromphp);
+    		alert (objData.rsgmsg);
+    		if (objData.rsgcode=='000')
+    		document.location.href="checkout_myaddress.html";
+		 }
+	};
+	xhr.send();
+}
+
+</script>
+</head>
+<body>
+<!-- page -->
+<div class="user-ui-page">
+        <!-- header -->
+        <div class="user-ui-header clearfix">
+	        <a class="left-bar" href="go.html">
+	        	<span class="glyphicon glyphicon-home"></span>
+	        </a>
+	        <span >登陆</span>
+	        <a class="right-bar" href="#">
+	        	<span class="glyphicon glyphicon-shopping-cart"></span>
+	        </a>
+        </div>
+        <!-- /header -->
+		<!-- content -->
+		<div class="user-ui-content">
+		<div class="container">
+		<ul id="login_bar" class="nav nav-tabs">
+		  <li id="tab1" class="active"><a href="javascript:void(0);">普通登陆</a></li>
+		</ul>
+		<section id="tab_form_1" class="login_form" style="padding-top:20px;">
+			<form data-role="form" action="#" method="post">
+			<section class="form-group">
+				<label for="uname">用户名：</label>
+	            <input type="text" class="form-control" name="uname" id="username" value="" tabindex="1">
+			</section>
+			<section class="form-group">
+			    <label for="password">密码：<a href="forgetpassstep.html">忘记密码？</a></label>
+	            <input type="password" class="form-control" name="password" id="password" value="" autocomplete="off" tabindex="2">
+			</section>
+			<p class="user-text-center">
+			    <input type="button" value="登陆" onclick="newaddress()" class="btn btn-info btn-block" tabindex="3">
+			</p>
+	        </form>
+        </section>
+        
+		</div>
+		</div>
+		<!-- /content -->
+</div>
+
+<!-- /page -->
+</body>
+</html>
