@@ -1,4 +1,6 @@
 // JavaScript Document
+var userid  = 0;
+
 function hide(){
 $.mobile.hidePageLoadingMsg();
 }

@@ -12,6 +12,10 @@
 <script src="css/jquery-1.10.2.min.js"></script>
 <script src="css/bootstrap.min.js"></script>
 <link href="css/base.mobile.css" rel="stylesheet" type="text/css" media="screen, projection" />
+<link href="fivegold.css" rel="stylesheet" type="text/css"/>
+  <script type="text/javascript" src="iscroll-lite.js"></script>
+      				<script type="text/javascript" src="iscroll.js"></script>
+<script type="text/javascript" src="fivegold.js"></script>
 
 <script language="javascript">
 
@@ -49,7 +53,7 @@ $(document).ready(function() {
 <body><!-- page -->
 <div class="user-ui-page">
         <!-- header -->
-	    <div class="user-ui-header clearfix">
+	    <div class="user-ui-header clearfix" id="header">
 		     <a class="left-bar" href="checkcart.html">
 		     	<span class="glyphicon glyphicon-chevron-left"></span>
 		     </a>
@@ -59,6 +63,8 @@ $(document).ready(function() {
 		     </a>
 	    </div>
 		<!-- /header -->
+		<div id="wrapper">
+	<div id="scroller">
 		<!-- content -->
 		<div class="user-ui-content">
 		<div class="container padding-none">
@@ -140,6 +146,8 @@ $(document).ready(function() {
 		</div>
 		</div>
 <!-- /content -->
+</div>
+		</div>
 
 <!-- footer -->
 <!--div id="dp_footer" class="dp-footer">
