@@ -1,4 +1,8 @@
 // JavaScript Document
+function hide(){
+$.mobile.hidePageLoadingMsg();
+}
+
 function request(paras){ 
 var url = location.href;  
 var paraString = url.substring(url.indexOf("?")+1,url.length).split("&");  
@@ -21,6 +25,7 @@ $("#5gshoplist").bind("swipeleft", function() {
 var myScroll;
 function loaded() {
 	myScroll = new iScroll('wrapper');
+	//alert (myScroll);
 }
 
 document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);

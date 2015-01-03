@@ -13,7 +13,10 @@
 	<script src="css/jquery.cookie.js"></script>
 	<script src="css/bootstrap.min.js"></script>
 	<link href="css/base.mobile.css" rel="stylesheet" type="text/css" media="screen, projection" />
-    <script type="text/javascript" src="fivegold.js"></script>
+	<link href="fivegold.css" rel="stylesheet" type="text/css"/>
+  <script type="text/javascript" src="iscroll-lite.js"></script>
+      				<script type="text/javascript" src="iscroll.js"></script>
+<script type="text/javascript" src="fivegold.js"></script>
     <!-- load the json2 library (required for jstorage use) -->
 <script src="json2.js"></script>
 <!-- load the jstorage library -->
@@ -21,14 +24,14 @@
     <script>	
 function makeList() {
     var goodsname = request('goodsname');
-    goodsname=encodeURIComponent(goodsname);
+    //goodsname=encodeURIComponent(goodsname);
 	//alert(goodsname);
 	var xhr = new XMLHttpRequest();
-	xhr.open("GET", "http://120.24.209.210/api/mobile.php?act=findgoods&goodsname="+goodsname+"&intro=new&sorting=1", true);
+	xhr.open("GET", "http://120.24.209.210/api/mobile.php?act=findgoods&goodsname="+goodsname+"&intro=new&sorting=1&mode=test", true);
 	xhr.onreadystatechange = function() {
   		 if (xhr.readyState==4 && xhr.status==200){
     		var resultfromphp = xhr.responseText;
-			alert(resultfromphp);
+			//alert(resultfromphp);
 			var html ='';
       		  var objData = jQuery.parseJSON(resultfromphp);
 			   $.each(objData.listallcat, function (index, term) {
@@ -76,7 +79,8 @@ document.location.href="findgoods.html?goodsname="+encodeURIComponent(goodsname)
 	</div>	
 	</div>
 <!-- search end -->
-
+     <div id="wrapper">
+	<div id="scroller">	
 	<div class="dp-main">
 	<div class="container">
 		<ol class="breadcrumb">
@@ -94,7 +98,8 @@ document.location.href="findgoods.html?goodsname="+encodeURIComponent(goodsname)
 	</div>
 </div>
 <!-- /content -->
-
+	</div><!-- /scroller -->
+</div><!-- /wrapper -->
 <div id="dp_footer" class="dp-footer ">
 		
 </div>

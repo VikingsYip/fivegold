@@ -15,8 +15,7 @@
 	<link href="css/base.mobile.css" rel="stylesheet" type="text/css" media="screen, projection" />
 	<link href="fivegold.css" rel="stylesheet" type="text/css"/>
   <script type="text/javascript" src="iscroll-lite.js"></script>
-      				<script type="text/javascript" src="iscroll.js"></script>
-<script type="text/javascript" src="fivegold.js"></script>
+ <script type="text/javascript" src="fivegold.js"></script>
     <script>	
 function makeList() {
 	var xhr = new XMLHttpRequest();
@@ -46,17 +45,9 @@ function makeList() {
 			});
 			   //alert(html);
 			document.getElementById('catHtml').innerHTML=html;
-			   
-			//$('#catHtml').innerHTML=html;
-		      	/*
-			 $.each(objData.listallcat, function (index, term) {
-               html+='<li><a href="listsecomdcat.html?firstcatid='+term.first_id+'" rel="external"  ><img src="'+term.first_img+'" width="92" height="95"><h1>'+term.first_name+'</h1></a></li>';
-			   });*/
-					 //alert(html);
-            /*$('#listallcat').append($(html));
-            $('#listallcat').trigger('create');    
-            $('#listallcat').listview('refresh');
-			*/
+			alert(myScroll);
+			   	//myScroll.updateCache(start, data);
+			
   		}
 	};
 	xhr.send();
@@ -76,7 +67,7 @@ document.location.href="findgoods.html?goodsname="+encodeURIComponent(goodsname)
 
 </head>
 
-<body>
+<body onload="loaded()">
 
 <div class="dp-header" id="header">
 	<div class="container-fluid" style="background-color:#E0DFDB;margin-bottom:5px;padding:10px 10px;">
