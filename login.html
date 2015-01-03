@@ -12,8 +12,12 @@
 <link rel="stylesheet" href="css/bootstrap.min.css">
 <script src="css/jquery-1.10.2.min.js"></script>
 <script src="css/bootstrap.min.js"></script>
-
-
+<script type="text/javascript" src="fivegold.js"></script>
+<!-- load the json2 library (required for jstorage use) -->
+<script src="json2.js"></script>
+<!-- load the jstorage library -->
+<script src="jstorage.js"></script>
+<script type="text/javascript" src="css/jquery.mobile-1.3.2.js"></script>
 <style>
 
 .user-ui-header{
@@ -65,8 +69,19 @@ function newaddress(){
     		//alert (resultfromphp);
     		var objData = jQuery.parseJSON(resultfromphp);
     		alert (objData.rsgmsg);
-    		if (objData.rsgcode=='000')
-    		document.location.href="checkout_myaddress.html";
+    		if (objData.rsgcode=='000'){
+    		      //userid = objData.userid;
+    		      //alert (userid);
+    		       //var session = $.jStorage.get('session', '');
+    		     // $.jStorage.set('session', $('#name').val(), {TTL: 28800000});
+         	      $.jStorage.set('userid', objData.userid , {TTL: 28800000}); // {TTL... is optional time, in milliseconds, until key/value pair expires}
+                   //var userid = $.jStorage.get('userid');
+  			//alert (userid);
+    		      //session('userid')=objData.userid;
+    		      //setCookie('userid',objData.userid,getExpDate(0,2,0));
+    		      //alert(session('userid'));
+    			document.location.href="checkout_myaddress.html";
+    		}
 		 }
 	};
 	xhr.send();

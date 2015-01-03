@@ -44,8 +44,10 @@ function newaddress(){
 	//alert (defaultval);
 	var zipcode=encodeURIComponent(document.getElementById('delivery_zip').value);						
 	//var zipcode = 0;
-	var posturl ="http://120.24.209.210/api/mobile.php?act=newaddress&user_id=24&country=0&province=0&city=0&district=0&address="+address+"&consignee="+consignee+"&email="+email+"&tel="+tel+"&mobile="+mobile+"&zipcode="+zipcode+"&mode=test&default="+defaultval;
-     //var posturl ="http://120.24.209.210/api/mobile.php?act=newaddress&user_id=24&address="+address+"&consignee="+consignee+"&email="+email+"&tel="+tel+"&mobile="+mobile;
+	 var userid = $.jStorage.get('userid');
+	   if (userid==null)
+        document.location.href="login.html";
+	var posturl ="http://120.24.209.210/api/mobile.php?act=newaddress&user_id="+userid+"&country=0&province=0&city=0&district=0&address="+address+"&consignee="+consignee+"&email="+email+"&tel="+tel+"&mobile="+mobile+"&zipcode="+zipcode+"&mode=test&default="+defaultval;
      //alert(posturl);
      //posturl=encodeURIComponent(posturl);
      

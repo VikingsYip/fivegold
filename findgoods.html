@@ -14,16 +14,21 @@
 	<script src="css/bootstrap.min.js"></script>
 	<link href="css/base.mobile.css" rel="stylesheet" type="text/css" media="screen, projection" />
     <script type="text/javascript" src="fivegold.js"></script>
+    <!-- load the json2 library (required for jstorage use) -->
+<script src="json2.js"></script>
+<!-- load the jstorage library -->
+<script src="jstorage.js"></script>
     <script>	
 function makeList() {
     var goodsname = request('goodsname');
+    goodsname=encodeURIComponent(goodsname);
 	//alert(goodsname);
 	var xhr = new XMLHttpRequest();
-	xhr.open("GET", "http://120.24.209.210/api/mobile.php?act=findgoodsname&goodsname="+goodsname+"&order_name=1&user_id=24", true);
+	xhr.open("GET", "http://120.24.209.210/api/mobile.php?act=findgoods&goodsname="+goodsname+"&intro=new&sorting=1", true);
 	xhr.onreadystatechange = function() {
   		 if (xhr.readyState==4 && xhr.status==200){
     		var resultfromphp = xhr.responseText;
-			//alert(resultfromphp);
+			alert(resultfromphp);
 			var html ='';
       		  var objData = jQuery.parseJSON(resultfromphp);
 			   $.each(objData.listallcat, function (index, term) {
@@ -50,16 +55,17 @@ document.location.href="findgoods.html?goodsname="+encodeURIComponent(goodsname)
 </script>
 </head>
 <body>
-<div class="dp-header">
+
+<div class="dp-header" id="header">
 	<div class="container-fluid" style="background-color:#E0DFDB;margin-bottom:5px;padding:10px 10px;">
 	<div class="row" style="margin:0 0;">
 			<div class="col-xs-12" style="padding:0 0;">
-			<form id="search_form" action="javascript:postfind()" method="get">
-				<div class="col-xs-99">
+		<form id="search_form" action="javascript:postfind()" method="get">
+					<div class="col-xs-99">
 					<img alt="轮通之家" src="img/logo.png" width="45px" border="0">
 				</div>
-				<div class="input-group">
-				      <input type="text" class="form-control" name="scontent" id="goodsname" value="" placeholder="搜索商品">
+				<div class="input-group col-xs-100">
+				      <input type="text" class="form-control" name="scontent"  id="goodsname" value="" placeholder="搜索商品">
 				      <span class="input-group-btn">
 				        <input class="btn btn-default" type="submit" value="搜索">
 				      </span>
@@ -67,8 +73,10 @@ document.location.href="findgoods.html?goodsname="+encodeURIComponent(goodsname)
 			</form>
 			</div>
 	</div>
-	</div>	<!-- search end -->
+	</div>	
 	</div>
+<!-- search end -->
+
 	<div class="dp-main">
 	<div class="container">
 		<ol class="breadcrumb">

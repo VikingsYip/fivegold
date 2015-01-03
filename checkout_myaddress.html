@@ -32,12 +32,19 @@
   <script type="text/javascript" src="iscroll-lite.js"></script>
       				<script type="text/javascript" src="iscroll.js"></script>
 <script type="text/javascript" src="fivegold.js"></script>
-
+<!-- load the json2 library (required for jstorage use) -->
+<script src="json2.js"></script>
+<!-- load the jstorage library -->
+<script src="jstorage.js"></script>
 <script>
 function deladdress(id){
   // alert(id);
-    var xhr = new XMLHttpRequest();
-	xhr.open("GET", "http://120.24.209.210/api/mobile.php?act=deladdress&id="+id+"&user_id=24", true);
+  var userid = $.jStorage.get('userid');
+      if (userid==null)
+        document.location.href="login.html";
+  //alert (userid);
+   var xhr = new XMLHttpRequest();
+	xhr.open("GET", "http://120.24.209.210/api/mobile.php?act=deladdress&id="+id+"&user_id="+userid, true);
 	
 	xhr.onreadystatechange = function() {
   		 if (xhr.readyState==4 && xhr.status==200){
@@ -56,8 +63,11 @@ function deladdress(id){
 
 
 function makeList() {
+      var userid = $.jStorage.get('userid');
+          if (userid==null)
+        document.location.href="login.html";
 	var xhr = new XMLHttpRequest();
-	xhr.open("GET", "http://120.24.209.210/api/mobile.php?act=myaddressmgn&user_id=24", true);
+	xhr.open("GET", "http://120.24.209.210/api/mobile.php?act=myaddressmgn&user_id="+userid, true);
 	xhr.onreadystatechange = function() {
   		 if (xhr.readyState==4 && xhr.status==200){
     		var resultfromphp = xhr.responseText;

@@ -19,7 +19,10 @@
   <script type="text/javascript" src="iscroll-lite.js"></script>
       				<script type="text/javascript" src="iscroll.js"></script>
 <script type="text/javascript" src="fivegold.js"></script>
-
+<!-- load the json2 library (required for jstorage use) -->
+<script src="json2.js"></script>
+<!-- load the jstorage library -->
+<script src="jstorage.js"></script>
 <script>  
 var shopid = request('goodsid') ;
 var imagecount = 0;
@@ -87,10 +90,13 @@ $(document).ready(function() {
 });
 var spec = 0;
 function addtocart(){
+ var userid = $.jStorage.get('userid');
+     if (userid==null)
+        document.location.href="login.html";
 var xhr = new XMLHttpRequest();
      var goods_num = document.getElementById('goods_num').value;
 	
-     var posturl = "http://120.24.209.210/api/mobile.php?act=addbuycart&goods_id="+shopid+"&number="+goods_num+"&userid=24&spec="+spec;
+     var posturl = "http://120.24.209.210/api/mobile.php?act=addbuycart&goods_id="+shopid+"&number="+goods_num+"&userid="+userid+"&spec="+spec;
 	 
 	//alert(posturl);  	
 	xhr.open("GET", posturl, true);
@@ -137,8 +143,11 @@ var xhr = new XMLHttpRequest();
 	xhr.send();	
 }
 function collect(){
+ var userid = $.jStorage.get('userid');
+     if (userid==null)
+        document.location.href="login.html";
 var xhr = new XMLHttpRequest();
-     var posturl = "http://120.24.209.210/api/mobile.php?act=collect&goods_id="+shopid+"&user_id=24";
+     var posturl = "http://120.24.209.210/api/mobile.php?act=collect&goods_id="+shopid+"&user_id="+userid;
 	//alert(posturl);  	
 	xhr.open("GET", posturl, true);
 	xhr.onreadystatechange = function() {

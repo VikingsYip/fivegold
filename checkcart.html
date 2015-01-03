@@ -24,14 +24,19 @@
       				<script type="text/javascript" src="iscroll.js"></script>
 <script type="text/javascript" src="fivegold.js"></script>
 
-
+<!-- load the json2 library (required for jstorage use) -->
+<script src="json2.js"></script>
+<!-- load the jstorage library -->
+<script src="jstorage.js"></script>
 <script language="javascript">
 var addressid = 0;
 function genOrder(){
-
+     var userid = $.jStorage.get('userid');
+         if (userid==null)
+        document.location.href="login.html";
       //document.location.href="addressMange.html";
 	var xhr = new XMLHttpRequest();
-	xhr.open("GET", "http://120.24.209.210/api/mobile.php?act=generateorders&user_id=24", true);
+	xhr.open("GET", "http://120.24.209.210/api/mobile.php?act=generateorders&user_id="+userid, true);
 	xhr.onreadystatechange = function() {
   		 if (xhr.readyState==4 && xhr.status==200){
     		var resultfromphp = xhr.responseText;
@@ -131,7 +136,10 @@ function addOrder(){
     var need_inv=0;//1要，0不要;
     var inv_type=' ';//发票类型
     var postscript=memo;	//用户备注
-   var posturl="http://120.24.209.210/api/mobile.php?act=orderconfirmation&user_id=24&mode=test&shipping_id="+shippingid+'&pay_id='+paymentid+'&need_inv='+need_inv+'&address_id='+addressid+'&postscript='+postscript;
+    var userid = $.jStorage.get('userid');
+    if (userid==null)
+        document.location.href="login.html";
+   var posturl="http://120.24.209.210/api/mobile.php?act=orderconfirmation&user_id="+userid+"&mode=test&shipping_id="+shippingid+'&pay_id='+paymentid+'&need_inv='+need_inv+'&address_id='+addressid+'&postscript='+postscript;
    //alert (posturl);
       var xhr = new XMLHttpRequest();
 	xhr.open("GET", posturl, true);

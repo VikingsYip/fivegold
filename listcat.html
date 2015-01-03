@@ -67,21 +67,27 @@ $(document).ready(function() {
 	 makeList();
 });
 
+function postfind(){
+var goodsname=document.getElementById('goodsname').value;
+document.location.href="findgoods.html?goodsname="+encodeURIComponent(goodsname);
+}
+
 </script>
 
 </head>
 
 <body>
-<div class="dp-header"  id="header">
+
+<div class="dp-header" id="header">
 	<div class="container-fluid" style="background-color:#E0DFDB;margin-bottom:5px;padding:10px 10px;">
 	<div class="row" style="margin:0 0;">
 			<div class="col-xs-12" style="padding:0 0;">
-			<form id="search_form" action="search.html" method="get">
-				<div class="col-xs-99">
-					<img alt="轮通之家" src="img/logo.png" width="36px" border="0">
+		<form id="search_form" action="javascript:postfind()" method="get">
+					<div class="col-xs-99">
+					<img alt="轮通之家" src="img/logo.png" width="45px" border="0">
 				</div>
-				<div class="input-group">
-				      <input type="text" class="form-control" name="scontent" value="" placeholder="搜索商品">
+				<div class="input-group col-xs-100">
+				      <input type="text" class="form-control" name="scontent"  id="goodsname" value="" placeholder="搜索商品">
 				      <span class="input-group-btn">
 				        <input class="btn btn-default" type="submit" value="搜索">
 				      </span>
@@ -89,8 +95,10 @@ $(document).ready(function() {
 			</form>
 			</div>
 	</div>
-	</div>	<!-- search end -->
+	</div>	
 	</div>
+<!-- search end -->
+
      <div id="wrapper">
 	<div id="scroller">	
 <div class="dp-main">

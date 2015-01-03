@@ -1,10 +1,4 @@
 // JavaScript Document
-var userid  = 0;
-
-function hide(){
-$.mobile.hidePageLoadingMsg();
-}
-
 function request(paras){ 
 var url = location.href;  
 var paraString = url.substring(url.indexOf("?")+1,url.length).split("&");  
@@ -37,6 +31,3 @@ document.addEventListener('touchmove', function (e) { e.preventDefault(); }, fal
  *
  */
 document.addEventListener('DOMContentLoaded', function () { setTimeout(loaded, 200); }, false);
-/*
- * * * * * * * */
-
