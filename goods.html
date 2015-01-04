@@ -105,8 +105,11 @@ var xhr = new XMLHttpRequest();
     	       	var resultfromphp = xhr.responseText;
 			//alert("添加成功");
       		      var objData = jQuery.parseJSON(resultfromphp);
-		     document.location.href="gencart.html";
-			 //alert (objData.rsgmsg);
+		     //document.location.href="gencart.html";
+			// alert (objData.rsgmsg);
+			 document.getElementById('alertmsg').innerHTML=objData.rsgmsg;
+			  // alert(document.getElementById('alertmsg'));
+			$('#addtocart_dialog').show();
 		}
 	};
 	xhr.send();
@@ -157,12 +160,11 @@ var xhr = new XMLHttpRequest();
 			//alert(resultfromphp);
 			//alert("添加成功");
       		      var objData = jQuery.parseJSON(resultfromphp);
-			     //alert (objData.rsgcode);
-			     if (objData.rsgcode=='000')
-					document.location.href="listcollection.html";  //document.getElementById('prompt').innerHTML = objData.rsgmsg;
-				 else
-				    alert (objData.rsgmsg);
-				 //$('#bshop').popup('open');  
+      		     // alert(objData.rsgmsg);
+			     	 document.getElementById('alertmsg2').innerHTML=objData.rsgmsg;
+			     	 // alert(document.getElementById('alertmsg2'));
+			$('#collect_dialog').show();
+
 			 
 		}
 	};
@@ -300,7 +302,7 @@ function update_minus(){
 		       </div>
         	   <div class="alert alert-danger m_5_0" id="tishi" style="display:none;"></div>
         	   <div class="m_5_0">
-			   		<a href="javascript:collect();"><input type="buttom" value="关注" class="btn btn-danger" style="width:80px">  </a>  <a href="javascript:addtocart();"> <input type="buttom" value="加入购物车" class="btn btn-danger" ></a>
+			   		<input type="buttom" onclick="javascript:collect();" value="关注" class="btn btn-danger" data-toggle="modal" data-target="#collect_dialog"  style="width:80px">  <input type="buttom" onclick="javascript:addtocart();" value="加入购物车" class="btn btn-danger"  data-toggle="modal" data-target="#addtocart_dialog" >
                  
 			   </div> 
           
@@ -326,14 +328,38 @@ function update_minus(){
 			
 		   
 <!-- S  快捷导航 -->
-<script type="text/javascript">
-$(function(){
-	if($.cookie('UNAME') ){
-		$('.login-tag').show();
-    }else{
-    	$('.login-tag').hide();
-    }
-});
-</script>
+<div class="modal fade" id="addtocart_dialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">购物车添加成功</h4>
+      </div>
+      <div class="modal-body" id="alertmsg">
+           
+      </div>
+      <div class="modal-footer">
+        <button id="login" type="button" class="btn btn-info" onclick="javascript:void(0)" data-dismiss="modal">确认</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<div class="modal fade" id="collect_dialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">关注成功</h4>
+      </div>
+      <div class="modal-body" id="alertmsg2">
+          
+      </div>
+      <div class="modal-footer">
+        <button id="login" type="button" class="btn btn-info" onclick="javascript:void(0)" data-dismiss="modal">确认</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 </body>
 </html>

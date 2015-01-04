@@ -24,7 +24,7 @@ $("#5gshoplist").bind("swipeleft", function() {
 
 var myScroll;
 function loaded() {
-	myScroll = new iScroll('wrapper');
+	myScroll = new IScroll('wrapper');
 	//alert (myScroll);
 }
 

@@ -53,14 +53,12 @@
 
 <script>
 
-function newaddress(){
+function login(){
 
 	var username=encodeURIComponent(document.getElementById('username').value);	
 	var password=encodeURIComponent(document.getElementById('password').value);						
     var posturl ="http://120.24.209.210/api/mobile.php?act=loginusr&mode=test&user="+username+"&password="+password;
-     //alert(posturl);
-     //posturl=encodeURIComponent(posturl);
-     
+
       var xhr = new XMLHttpRequest();
 	xhr.open("GET", posturl, true);
 	xhr.onreadystatechange = function() {
@@ -68,25 +66,26 @@ function newaddress(){
     		var resultfromphp = xhr.responseText;
     		//alert (resultfromphp);
     		var objData = jQuery.parseJSON(resultfromphp);
-    		alert (objData.rsgmsg);
+    		$('#logout_dialog').show();
+    		    document.getElementById('alertmsg').innerHTML=objData.rsgmsg;
+    		//alert (document.getElementById('alertmsg').innerHTML);
     		if (objData.rsgcode=='000'){
-    		      //userid = objData.userid;
-    		      //alert (userid);
-    		       //var session = $.jStorage.get('session', '');
-    		     // $.jStorage.set('session', $('#name').val(), {TTL: 28800000});
          	      $.jStorage.set('userid', objData.userid , {TTL: 28800000}); // {TTL... is optional time, in milliseconds, until key/value pair expires}
-                   //var userid = $.jStorage.get('userid');
-  			//alert (userid);
-    		      //session('userid')=objData.userid;
-    		      //setCookie('userid',objData.userid,getExpDate(0,2,0));
-    		      //alert(session('userid'));
-    			document.location.href="checkout_myaddress.html";
+         	      $.jStorage.set('username', username , {TTL: 28800000}); // {TTL... is optional time, in milliseconds, until key/value pair expires}
+         	      $.jStorage.set('password', password , {TTL: 28800000}); // {TTL... is optional time, in milliseconds, until key/value pair expires}
+    			
     		}
 		 }
 	};
 	xhr.send();
 }
-
+function confirm(){
+var userid = $.jStorage.get('userid');
+if (userid!=null)
+	document.location.href='usercenter.html';
+else
+      void(0);
+}
 </script>
 </head>
 <body>
@@ -120,7 +119,7 @@ function newaddress(){
 	            <input type="password" class="form-control" name="password" id="password" value="" autocomplete="off" tabindex="2">
 			</section>
 			<p class="user-text-center">
-			    <input type="button" value="登陆" onclick="newaddress()" class="btn btn-info btn-block" tabindex="3">
+			    <input type="button" value="登陆" onclick="login()" class="btn btn-info btn-block" data-toggle="modal" data-target="#logout_dialog" tabindex="3">
 			</p>
 	        </form>
         </section>
@@ -130,6 +129,22 @@ function newaddress(){
 		<!-- /content -->
 </div>
 
+<div class="modal fade" id="logout_dialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">登录成功</h4>
+      </div>
+      <div class="modal-body" id="alertmsg">
+            
+      </div>
+      <div class="modal-footer">
+        <button id="login" type="button" class="btn btn-info" onclick="confirm()" data-dismiss="modal">确认</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 <!-- /page -->
 </body>
 </html>

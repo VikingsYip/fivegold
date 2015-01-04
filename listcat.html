@@ -31,10 +31,10 @@ function makeList() {
 			 $.each(term.cat_id, function (index, secondterm) {
 			
 			html+="<div>"//第二级div开始 
-			html+="<h5 style=\"border-bottom:1px dashed #808080;line-height:30px;\"><a href=\"#\" style=\"color:#808080;\">"+secondterm.name+"</a></h5>";
+			html+="<h5 style=\"border-bottom:1px dashed #808080;line-height:30px;\"><img src=\""+secondterm.img+"\" width=\"30px\"/><a href=\"#\" style=\"color:#808080;\">"+secondterm.name+"</a></h5>";
 					html+="<div>"//第三级div开始 ;
 					 $.each(secondterm.cat_id, function (index, thirdterm) {
-					html+="<a class=\"font-default\" href=\"listview.html?catid="+thirdterm.id+"\">"+thirdterm.name+"</a><br>";
+					html+="<a class=\"font-default\" href=\"listview.html?catid="+thirdterm.id+"\">"+thirdterm.name+"</a>&nbsp;&nbsp;";
 					  });//thrid
 				    html+="</div>";//第三级div结束
 			    html+="</div>";//第二级div结束

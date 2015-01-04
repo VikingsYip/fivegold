@@ -14,6 +14,40 @@
 	<link rel="stylesheet" href="css/idangerous.swiper.css">
 	<script src="css/idangerous.swiper.min.js"></script>
 	<link href="css/base.mobile.css" rel="stylesheet" type="text/css" media="screen, projection" />	
+	<script>
+	function makelist(){
+			
+    var posturl ="http://www.zgltong.com/api/mobile.php?act=carousel";
+
+      var xhr = new XMLHttpRequest();
+	xhr.open("GET", posturl, true);
+	xhr.onreadystatechange = function() {
+  		 if (xhr.readyState==4 && xhr.status==200){
+    		var resultfromphp = xhr.responseText;
+    		//alert (resultfromphp);
+    		var objData = jQuery.parseJSON(resultfromphp);
+    		
+    		 $.each(objData.listallcat, function (index, term) {	
+    		       //alert(term.ad_code);
+    		       var html = "";
+    		       html+=	"<div class=\"swiper-slide\" >";
+			html+="<a href=\"#\">";
+			html+="<img src=\""+term.ad_code+"\" width=\"100%\" >";
+			html+="</a>";
+			html+="</div>";
+			  document.getElementById('showimage').innerHTML+=html;
+			   });
+			
+		
+		 }
+	};
+	xhr.send();
+}
+$(document).ready(function() {
+     	 makelist();
+});
+</script>
+	</script>
 	
 </head>
 <body>
@@ -47,7 +81,7 @@
 	position: relative;
 }
 .total_img .swiper-container,.total_img .swiper-slide {
-	width: 320px;
+	width: 640px;
 	max-width: 640px;
 	min-width: 320px;
 	height:130px;
@@ -83,18 +117,8 @@
 </style>
 <div class="total_img">
 	<div class="swiper-container">
-		<div class="swiper-wrapper">
-			<div class="swiper-slide">
-				<a href="#">
-					<img src="img/aa.jpg" width="100%">
-				</a>
-			 </div>
-			<div class="swiper-slide">
-				<a href="#">
-					<img src="img/aa.jpg"  width="100%">
-				</a>
-			 </div>
-					 
+		<div class="swiper-wrapper" id="showimage">
+
 		</div>
 		<div class="previous">Previous</div>
 		<div class="next">Next</div>
@@ -369,7 +393,7 @@ function setcookie(cookieName, cookieValue, seconds, path, domain, secure) {
 		    	<div class="menu-img glyphicon glyphicon-th-large"></div>
 		    	<div>分类</div>
 		    </a>
-		    <a class="pull-left menu-btn" href="listcollection.html">
+		    <a class="pull-left menu-btn" href="usercenter.html">
 		    	<div class="menu-img glyphicon glyphicon-user"></div>
 		    	<div>我的</div>
 		    </a>
