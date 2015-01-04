@@ -1,1179 +1,1988 @@
-/**
- * oxScroll
- */
+/*! iScroll v5.1.1 ~ (c) 2008-2014 Matteo Spinelli ~ http://cubiq.org/license */
 (function (window, document, Math) {
-    /**
-     * rAF 不解释
-     * @type {window.requestAnimationFrame|*|Function}
-     */
-    var rAF = window.requestAnimationFrame	||
-        window.webkitRequestAnimationFrame	||
-        window.mozRequestAnimationFrame		||
-        window.oRequestAnimationFrame		||
-        window.msRequestAnimationFrame		||
-        function (callback) { window.setTimeout(callback, 1000 / 60); };
+var rAF = window.requestAnimationFrame	||
+	window.webkitRequestAnimationFrame	||
+	window.mozRequestAnimationFrame		||
+	window.oRequestAnimationFrame		||
+	window.msRequestAnimationFrame		||
+	function (callback) { window.setTimeout(callback, 1000 / 60); };
 
-    /**
-     * g工具类处理函数
-     */
-    var utils = (function () {
-        //将需要暴露给外界调用的方法放在me对象里，其他var声明的方法则保持为私有
-        var me = {};
+var utils = (function () {
+	var me = {};
 
-        /**
-         * 用于判断浏览器是否支持相关的CSS3属性
-         * @type {CSSStyleDeclaration}
-         * @private
-         */
-        var _elementStyle = document.createElement('div').style;
-        /**
-         * 判断CSS 属性样式前缀
-         */
-        var _vendor = (function () {
-            var vendors = ['t', 'webkitT', 'MozT', 'msT', 'OT'],
-                transform,
-                i = 0,
-                l = vendors.length;
+	var _elementStyle = document.createElement('div').style;
+	var _vendor = (function () {
+		var vendors = ['t', 'webkitT', 'MozT', 'msT', 'OT'],
+			transform,
+			i = 0,
+			l = vendors.length;
 
-            for ( ; i < l; i++ ) {
-                transform = vendors[i] + 'ransform';
-                if ( transform in _elementStyle ) return vendors[i].substr(0, vendors[i].length-1);
-            }
+		for ( ; i < l; i++ ) {
+			transform = vendors[i] + 'ransform';
+			if ( transform in _elementStyle ) return vendors[i].substr(0, vendors[i].length-1);
+		}
 
-            return false;
-        })();
+		return false;
+	})();
 
-        /**
-         * 获取CSS 前缀
-         * @param style
-         * @returns {*} 返回CSS3兼容性前缀
-         * @private
-         */
-        function _prefixStyle (style) {
-            if ( _vendor === false ) return false;
-            if ( _vendor === '' ) return style;
-            return _vendor + style.charAt(0).toUpperCase() + style.substr(1);
-        }
+	function _prefixStyle (style) {
+		if ( _vendor === false ) return false;
+		if ( _vendor === '' ) return style;
+		return _vendor + style.charAt(0).toUpperCase() + style.substr(1);
+	}
 
-        /**
-         * 获取时间戳
-         * @type {Function}
-         */
-        me.getTime = Date.now || function getTime () { return new Date().getTime(); };
+	me.getTime = Date.now || function getTime () { return new Date().getTime(); };
 
-        /**
-         *
-         * @param target
-         * @param obj
-         */
-        me.extend = function (target, obj) {
-            for ( var i in obj ) {
-                target[i] = obj[i];
-            }
-        };
+	me.extend = function (target, obj) {
+		for ( var i in obj ) {
+			target[i] = obj[i];
+		}
+	};
 
-        me.addEvent = function (el, type, fn, capture) {
-            el.addEventListener(type, fn, !!capture);
-        };
+	me.addEvent = function (el, type, fn, capture) {
+		el.addEventListener(type, fn, !!capture);
+	};
 
-        me.removeEvent = function (el, type, fn, capture) {
-            el.removeEventListener(type, fn, !!capture);
-        };
+	me.removeEvent = function (el, type, fn, capture) {
+		el.removeEventListener(type, fn, !!capture);
+	};
 
-        /**
-         * 根据我们的拖动返回运动的长度与耗时，用于惯性拖动判断
-         * @param current 当前鼠标位置
-         * @param start touchStart时候记录的Y（可能是X）的开始位置，但是在touchmove时候可能被重写
-         * @param time touchstart到手指离开时候经历的时间，同样可能被touchmove重写
-         * @param lowerMargin y可移动的最大距离，这个一般为计算得出 this.wrapperHeight - this.scrollerHeight
-         * @param wrapperSize 如果有边界距离的话就是可拖动，不然碰到0的时候便停止
-         * @param deceleration 匀减速
-         * @returns {{destination: number, duration: number}}
-         */
-        me.momentum = function (current, start, time, lowerMargin, wrapperSize, deceleration) {
-            var distance = current - start,
-                speed = Math.abs(distance) / time,
-                destination,
-                duration;
+	me.momentum = function (current, start, time, lowerMargin, wrapperSize, deceleration) {
+		var distance = current - start,
+			speed = Math.abs(distance) / time,
+			destination,
+			duration;
 
-            deceleration = deceleration === undefined ? 0.0006 : deceleration;
+		deceleration = deceleration === undefined ? 0.0006 : deceleration;
 
-            destination = current + ( speed * speed ) / ( 2 * deceleration ) * ( distance < 0 ? -1 : 1 );
-            duration = speed / deceleration;
+		destination = current + ( speed * speed ) / ( 2 * deceleration ) * ( distance < 0 ? -1 : 1 );
+		duration = speed / deceleration;
 
-            if ( destination < lowerMargin ) {
-                destination = wrapperSize ? lowerMargin - ( wrapperSize / 2.5 * ( speed / 8 ) ) : lowerMargin;
-                distance = Math.abs(destination - current);
-                duration = distance / speed;
-            } else if ( destination > 0 ) {
-                destination = wrapperSize ? wrapperSize / 2.5 * ( speed / 8 ) : 0;
-                distance = Math.abs(current) + destination;
-                duration = distance / speed;
-            }
+		if ( destination < lowerMargin ) {
+			destination = wrapperSize ? lowerMargin - ( wrapperSize / 2.5 * ( speed / 8 ) ) : lowerMargin;
+			distance = Math.abs(destination - current);
+			duration = distance / speed;
+		} else if ( destination > 0 ) {
+			destination = wrapperSize ? wrapperSize / 2.5 * ( speed / 8 ) : 0;
+			distance = Math.abs(current) + destination;
+			duration = distance / speed;
+		}
 
-            return {
-                destination: Math.round(destination),
-                duration: duration
-            };
-        };
+		return {
+			destination: Math.round(destination),
+			duration: duration
+		};
+	};
 
-        var _transform = _prefixStyle('transform');
+	var _transform = _prefixStyle('transform');
 
-        me.extend(me, {
-            hasTransform: _transform !== false,
-            hasPerspective: _prefixStyle('perspective') in _elementStyle,
-            hasTouch: 'ontouchstart' in window,
-            hasPointer: navigator.msPointerEnabled,
-            hasTransition: _prefixStyle('transition') in _elementStyle
-        });
+	me.extend(me, {
+		hasTransform: _transform !== false,
+		hasPerspective: _prefixStyle('perspective') in _elementStyle,
+		hasTouch: 'ontouchstart' in window,
+		hasPointer: navigator.msPointerEnabled,
+		hasTransition: _prefixStyle('transition') in _elementStyle
+	});
 
-        // This should find all Android browsers lower than build 535.19 (both stock browser and webview)
-        me.isBadAndroid = /Android /.test(window.navigator.appVersion) && !(/Chrome\/\d/.test(window.navigator.appVersion));
+	// This should find all Android browsers lower than build 535.19 (both stock browser and webview)
+	me.isBadAndroid = /Android /.test(window.navigator.appVersion) && !(/Chrome\/\d/.test(window.navigator.appVersion));
 
-        me.extend(me.style = {}, {
-            transform: _transform,
-            transitionTimingFunction: _prefixStyle('transitionTimingFunction'),
-            transitionDuration: _prefixStyle('transitionDuration'),
-            transitionDelay: _prefixStyle('transitionDelay'),
-            transformOrigin: _prefixStyle('transformOrigin')
-        });
+	me.extend(me.style = {}, {
+		transform: _transform,
+		transitionTimingFunction: _prefixStyle('transitionTimingFunction'),
+		transitionDuration: _prefixStyle('transitionDuration'),
+		transitionDelay: _prefixStyle('transitionDelay'),
+		transformOrigin: _prefixStyle('transformOrigin')
+	});
 
-        me.hasClass = function (e, c) {
-            var re = new RegExp("(^|\\s)" + c + "(\\s|$)");
-            return re.test(e.className);
-        };
+	me.hasClass = function (e, c) {
+		var re = new RegExp("(^|\\s)" + c + "(\\s|$)");
+		return re.test(e.className);
+	};
 
-        me.addClass = function (e, c) {
-            if ( me.hasClass(e, c) ) {
-                return;
-            }
+	me.addClass = function (e, c) {
+		if ( me.hasClass(e, c) ) {
+			return;
+		}
 
-            var newclass = e.className.split(' ');
-            newclass.push(c);
-            e.className = newclass.join(' ');
-        };
+		var newclass = e.className.split(' ');
+		newclass.push(c);
+		e.className = newclass.join(' ');
+	};
 
-        me.removeClass = function (e, c) {
-            if ( !me.hasClass(e, c) ) {
-                return;
-            }
+	me.removeClass = function (e, c) {
+		if ( !me.hasClass(e, c) ) {
+			return;
+		}
 
-            var re = new RegExp("(^|\\s)" + c + "(\\s|$)", 'g');
-            e.className = e.className.replace(re, ' ');
-        };
+		var re = new RegExp("(^|\\s)" + c + "(\\s|$)", 'g');
+		e.className = e.className.replace(re, ' ');
+	};
 
-        me.offset = function (el) {
-            var left = -el.offsetLeft,
-                top = -el.offsetTop;
+	me.offset = function (el) {
+		var left = -el.offsetLeft,
+			top = -el.offsetTop;
 
-            // jshint -W084
-            while (el = el.offsetParent) {
-                left -= el.offsetLeft;
-                top -= el.offsetTop;
-            }
-            // jshint +W084
+		// jshint -W084
+		while (el = el.offsetParent) {
+			left -= el.offsetLeft;
+			top -= el.offsetTop;
+		}
+		// jshint +W084
 
-            return {
-                left: left,
-                top: top
-            };
-        };
+		return {
+			left: left,
+			top: top
+		};
+	};
 
-        me.preventDefaultException = function (el, exceptions) {
-            for ( var i in exceptions ) {
-                if ( exceptions[i].test(el[i]) ) {
-                    return true;
-                }
-            }
+	me.preventDefaultException = function (el, exceptions) {
+		for ( var i in exceptions ) {
+			if ( exceptions[i].test(el[i]) ) {
+				return true;
+			}
+		}
 
-            return false;
-        };
+		return false;
+	};
 
-        me.extend(me.eventType = {}, {
-            touchstart: 1,
-            touchmove: 1,
-            touchend: 1,
+	me.extend(me.eventType = {}, {
+		touchstart: 1,
+		touchmove: 1,
+		touchend: 1,
 
-            mousedown: 2,
-            mousemove: 2,
-            mouseup: 2,
+		mousedown: 2,
+		mousemove: 2,
+		mouseup: 2,
 
-            MSPointerDown: 3,
-            MSPointerMove: 3,
-            MSPointerUp: 3
-        });
+		MSPointerDown: 3,
+		MSPointerMove: 3,
+		MSPointerUp: 3
+	});
 
-        /**
-         * 动画函数
-         * style为css3调用的
-         * fn为js调用的
-         */
-        me.extend(me.ease = {}, {
-            quadratic: {
-                style: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
-                fn: function (k) {
-                    return k * ( 2 - k );
-                }
-            },
-            circular: {
-                style: 'cubic-bezier(0.1, 0.57, 0.1, 1)',	// Not properly "circular" but this looks better, it should be (0.075, 0.82, 0.165, 1)
-                fn: function (k) {
-                    return Math.sqrt( 1 - ( --k * k ) );
-                }
-            },
-            back: {
-                style: 'cubic-bezier(0.175, 0.885, 0.32, 1.275)',
-                fn: function (k) {
-                    var b = 4;
-                    return ( k = k - 1 ) * k * ( ( b + 1 ) * k + b ) + 1;
-                }
-            },
-            bounce: {
-                style: '',
-                fn: function (k) {
-                    if ( ( k /= 1 ) < ( 1 / 2.75 ) ) {
-                        return 7.5625 * k * k;
-                    } else if ( k < ( 2 / 2.75 ) ) {
-                        return 7.5625 * ( k -= ( 1.5 / 2.75 ) ) * k + 0.75;
-                    } else if ( k < ( 2.5 / 2.75 ) ) {
-                        return 7.5625 * ( k -= ( 2.25 / 2.75 ) ) * k + 0.9375;
-                    } else {
-                        return 7.5625 * ( k -= ( 2.625 / 2.75 ) ) * k + 0.984375;
-                    }
-                }
-            },
-            elastic: {
-                style: '',
-                fn: function (k) {
-                    var f = 0.22,
-                        e = 0.4;
+	me.extend(me.ease = {}, {
+		quadratic: {
+			style: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)',
+			fn: function (k) {
+				return k * ( 2 - k );
+			}
+		},
+		circular: {
+			style: 'cubic-bezier(0.1, 0.57, 0.1, 1)',	// Not properly "circular" but this looks better, it should be (0.075, 0.82, 0.165, 1)
+			fn: function (k) {
+				return Math.sqrt( 1 - ( --k * k ) );
+			}
+		},
+		back: {
+			style: 'cubic-bezier(0.175, 0.885, 0.32, 1.275)',
+			fn: function (k) {
+				var b = 4;
+				return ( k = k - 1 ) * k * ( ( b + 1 ) * k + b ) + 1;
+			}
+		},
+		bounce: {
+			style: '',
+			fn: function (k) {
+				if ( ( k /= 1 ) < ( 1 / 2.75 ) ) {
+					return 7.5625 * k * k;
+				} else if ( k < ( 2 / 2.75 ) ) {
+					return 7.5625 * ( k -= ( 1.5 / 2.75 ) ) * k + 0.75;
+				} else if ( k < ( 2.5 / 2.75 ) ) {
+					return 7.5625 * ( k -= ( 2.25 / 2.75 ) ) * k + 0.9375;
+				} else {
+					return 7.5625 * ( k -= ( 2.625 / 2.75 ) ) * k + 0.984375;
+				}
+			}
+		},
+		elastic: {
+			style: '',
+			fn: function (k) {
+				var f = 0.22,
+					e = 0.4;
 
-                    if ( k === 0 ) { return 0; }
-                    if ( k == 1 ) { return 1; }
+				if ( k === 0 ) { return 0; }
+				if ( k == 1 ) { return 1; }
 
-                    return ( e * Math.pow( 2, - 10 * k ) * Math.sin( ( k - f / 4 ) * ( 2 * Math.PI ) / f ) + 1 );
-                }
-            }
-        });
+				return ( e * Math.pow( 2, - 10 * k ) * Math.sin( ( k - f / 4 ) * ( 2 * Math.PI ) / f ) + 1 );
+			}
+		}
+	});
 
-        /**
-         * 模拟tap事件
-         * @param e
-         * @param eventName
-         */
-        me.tap = function (e, eventName) {
-            var ev = document.createEvent('Event');
-            ev.initEvent(eventName, true, true);
-            ev.pageX = e.pageX;
-            ev.pageY = e.pageY;
-            e.target.dispatchEvent(ev);
-        };
+	me.tap = function (e, eventName) {
+		var ev = document.createEvent('Event');
+		ev.initEvent(eventName, true, true);
+		ev.pageX = e.pageX;
+		ev.pageY = e.pageY;
+		e.target.dispatchEvent(ev);
+	};
 
-        /**
-         * 模拟点击事件
-         * @param e
-         */
-        me.click = function (e) {
-            var target = e.target,
-                ev;
+	me.click = function (e) {
+		var target = e.target,
+			ev;
 
-            if ( !(/(SELECT|INPUT|TEXTAREA)/i).test(target.tagName) ) {
-                ev = document.createEvent('MouseEvents');
-                ev.initMouseEvent('click', true, true, e.view, 1,
-                    target.screenX, target.screenY, target.clientX, target.clientY,
-                    e.ctrlKey, e.altKey, e.shiftKey, e.metaKey,
-                    0, null);
+		if ( !(/(SELECT|INPUT|TEXTAREA)/i).test(target.tagName) ) {
+			ev = document.createEvent('MouseEvents');
+			ev.initMouseEvent('click', true, true, e.view, 1,
+				target.screenX, target.screenY, target.clientX, target.clientY,
+				e.ctrlKey, e.altKey, e.shiftKey, e.metaKey,
+				0, null);
 
-                ev._constructed = true;
-                target.dispatchEvent(ev);
-            }
-        };
+			ev._constructed = true;
+			target.dispatchEvent(ev);
+		}
+	};
 
-        return me;
-    })();
+	return me;
+})();
 
-    function IScroll (el, options) {
-        //wrapper 是iScroll的容器
-        this.wrapper = typeof el == 'string' ? document.querySelector(el) : el;
-        //scroller 是iScroll 滚动的元素
-        this.scroller = this.wrapper.children[0];
-        // scroller 的 Style对象，通过set他的属性改变样式
-        this.scrollerStyle = this.scroller.style;
-        //初始化参数
-        this.options = {
-            //步进
-            snapThreshold: 0.334,
+function IScroll (el, options) {
+	this.wrapper = typeof el == 'string' ? document.querySelector(el) : el;
+	this.scroller = this.wrapper.children[0];
+	this.scrollerStyle = this.scroller.style;		// cache style for better performance
 
+	this.options = {
 
-            startX: 0,
-            startY: 0,
-            //默认是Y轴上下滚动
-            scrollY: true,
-            //方向锁定阈值，比如用户点击屏幕后，滑动5px的距离后，判断用户的拖动意图，是x方向拖动还是y方向
-            directionLockThreshold: 5,
-            //是否有惯性缓冲动画
-            momentum: true,
-            //超出边界时候是否还能拖动
-            bounce: true,
-            //超出边界还原时间点
-            bounceTime: 600,
-            //超出边界返回的动画
-            bounceEasing: '',
-            //是否阻止默认滚动事件
-            preventDefault: true,
-            //当遇到表单元素则不阻止冒泡，而是弹出系统自带相应的输入控件
-            preventDefaultException: { tagName: /^(INPUT|TEXTAREA|BUTTON|SELECT)$/ },
+		resizeScrollbars: true,
 
-            HWCompositing: true,
-            useTransition: true,
-            useTransform: true
-        };
-        //合并配置参数
-        utils.extend(this.options,options);
+		mouseWheelSpeed: 20,
 
-        /**
-         * 判断是否支持3D加速
-         * @type {string}
-         */
-        this.translateZ = this.options.HWCompositing && utils.hasPerspective ? ' translateZ(0)' : '';
-        /**
-         * 判断是否支持css3的transition 动画
-         * @type {*|utils.hasTransition|boolean}
-         */
-        this.options.useTransition = utils.hasTransition && this.options.useTransition;
-        /**
-         * 判断是否支持css3的Transform属性
-         * 一般来说 目前主流的手机都支持Transform及transition
-         * @type {*|utils.hasTransform|boolean}
-         */
-        this.options.useTransform = utils.hasTransform && this.options.useTransform;
-        /**
-         * 是否支持事件穿透
-         * TODO 还不明用途
-         * @type {string}
-         */
-        this.options.eventPassthrough = this.options.eventPassthrough === true ? 'vertical' : this.options.eventPassthrough;
-        /**
-         * 是否阻止默认行为，这里一般设置为 true 防止页面在手机端被默认拖动
-         * @type {boolean}
-         */
-        this.options.preventDefault = !this.options.eventPassthrough && this.options.preventDefault;
-        // If you want eventPassthrough I have to lock one of the axes
-        /**
-         * 判断滚动的方向 X or Y
-         * @type {boolean}
-         */
-        this.options.scrollY = this.options.eventPassthrough == 'vertical' ? false : this.options.scrollY;
-        this.options.scrollX = this.options.eventPassthrough == 'horizontal' ? false : this.options.scrollX;
+		snapThreshold: 0.334,
 
-        // With eventPassthrough we also need lockDirection mechanism
-        /**
-         * 是否是双向同时自由滚动，这个属性在项目中一般用的比较少，滚动大部分都是单方向的
-         * @type {boolean|*|IScroll.options.freeScroll}
-         */
-        this.options.freeScroll = this.options.freeScroll && !this.options.eventPassthrough;
-        this.options.directionLockThreshold = this.options.eventPassthrough ? 0 : this.options.directionLockThreshold;
-        /**
-         * touchend后的惯性动画效果，
-         * @type {*|circular}
-         */
-        this.options.bounceEasing = typeof this.options.bounceEasing == 'string' ? utils.ease[this.options.bounceEasing] || utils.ease.circular : this.options.bounceEasing;
-        /**
-         * 当window触发resize事件60ms后还原
-         * PS：感觉一般用于PC端
-         * TODO 后续没用的话 就删除
-         * @type {number}
-         */
-        this.options.resizePolling = this.options.resizePolling === undefined ? 60 : this.options.resizePolling;
+// INSERT POINT: OPTIONS 
 
-        if ( this.options.tap === true ) {
-            this.options.tap = 'tap';
-        }
+		startX: 0,
+		startY: 0,
+		scrollY: true,
+		directionLockThreshold: 5,
+		momentum: true,
+
+		bounce: true,
+		bounceTime: 600,
+		bounceEasing: '',
+
+		preventDefault: true,
+		preventDefaultException: { tagName: /^(INPUT|TEXTAREA|BUTTON|SELECT)$/ },
+
+		HWCompositing: true,
+		useTransition: true,
+		useTransform: true
+	};
+
+	for ( var i in options ) {
+		this.options[i] = options[i];
+	}
+
+	// Normalize options
+	this.translateZ = this.options.HWCompositing && utils.hasPerspective ? ' translateZ(0)' : '';
+
+	this.options.useTransition = utils.hasTransition && this.options.useTransition;
+	this.options.useTransform = utils.hasTransform && this.options.useTransform;
+
+	this.options.eventPassthrough = this.options.eventPassthrough === true ? 'vertical' : this.options.eventPassthrough;
+	this.options.preventDefault = !this.options.eventPassthrough && this.options.preventDefault;
+
+	// If you want eventPassthrough I have to lock one of the axes
+	this.options.scrollY = this.options.eventPassthrough == 'vertical' ? false : this.options.scrollY;
+	this.options.scrollX = this.options.eventPassthrough == 'horizontal' ? false : this.options.scrollX;
+
+	// With eventPassthrough we also need lockDirection mechanism
+	this.options.freeScroll = this.options.freeScroll && !this.options.eventPassthrough;
+	this.options.directionLockThreshold = this.options.eventPassthrough ? 0 : this.options.directionLockThreshold;
+
+	this.options.bounceEasing = typeof this.options.bounceEasing == 'string' ? utils.ease[this.options.bounceEasing] || utils.ease.circular : this.options.bounceEasing;
+
+	this.options.resizePolling = this.options.resizePolling === undefined ? 60 : this.options.resizePolling;
+
+	if ( this.options.tap === true ) {
+		this.options.tap = 'tap';
+	}
+
+	if ( this.options.shrinkScrollbars == 'scale' ) {
+		this.options.useTransition = false;
+	}
+
+	this.options.invertWheelDirection = this.options.invertWheelDirection ? -1 : 1;
 
 // INSERT POINT: NORMALIZATION
 
-        // Some defaults
-        //一些默认 不会被重写的参数属性
-        this.x = 0;
-        this.y = 0;
-        this.directionX = 0;
-        this.directionY = 0;
-        this._events = {};
+	// Some defaults	
+	this.x = 0;
+	this.y = 0;
+	this.directionX = 0;
+	this.directionY = 0;
+	this._events = {};
 
 // INSERT POINT: DEFAULTS
-        /**
-         * 初始化
-         */
-        this._init();
-        this.refresh();
 
-        this.scrollTo(this.options.startX, this.options.startY);
-        this.enable();
-    }
+	this._init();
+	this.refresh();
 
-    IScroll.prototype = {
-        version: '5.1.1',
+	this.scrollTo(this.options.startX, this.options.startY);
+	this.enable();
+}
 
-        _init: function () {
-            this._initEvents();
+IScroll.prototype = {
+	version: '5.1.1',
+
+	_init: function () {
+		this._initEvents();
+
+		if ( this.options.scrollbars || this.options.indicators ) {
+			this._initIndicators();
+		}
+
+		if ( this.options.mouseWheel ) {
+			this._initWheel();
+		}
+
+		if ( this.options.snap ) {
+			this._initSnap();
+		}
+
+		if ( this.options.keyBindings ) {
+			this._initKeys();
+		}
 
 // INSERT POINT: _init
 
-        },
+	},
 
-        destroy: function () {
-            this._initEvents(true);
+	destroy: function () {
+		this._initEvents(true);
 
-            this._execEvent('destroy');
-        },
+		this._execEvent('destroy');
+	},
 
-        _transitionEnd: function (e) {
-            if ( e.target != this.scroller || !this.isInTransition ) {
-                return;
-            }
+	_transitionEnd: function (e) {
+		if ( e.target != this.scroller || !this.isInTransition ) {
+			return;
+		}
 
-            this._transitionTime();
-            if ( !this.resetPosition(this.options.bounceTime) ) {
-                this.isInTransition = false;
-                this._execEvent('scrollEnd');
-            }
-        },
+		this._transitionTime();
+		if ( !this.resetPosition(this.options.bounceTime) ) {
+			this.isInTransition = false;
+			this._execEvent('scrollEnd');
+		}
+	},
 
-        /**
-         * touchstart 触发该函数
-         * @param e
-         * @private
-         */
-        _start: function (e) {
-            // React to left mouse button only
-            //判断是否是鼠标左键按下的拖动
-            if ( utils.eventType[e.type] != 1 ) {
-                if ( e.button !== 0 ) {
-                    return;
-                }
-            }
-            /**
-             * 判断是否开启拖动，是否初始化完毕 否则就呵呵。。
-             */
-            if ( !this.enabled || (this.initiated && utils.eventType[e.type] !== this.initiated) ) {
-                return;
-            }
+	_start: function (e) {
+		// React to left mouse button only
+		if ( utils.eventType[e.type] != 1 ) {
+			if ( e.button !== 0 ) {
+				return;
+			}
+		}
 
-            /**
-             * 如果参数里设置了preventDefault 则 阻止默认事件
-             */
-            if ( this.options.preventDefault && !utils.isBadAndroid && !utils.preventDefaultException(e.target, this.options.preventDefaultException) ) {
-                e.preventDefault();
-            }
+		if ( !this.enabled || (this.initiated && utils.eventType[e.type] !== this.initiated) ) {
+			return;
+		}
 
-            var point = e.touches ? e.touches[0] : e,
-                pos;
+		if ( this.options.preventDefault && !utils.isBadAndroid && !utils.preventDefaultException(e.target, this.options.preventDefaultException) ) {
+			e.preventDefault();
+		}
 
-            this.initiated	= utils.eventType[e.type];
-            this.moved		= false;
-            this.distX		= 0;
-            this.distY		= 0;
-            this.directionX = 0;
-            this.directionY = 0;
-            this.directionLocked = 0;
-            //开启动画时间，如果之前有动画的话，便要停止动画，这里因为没有传时间，所以动画便直接停止了
-            //用于停止拖动产生的惯性动作（touchstart时页面可能正在滚动）
-            this._transitionTime();
-            //记录下 touch start 的事件
-            this.startTime = utils.getTime();
-            //如果正在动画状态，则让页面停止在手指触摸处
-            if ( this.options.useTransition && this.isInTransition ) {
-                this.isInTransition = false;
-                //获取x，y坐标值
-                pos = this.getComputedPosition();
-//            debugger;
-                //touchstart 时 让正在滚动的页面停止下来
-                this._translate(Math.round(pos.x), Math.round(pos.y));
-                this._execEvent('scrollEnd');
-            } else if ( !this.options.useTransition && this.isAnimating ) {
-                this.isAnimating = false;
-                this._execEvent('scrollEnd');
-            }
-            //重设一些参数
-            this.startX    = this.x;
-            this.startY    = this.y;
-            this.absStartX = this.x;
-            this.absStartY = this.y;
-            this.pointX    = point.pageX;
-            this.pointY    = point.pageY;
+		var point = e.touches ? e.touches[0] : e,
+			pos;
 
-            this._execEvent('beforeScrollStart');
-        },
+		this.initiated	= utils.eventType[e.type];
+		this.moved		= false;
+		this.distX		= 0;
+		this.distY		= 0;
+		this.directionX = 0;
+		this.directionY = 0;
+		this.directionLocked = 0;
 
-        /**
-         * touchmove时调用的函数.
-         * @param e
-         * @private
-         */
-        _move: function (e) {
-            /**
-             * TODO 这里做事件类型的判断是啥意思?
-             */
-            if ( !this.enabled || utils.eventType[e.type] !== this.initiated ) {
-                return;
-            }
-            if ( this.options.preventDefault ) {	// increases performance on Android? TODO: check!
-                e.preventDefault();
-            }
+		this._transitionTime();
 
-            /**
-             * 记录当前移动的一些数据，为dom移动做准备
-             * @type {*}
-             */
-            var point		= e.touches ? e.touches[0] : e,             //
-                deltaX		= point.pageX - this.pointX,                //拖动的距离X 这里的值每300ms刷新一次的距离 即小段小段的距离
-                deltaY		= point.pageY - this.pointY,                //拖动的距离X
-                timestamp	= utils.getTime(),                          //拖动时候的时间戳
-                newX, newY,                                             //拖动的目的地 X Y 距离
-                absDistX, absDistY;                                     //距离的绝对值,用于判断滚动方向
+		this.startTime = utils.getTime();
 
-            this.pointX		= point.pageX;
-            this.pointY		= point.pageY;
+		if ( this.options.useTransition && this.isInTransition ) {
+			this.isInTransition = false;
+			pos = this.getComputedPosition();
+			this._translate(Math.round(pos.x), Math.round(pos.y));
+			this._execEvent('scrollEnd');
+		} else if ( !this.options.useTransition && this.isAnimating ) {
+			this.isAnimating = false;
+			this._execEvent('scrollEnd');
+		}
 
-            this.distX		+= deltaX;                                  //拖动的距离
-            this.distY		+= deltaY;
-            absDistX		= Math.abs(this.distX);
-            absDistY		= Math.abs(this.distY);
-            // We need to move at least 10 pixels for the scrolling to initiate
-            //滑动的时间大于300ms 并且距离小于10px 则不滑动
-            if ( timestamp - this.endTime > 300 && (absDistX < 10 && absDistY < 10) ) {
-                return;
-            }
-            /**
-             * 这里根据10px的距离来做拖动方向判断，判断用户拖动的意图
-             */
-            // If you are scrolling in one direction lock the other
-            if ( !this.directionLocked && !this.options.freeScroll ) {
-                if ( absDistX > absDistY + this.options.directionLockThreshold ) {
-                    this.directionLocked = 'h';		// lock horizontally
-                } else if ( absDistY >= absDistX + this.options.directionLockThreshold ) {
-                    this.directionLocked = 'v';		// lock vertically
-                } else {
-                    this.directionLocked = 'n';		// no lock
-                }
-            }
-            //横向滚动Y
-            if ( this.directionLocked == 'h' ) {
-                if ( this.options.eventPassthrough == 'vertical' ) {
-                    e.preventDefault();
-                } else if ( this.options.eventPassthrough == 'horizontal' ) {
-                    this.initiated = false;
-                    return;
-                }
+		this.startX    = this.x;
+		this.startY    = this.y;
+		this.absStartX = this.x;
+		this.absStartY = this.y;
+		this.pointX    = point.pageX;
+		this.pointY    = point.pageY;
 
-                deltaY = 0;
-            } else if ( this.directionLocked == 'v' ) {
-                if ( this.options.eventPassthrough == 'horizontal' ) {
-                    e.preventDefault();
-                } else if ( this.options.eventPassthrough == 'vertical' ) {
-                    this.initiated = false;
-                    return;
-                }
+		this._execEvent('beforeScrollStart');
+	},
 
-                deltaX = 0;
-            }
-            //拖动的距离
-            deltaX = this.hasHorizontalScroll ? deltaX : 0;
-            deltaY = this.hasVerticalScroll ? deltaY : 0;
-            //将当前位置 加上 位移 得出实际移动的距离
-            newX = this.x + deltaX;
-            newY = this.y + deltaY;
-            // Slow down if outside of the boundaries
-            /**
-             * 如果拖动已经超出边界了,则减慢拖动的速度
-             */
-            if ( newX > 0 || newX < this.maxScrollX ) {
-                newX = this.options.bounce ? this.x + deltaX / 3 : newX > 0 ? 0 : this.maxScrollX;
-            }
-            if ( newY > 0 || newY < this.maxScrollY ) {
-                newY = this.options.bounce ? this.y + deltaY / 3 : newY > 0 ? 0 : this.maxScrollY;
-            }
+	_move: function (e) {
+		if ( !this.enabled || utils.eventType[e.type] !== this.initiated ) {
+			return;
+		}
 
-            /**
-             * TODO 干嘛的？
-             * @type {number}
-             */
-            this.directionX = deltaX > 0 ? -1 : deltaX < 0 ? 1 : 0;
-            this.directionY = deltaY > 0 ? -1 : deltaY < 0 ? 1 : 0;
-            //第一次拖动时的回调
-            if ( !this.moved ) {
-                this._execEvent('scrollStart');
-            }
+		if ( this.options.preventDefault ) {	// increases performance on Android? TODO: check!
+			e.preventDefault();
+		}
 
-            this.moved = true;
+		var point		= e.touches ? e.touches[0] : e,
+			deltaX		= point.pageX - this.pointX,
+			deltaY		= point.pageY - this.pointY,
+			timestamp	= utils.getTime(),
+			newX, newY,
+			absDistX, absDistY;
 
-            this._translate(newX, newY);
+		this.pointX		= point.pageX;
+		this.pointY		= point.pageY;
 
-            /* REPLACE START: _move */
-            /**
-             * 每300ms会重置一次当前位置以及开始时间，这个就是为什么我们在抓住不放很久突然丢开仍然有长距离移动的原因，这个比较精妙哦
-             */
-            if ( timestamp - this.startTime > 300 ) {
-                this.startTime = timestamp;
-                this.startX = this.x;
-                this.startY = this.y;
-            }
+		this.distX		+= deltaX;
+		this.distY		+= deltaY;
+		absDistX		= Math.abs(this.distX);
+		absDistY		= Math.abs(this.distY);
 
-            /* REPLACE END: _move */
+		// We need to move at least 10 pixels for the scrolling to initiate
+		if ( timestamp - this.endTime > 300 && (absDistX < 10 && absDistY < 10) ) {
+			return;
+		}
 
-        },
+		// If you are scrolling in one direction lock the other
+		if ( !this.directionLocked && !this.options.freeScroll ) {
+			if ( absDistX > absDistY + this.options.directionLockThreshold ) {
+				this.directionLocked = 'h';		// lock horizontally
+			} else if ( absDistY >= absDistX + this.options.directionLockThreshold ) {
+				this.directionLocked = 'v';		// lock vertically
+			} else {
+				this.directionLocked = 'n';		// no lock
+			}
+		}
 
-        _end: function (e) {
-            if ( !this.enabled || utils.eventType[e.type] !== this.initiated ) {
-                return;
-            }
+		if ( this.directionLocked == 'h' ) {
+			if ( this.options.eventPassthrough == 'vertical' ) {
+				e.preventDefault();
+			} else if ( this.options.eventPassthrough == 'horizontal' ) {
+				this.initiated = false;
+				return;
+			}
 
-            if ( this.options.preventDefault && !utils.preventDefaultException(e.target, this.options.preventDefaultException) ) {
-                e.preventDefault();
-            }
+			deltaY = 0;
+		} else if ( this.directionLocked == 'v' ) {
+			if ( this.options.eventPassthrough == 'horizontal' ) {
+				e.preventDefault();
+			} else if ( this.options.eventPassthrough == 'vertical' ) {
+				this.initiated = false;
+				return;
+			}
 
-            /**
-             * 在手指离开屏幕前 保存一些相关的数据
-             * @type {*}
-             */
-            var point = e.changedTouches ? e.changedTouches[0] : e,
-                momentumX,
-                momentumY,
-                duration = utils.getTime() - this.startTime,        //拖动的耗时，这里并不是touchstart之间的耗时，在_move() 里 每隔300ms 更新一下时间的
-                newX = Math.round(this.x),
-                newY = Math.round(this.y),
-                distanceX = Math.abs(newX - this.startX),           //拖动的距离
-                distanceY = Math.abs(newY - this.startY),
-                time = 0,
-                easing = '';
-            //重置一些参数
-            this.isInTransition = 0;        //是否处于css动画状态
-            this.initiated = 0;             //是否初始化
-            this.endTime = utils.getTime();
+			deltaX = 0;
+		}
 
-            // reset if we are outside of the boundaries
-            /**
-             * 若超出边界，则将重设位置 不再执行后面逻辑
-             */
-            if ( this.resetPosition(this.options.bounceTime) ) {
-                return;
-            }
-            //惯性拖动距离
-            this.scrollTo(newX, newY);	// ensures that the last position is rounded
+		deltaX = this.hasHorizontalScroll ? deltaX : 0;
+		deltaY = this.hasVerticalScroll ? deltaY : 0;
 
-            // we scrolled less than 10 pixels
-            if ( !this.moved ) {
-                if ( this.options.tap ) {
-                    utils.tap(e, this.options.tap);
-                }
+		newX = this.x + deltaX;
+		newY = this.y + deltaY;
 
-                if ( this.options.click ) {
-                    utils.click(e);
-                }
+		// Slow down if outside of the boundaries
+		if ( newX > 0 || newX < this.maxScrollX ) {
+			newX = this.options.bounce ? this.x + deltaX / 3 : newX > 0 ? 0 : this.maxScrollX;
+		}
+		if ( newY > 0 || newY < this.maxScrollY ) {
+			newY = this.options.bounce ? this.y + deltaY / 3 : newY > 0 ? 0 : this.maxScrollY;
+		}
 
-                this._execEvent('scrollCancel');
-                return;
-            }
+		this.directionX = deltaX > 0 ? -1 : deltaX < 0 ? 1 : 0;
+		this.directionY = deltaY > 0 ? -1 : deltaY < 0 ? 1 : 0;
 
-            if ( this._events.flick && duration < 200 && distanceX < 100 && distanceY < 100 ) {
-                this._execEvent('flick');
-                return;
-            }
+		if ( !this.moved ) {
+			this._execEvent('scrollStart');
+		}
 
-            // start momentum animation if needed
-            /**
-             * 如果需要惯性移动的话 则运行如下计算公式等
-             * 根据动力加速度计算出来的动画参数
-             * 计算出相关的距离
-             */
-            if ( this.options.momentum && duration < 300 ) {
-                momentumX = this.hasHorizontalScroll ? utils.momentum(this.x, this.startX, duration, this.maxScrollX, this.options.bounce ? this.wrapperWidth : 0, this.options.deceleration) : { destination: newX, duration: 0 };
-                momentumY = this.hasVerticalScroll ? utils.momentum(this.y, this.startY, duration, this.maxScrollY, this.options.bounce ? this.wrapperHeight : 0, this.options.deceleration) : { destination: newY, duration: 0 };
-                newX = momentumX.destination;
-                newY = momentumY.destination;
-                time = Math.max(momentumX.duration, momentumY.duration);
-                this.isInTransition = 1;
-            }
+		this.moved = true;
+
+		this._translate(newX, newY);
+
+/* REPLACE START: _move */
+
+		if ( timestamp - this.startTime > 300 ) {
+			this.startTime = timestamp;
+			this.startX = this.x;
+			this.startY = this.y;
+		}
+
+/* REPLACE END: _move */
+
+	},
+
+	_end: function (e) {
+		if ( !this.enabled || utils.eventType[e.type] !== this.initiated ) {
+			return;
+		}
+
+		if ( this.options.preventDefault && !utils.preventDefaultException(e.target, this.options.preventDefaultException) ) {
+			e.preventDefault();
+		}
+
+		var point = e.changedTouches ? e.changedTouches[0] : e,
+			momentumX,
+			momentumY,
+			duration = utils.getTime() - this.startTime,
+			newX = Math.round(this.x),
+			newY = Math.round(this.y),
+			distanceX = Math.abs(newX - this.startX),
+			distanceY = Math.abs(newY - this.startY),
+			time = 0,
+			easing = '';
+
+		this.isInTransition = 0;
+		this.initiated = 0;
+		this.endTime = utils.getTime();
+
+		// reset if we are outside of the boundaries
+		if ( this.resetPosition(this.options.bounceTime) ) {
+			return;
+		}
+
+		this.scrollTo(newX, newY);	// ensures that the last position is rounded
+
+		// we scrolled less than 10 pixels
+		if ( !this.moved ) {
+			if ( this.options.tap ) {
+				utils.tap(e, this.options.tap);
+			}
+
+			if ( this.options.click ) {
+				utils.click(e);
+			}
+
+			this._execEvent('scrollCancel');
+			return;
+		}
+
+		if ( this._events.flick && duration < 200 && distanceX < 100 && distanceY < 100 ) {
+			this._execEvent('flick');
+			return;
+		}
+
+		// start momentum animation if needed
+		if ( this.options.momentum && duration < 300 ) {
+			momentumX = this.hasHorizontalScroll ? utils.momentum(this.x, this.startX, duration, this.maxScrollX, this.options.bounce ? this.wrapperWidth : 0, this.options.deceleration) : { destination: newX, duration: 0 };
+			momentumY = this.hasVerticalScroll ? utils.momentum(this.y, this.startY, duration, this.maxScrollY, this.options.bounce ? this.wrapperHeight : 0, this.options.deceleration) : { destination: newY, duration: 0 };
+			newX = momentumX.destination;
+			newY = momentumY.destination;
+			time = Math.max(momentumX.duration, momentumY.duration);
+			this.isInTransition = 1;
+		}
+
+
+		if ( this.options.snap ) {
+			var snap = this._nearestSnap(newX, newY);
+			this.currentPage = snap;
+			time = this.options.snapSpeed || Math.max(
+					Math.max(
+						Math.min(Math.abs(newX - snap.x), 1000),
+						Math.min(Math.abs(newY - snap.y), 1000)
+					), 300);
+			newX = snap.x;
+			newY = snap.y;
+
+			this.directionX = 0;
+			this.directionY = 0;
+			easing = this.options.bounceEasing;
+		}
 
 // INSERT POINT: _end
-            if ( newX != this.x || newY != this.y ) {
-                // change easing function when scroller goes out of the boundaries
-                /**
-                 * 如果有惯性移动 并且惯性移动超出了边界，则开启css3动画的回弹效果
-                 */
-                if ( newX > 0 || newX < this.maxScrollX || newY > 0 || newY < this.maxScrollY ) {
-                    easing = utils.ease.quadratic;
-                }
 
-                this.scrollTo(newX, newY, time, easing);
-                return;
-            }
+		if ( newX != this.x || newY != this.y ) {
+			// change easing function when scroller goes out of the boundaries
+			if ( newX > 0 || newX < this.maxScrollX || newY > 0 || newY < this.maxScrollY ) {
+				easing = utils.ease.quadratic;
+			}
 
-            this._execEvent('scrollEnd');
-        },
+			this.scrollTo(newX, newY, time, easing);
+			return;
+		}
 
-        _resize: function () {
-            var that = this;
+		this._execEvent('scrollEnd');
+	},
 
-            clearTimeout(this.resizeTimeout);
+	_resize: function () {
+		var that = this;
 
-            this.resizeTimeout = setTimeout(function () {
-                that.refresh();
-            }, this.options.resizePolling);
-        },
+		clearTimeout(this.resizeTimeout);
 
-        /**
-         * 重置位置信息
-         * @param time
-         * @returns {boolean}
-         */
-        resetPosition: function (time) {
-            var x = this.x,
-                y = this.y;
+		this.resizeTimeout = setTimeout(function () {
+			that.refresh();
+		}, this.options.resizePolling);
+	},
 
-            time = time || 0;
+	resetPosition: function (time) {
+		var x = this.x,
+			y = this.y;
 
-            if ( !this.hasHorizontalScroll || this.x > 0 ) {
-                x = 0;
-            } else if ( this.x < this.maxScrollX ) {
-                x = this.maxScrollX;
-            }
+		time = time || 0;
 
-            if ( !this.hasVerticalScroll || this.y > 0 ) {
-                y = 0;
-            } else if ( this.y < this.maxScrollY ) {
-                y = this.maxScrollY;
-            }
+		if ( !this.hasHorizontalScroll || this.x > 0 ) {
+			x = 0;
+		} else if ( this.x < this.maxScrollX ) {
+			x = this.maxScrollX;
+		}
 
-            if ( x == this.x && y == this.y ) {
-                return false;
-            }
+		if ( !this.hasVerticalScroll || this.y > 0 ) {
+			y = 0;
+		} else if ( this.y < this.maxScrollY ) {
+			y = this.maxScrollY;
+		}
 
-            this.scrollTo(x, y, time, this.options.bounceEasing);
+		if ( x == this.x && y == this.y ) {
+			return false;
+		}
 
-            return true;
-        },
+		this.scrollTo(x, y, time, this.options.bounceEasing);
 
-        /**
-         * 禁用iscroll
-         */
-        disable: function () {
-            this.enabled = false;
-        },
-        /**
-         * 开启iscroll
-         */
-        enable: function () {
-            this.enabled = true;
-        },
+		return true;
+	},
 
-        /**
-         * 更新iscroll的相关信息，一般用于初始化时获取页面的相关数据以便后续调用
-         * 在异步加载、旋转屏幕时也调用该函数 重新获取页面数据
-         */
-        refresh: function () {
-            var rf = this.wrapper.offsetHeight;		// Force reflow
+	disable: function () {
+		this.enabled = false;
+	},
 
-            this.wrapperWidth	= this.wrapper.clientWidth;
-            this.wrapperHeight	= this.wrapper.clientHeight;
+	enable: function () {
+		this.enabled = true;
+	},
 
-            /* REPLACE START: refresh */
+	refresh: function () {
+		var rf = this.wrapper.offsetHeight;		// Force reflow
 
-            this.scrollerWidth	= this.scroller.offsetWidth;
-            this.scrollerHeight	= this.scroller.offsetHeight;
+		this.wrapperWidth	= this.wrapper.clientWidth;
+		this.wrapperHeight	= this.wrapper.clientHeight;
 
-            this.maxScrollX		= this.wrapperWidth - this.scrollerWidth;
-            this.maxScrollY		= this.wrapperHeight - this.scrollerHeight;
+/* REPLACE START: refresh */
 
-            /* REPLACE END: refresh */
+		this.scrollerWidth	= this.scroller.offsetWidth;
+		this.scrollerHeight	= this.scroller.offsetHeight;
 
-            this.hasHorizontalScroll	= this.options.scrollX && this.maxScrollX < 0;
-            this.hasVerticalScroll		= this.options.scrollY && this.maxScrollY < 0;
+		this.maxScrollX		= this.wrapperWidth - this.scrollerWidth;
+		this.maxScrollY		= this.wrapperHeight - this.scrollerHeight;
 
-            if ( !this.hasHorizontalScroll ) {
-                this.maxScrollX = 0;
-                this.scrollerWidth = this.wrapperWidth;
-            }
+/* REPLACE END: refresh */
 
-            if ( !this.hasVerticalScroll ) {
-                this.maxScrollY = 0;
-                this.scrollerHeight = this.wrapperHeight;
-            }
+		this.hasHorizontalScroll	= this.options.scrollX && this.maxScrollX < 0;
+		this.hasVerticalScroll		= this.options.scrollY && this.maxScrollY < 0;
 
-            this.endTime = 0;
-            this.directionX = 0;
-            this.directionY = 0;
+		if ( !this.hasHorizontalScroll ) {
+			this.maxScrollX = 0;
+			this.scrollerWidth = this.wrapperWidth;
+		}
 
-            this.wrapperOffset = utils.offset(this.wrapper);
+		if ( !this.hasVerticalScroll ) {
+			this.maxScrollY = 0;
+			this.scrollerHeight = this.wrapperHeight;
+		}
 
-            this._execEvent('refresh');
+		this.endTime = 0;
+		this.directionX = 0;
+		this.directionY = 0;
 
-            this.resetPosition();
+		this.wrapperOffset = utils.offset(this.wrapper);
+
+		this._execEvent('refresh');
+
+		this.resetPosition();
 
 // INSERT POINT: _refresh
 
-        },
+	},
 
-        on: function (type, fn) {
-            if ( !this._events[type] ) {
-                this._events[type] = [];
-            }
+	on: function (type, fn) {
+		if ( !this._events[type] ) {
+			this._events[type] = [];
+		}
 
-            this._events[type].push(fn);
-        },
+		this._events[type].push(fn);
+	},
 
-        off: function (type, fn) {
-            if ( !this._events[type] ) {
-                return;
-            }
+	off: function (type, fn) {
+		if ( !this._events[type] ) {
+			return;
+		}
 
-            var index = this._events[type].indexOf(fn);
+		var index = this._events[type].indexOf(fn);
 
-            if ( index > -1 ) {
-                this._events[type].splice(index, 1);
-            }
-        },
-        /**
-         * 类似于zepto的 triiger ，事件触发器
-         * @param type
-         * @private
-         */
-        _execEvent: function (type) {
-            if ( !this._events[type] ) {
-                return;
-            }
+		if ( index > -1 ) {
+			this._events[type].splice(index, 1);
+		}
+	},
 
-            var i = 0,
-                l = this._events[type].length;
+	_execEvent: function (type) {
+		if ( !this._events[type] ) {
+			return;
+		}
 
-            if ( !l ) {
-                return;
-            }
+		var i = 0,
+			l = this._events[type].length;
 
-            for ( ; i < l; i++ ) {
-                this._events[type][i].apply(this, [].slice.call(arguments, 1));
-            }
-        },
+		if ( !l ) {
+			return;
+		}
 
-        scrollBy: function (x, y, time, easing) {
-            x = this.x + x;
-            y = this.y + y;
-            time = time || 0;
+		for ( ; i < l; i++ ) {
+			this._events[type][i].apply(this, [].slice.call(arguments, 1));
+		}
+	},
 
-            this.scrollTo(x, y, time, easing);
-        },
+	scrollBy: function (x, y, time, easing) {
+		x = this.x + x;
+		y = this.y + y;
+		time = time || 0;
 
-        /**
-         *
-         * @param  x 为移动的x轴坐标
-         * @param y 为移动的y轴坐标
-         * @param time 为移动时间
-         * @param easing 为移动的动画效果
-         */
-        scrollTo: function (x, y, time, easing) {
-            easing = easing || utils.ease.circular;
+		this.scrollTo(x, y, time, easing);
+	},
 
-            this.isInTransition = this.options.useTransition && time > 0;
-            //如果有css动画 则直接调用css3移动
-            if ( !time || (this.options.useTransition && easing.style) ) {
-                //设置相关的css3动画属性及位置 直接位移过去
-                this._transitionTimingFunction(easing.style);
-                this._transitionTime(time);
-                this._translate(x, y);
-            } else {
-                this._animate(x, y, time, easing.fn);
-            }
-        },
+	scrollTo: function (x, y, time, easing) {
+		easing = easing || utils.ease.circular;
 
-        /**
-         * 这个方法实际上是对scrollTo的进一步封装,滚动到相应的元素区域。
-         * @param el 为需要滚动到的元素引用
-         * @param time 为滚动时间
-         * @param offsetX 为X轴偏移量
-         * @param offsetY 为Y轴偏移量
-         * @param easing 动画效果
-         */
-        scrollToElement: function (el, time, offsetX, offsetY, easing) {
-            el = el.nodeType ? el : this.scroller.querySelector(el);
+		this.isInTransition = this.options.useTransition && time > 0;
 
-            if ( !el ) {
-                return;
-            }
+		if ( !time || (this.options.useTransition && easing.style) ) {
+			this._transitionTimingFunction(easing.style);
+			this._transitionTime(time);
+			this._translate(x, y);
+		} else {
+			this._animate(x, y, time, easing.fn);
+		}
+	},
 
-            var pos = utils.offset(el);
+	scrollToElement: function (el, time, offsetX, offsetY, easing) {
+		el = el.nodeType ? el : this.scroller.querySelector(el);
 
-            pos.left -= this.wrapperOffset.left;
-            pos.top  -= this.wrapperOffset.top;
+		if ( !el ) {
+			return;
+		}
 
-            // if offsetX/Y are true we center the element to the screen
-            if ( offsetX === true ) {
-                offsetX = Math.round(el.offsetWidth / 2 - this.wrapper.offsetWidth / 2);
-            }
-            if ( offsetY === true ) {
-                offsetY = Math.round(el.offsetHeight / 2 - this.wrapper.offsetHeight / 2);
-            }
+		var pos = utils.offset(el);
 
-            pos.left -= offsetX || 0;
-            pos.top  -= offsetY || 0;
+		pos.left -= this.wrapperOffset.left;
+		pos.top  -= this.wrapperOffset.top;
 
-            pos.left = pos.left > 0 ? 0 : pos.left < this.maxScrollX ? this.maxScrollX : pos.left;
-            pos.top  = pos.top  > 0 ? 0 : pos.top  < this.maxScrollY ? this.maxScrollY : pos.top;
+		// if offsetX/Y are true we center the element to the screen
+		if ( offsetX === true ) {
+			offsetX = Math.round(el.offsetWidth / 2 - this.wrapper.offsetWidth / 2);
+		}
+		if ( offsetY === true ) {
+			offsetY = Math.round(el.offsetHeight / 2 - this.wrapper.offsetHeight / 2);
+		}
 
-            time = time === undefined || time === null || time === 'auto' ? Math.max(Math.abs(this.x-pos.left), Math.abs(this.y-pos.top)) : time;
+		pos.left -= offsetX || 0;
+		pos.top  -= offsetY || 0;
 
-            this.scrollTo(pos.left, pos.top, time, easing);
-        },
+		pos.left = pos.left > 0 ? 0 : pos.left < this.maxScrollX ? this.maxScrollX : pos.left;
+		pos.top  = pos.top  > 0 ? 0 : pos.top  < this.maxScrollY ? this.maxScrollY : pos.top;
 
-        /**
-         * css3 动画时长
-         * @param time 动画时间 单位ms 如果不传参数 则为0 ，即是直接停止动画
-         * @private
-         */
-        _transitionTime: function (time) {
-            time = time || 0;
+		time = time === undefined || time === null || time === 'auto' ? Math.max(Math.abs(this.x-pos.left), Math.abs(this.y-pos.top)) : time;
 
-            this.scrollerStyle[utils.style.transitionDuration] = time + 'ms';
+		this.scrollTo(pos.left, pos.top, time, easing);
+	},
 
-            if ( !time && utils.isBadAndroid ) {
-                this.scrollerStyle[utils.style.transitionDuration] = '0.001s';
-            }
+	_transitionTime: function (time) {
+		time = time || 0;
+
+		this.scrollerStyle[utils.style.transitionDuration] = time + 'ms';
+
+		if ( !time && utils.isBadAndroid ) {
+			this.scrollerStyle[utils.style.transitionDuration] = '0.001s';
+		}
+
+
+		if ( this.indicators ) {
+			for ( var i = this.indicators.length; i--; ) {
+				this.indicators[i].transitionTime(time);
+			}
+		}
+
 
 // INSERT POINT: _transitionTime
 
-        },
+	},
 
-        /**
-         * CSS3 动画函数
-         * @param easing
-         * @private
-         */
-        _transitionTimingFunction: function (easing) {
-            this.scrollerStyle[utils.style.transitionTimingFunction] = easing;
+	_transitionTimingFunction: function (easing) {
+		this.scrollerStyle[utils.style.transitionTimingFunction] = easing;
+
+
+		if ( this.indicators ) {
+			for ( var i = this.indicators.length; i--; ) {
+				this.indicators[i].transitionTimingFunction(easing);
+			}
+		}
+
 
 // INSERT POINT: _transitionTimingFunction
 
-        },
+	},
 
-        /**
-         * 动画位移 如果支持css3 动画 则使用transform进行位移
-         * iscorll里都是靠它进行移动的
-         * @param x
-         * @param y
-         * @private
-         */
-        _translate: function (x, y) {
-            if ( this.options.useTransform ) {
-                var me = this;
-                /* REPLACE START: _translate */
-                //将上rAF位移
-                rAF(function(){
-                    me.scrollerStyle[utils.style.transform] = 'translate(' + x + 'px,' + y + 'px)' + me.translateZ;
-                });
+	_translate: function (x, y) {
+		if ( this.options.useTransform ) {
 
-                /* REPLACE END: _translate */
+/* REPLACE START: _translate */
 
-            } else {
-                x = Math.round(x);
-                y = Math.round(y);
-                this.scrollerStyle.left = x + 'px';
-                this.scrollerStyle.top = y + 'px';
-            }
+			this.scrollerStyle[utils.style.transform] = 'translate(' + x + 'px,' + y + 'px)' + this.translateZ;
 
-            this.x = x;
-            this.y = y;
+/* REPLACE END: _translate */
+
+		} else {
+			x = Math.round(x);
+			y = Math.round(y);
+			this.scrollerStyle.left = x + 'px';
+			this.scrollerStyle.top = y + 'px';
+		}
+
+		this.x = x;
+		this.y = y;
+
+
+	if ( this.indicators ) {
+		for ( var i = this.indicators.length; i--; ) {
+			this.indicators[i].updatePosition();
+		}
+	}
+
 
 // INSERT POINT: _translate
 
-        },
+	},
 
-        /**
-         * 页面初始化时候的一些事件 如果传参数则是取消事件绑定 不传的话 就是添加事件绑定
-         * @param remove
-         * @private
-         */
-        _initEvents: function (remove) {
-            var eventType = remove ? utils.removeEvent : utils.addEvent,
-            //bindToWrapper 貌似官网没有特别说明，这里意思就是相对应window的事件绑定
-                target = this.options.bindToWrapper ? this.wrapper : window;
-            //旋转屏幕事件
-            eventType(window, 'orientationchange', this);
+	_initEvents: function (remove) {
+		var eventType = remove ? utils.removeEvent : utils.addEvent,
+			target = this.options.bindToWrapper ? this.wrapper : window;
 
-            eventType(window, 'resize', this);
+		eventType(window, 'orientationchange', this);
+		eventType(window, 'resize', this);
 
-            if ( this.options.click ) {
-                eventType(this.wrapper, 'click', this, true);
-            }
+		if ( this.options.click ) {
+			eventType(this.wrapper, 'click', this, true);
+		}
 
-            /**
-             * 判断机型做相应的事件绑定
-             * 针对PC的touch 事件
-             */
-            if ( !this.options.disableMouse ) {
-                eventType(this.wrapper, 'mousedown', this);
-                eventType(target, 'mousemove', this);
-                eventType(target, 'mousecancel', this);
-                eventType(target, 'mouseup', this);
-            }
+		if ( !this.options.disableMouse ) {
+			eventType(this.wrapper, 'mousedown', this);
+			eventType(target, 'mousemove', this);
+			eventType(target, 'mousecancel', this);
+			eventType(target, 'mouseup', this);
+		}
 
-            /**
-             * 针对win phone的touch事件
-             */
-            if ( utils.hasPointer && !this.options.disablePointer ) {
-                eventType(this.wrapper, 'MSPointerDown', this);
-                eventType(target, 'MSPointerMove', this);
-                eventType(target, 'MSPointerCancel', this);
-                eventType(target, 'MSPointerUp', this);
-            }
+		if ( utils.hasPointer && !this.options.disablePointer ) {
+			eventType(this.wrapper, 'MSPointerDown', this);
+			eventType(target, 'MSPointerMove', this);
+			eventType(target, 'MSPointerCancel', this);
+			eventType(target, 'MSPointerUp', this);
+		}
 
-            /**
-             * 针对ios & Android的touch事件
-             */
-            if ( utils.hasTouch && !this.options.disableTouch ) {
-                eventType(this.wrapper, 'touchstart', this);
-                eventType(target, 'touchmove', this);
-                eventType(target, 'touchcancel', this);
-                eventType(target, 'touchend', this);
-            }
+		if ( utils.hasTouch && !this.options.disableTouch ) {
+			eventType(this.wrapper, 'touchstart', this);
+			eventType(target, 'touchmove', this);
+			eventType(target, 'touchcancel', this);
+			eventType(target, 'touchend', this);
+		}
 
-            /**
-             * css3 动画结束后的的回调事件
-             */
-            eventType(this.scroller, 'transitionend', this);
-            eventType(this.scroller, 'webkitTransitionEnd', this);
-            eventType(this.scroller, 'oTransitionEnd', this);
-            eventType(this.scroller, 'MSTransitionEnd', this);
-        },
+		eventType(this.scroller, 'transitionend', this);
+		eventType(this.scroller, 'webkitTransitionEnd', this);
+		eventType(this.scroller, 'oTransitionEnd', this);
+		eventType(this.scroller, 'MSTransitionEnd', this);
+	},
 
-        /**
-         * 获得一个DOM的实时样式样式，在touchstart时候保留DOM样式状态十分有用
-         * @returns {{x: *, y: *}} 返回x，y坐标的位移
-         */
-        getComputedPosition: function () {
-            var matrix = window.getComputedStyle(this.scroller, null),
-                x, y;
-            //如果是css3 位移，则位移的距离从matrix获取，否则直接获取left top 的传统位移值
-            if ( this.options.useTransform ) {
-//            console.info(matrix[utils.style.transform])
-                //css3的matrix矩阵，eg：matrix[utils.style.transform]的值为 matrix(1, 0, 0, 1, -642, 0)
-                matrix = matrix[utils.style.transform].split(')')[0].split(', ');
-                x = +(matrix[12] || matrix[4]);
-                y = +(matrix[13] || matrix[5]);
-            } else {
-                x = +matrix.left.replace(/[^-\d.]/g, '');
-                y = +matrix.top.replace(/[^-\d.]/g, '');
-            }
+	getComputedPosition: function () {
+		var matrix = window.getComputedStyle(this.scroller, null),
+			x, y;
 
-            return { x: x, y: y };
-        },
+		if ( this.options.useTransform ) {
+			matrix = matrix[utils.style.transform].split(')')[0].split(', ');
+			x = +(matrix[12] || matrix[4]);
+			y = +(matrix[13] || matrix[5]);
+		} else {
+			x = +matrix.left.replace(/[^-\d.]/g, '');
+			y = +matrix.top.replace(/[^-\d.]/g, '');
+		}
 
-        /**
-         * 如果启用了CSS3的动画，便会使用CSS3动画方式进行动画，否则使用_animate方法（js实现方案）
-         * 这里使用了RAF的动画 用于保证动画的流程性
-         * @param destX
-         * @param destY
-         * @param duration
-         * @param easingFn
-         * @private
-         */
-        _animate: function (destX, destY, duration, easingFn) {
-            var that = this,
-                startX = this.x,
-                startY = this.y,
-                startTime = utils.getTime(),
-                destTime = startTime + duration;
+		return { x: x, y: y };
+	},
 
-            function step () {
-                var now = utils.getTime(),
-                    newX, newY,
-                    easing;
+	_initIndicators: function () {
+		var interactive = this.options.interactiveScrollbars,
+			customStyle = typeof this.options.scrollbars != 'string',
+			indicators = [],
+			indicator;
 
-                if ( now >= destTime ) {
-                    that.isAnimating = false;
-                    that._translate(destX, destY);
+		var that = this;
 
-                    if ( !that.resetPosition(that.options.bounceTime) ) {
-                        that._execEvent('scrollEnd');
-                    }
+		this.indicators = [];
 
-                    return;
-                }
+		if ( this.options.scrollbars ) {
+			// Vertical scrollbar
+			if ( this.options.scrollY ) {
+				indicator = {
+					el: createDefaultScrollbar('v', interactive, this.options.scrollbars),
+					interactive: interactive,
+					defaultScrollbars: true,
+					customStyle: customStyle,
+					resize: this.options.resizeScrollbars,
+					shrink: this.options.shrinkScrollbars,
+					fade: this.options.fadeScrollbars,
+					listenX: false
+				};
 
-                now = ( now - startTime ) / duration;
-                easing = easingFn(now);
-                newX = ( destX - startX ) * easing + startX;
-                newY = ( destY - startY ) * easing + startY;
-                that._translate(newX, newY);
-                //自我调用的方式（递归）来执行动画
-                if ( that.isAnimating ) {
-                    rAF(step);
-                }
-            }
+				this.wrapper.appendChild(indicator.el);
+				indicators.push(indicator);
+			}
 
-            this.isAnimating = true;
-            step();
-        },
-        /**
-         * 统一的事件处理对象
-         * @param e
-         */
-        handleEvent: function (e) {
-            switch ( e.type ) {
-                case 'touchstart':
-                case 'MSPointerDown':
-                case 'mousedown':
-                    this._start(e);
-                    break;
-                case 'touchmove':
-                case 'MSPointerMove':
-                case 'mousemove':
-                    this._move(e);
-                    break;
-                case 'touchend':
-                case 'MSPointerUp':
-                case 'mouseup':
-                case 'touchcancel':
-                case 'MSPointerCancel':
-                case 'mousecancel':
-                    this._end(e);
-                    break;
-                case 'orientationchange':
-                case 'resize':
-                    this._resize();
-                    break;
-                case 'transitionend':
-                case 'webkitTransitionEnd':
-                case 'oTransitionEnd':
-                case 'MSTransitionEnd':
-                    this._transitionEnd(e);
-                    break;
-                case 'wheel':
-                case 'DOMMouseScroll':
-                case 'mousewheel':
-                    this._wheel(e);
-                    break;
-                case 'keydown':
-                    this._key(e);
-                    break;
-                case 'click':
-                    if ( !e._constructed ) {
-                        e.preventDefault();
-                        e.stopPropagation();
-                    }
-                    break;
-            }
-        }
-    };
-    /**
-     * 将utils工具类函数归到iscroll下面 方便开发者调用
-     */
-    IScroll.utils = utils;
-    /**
-     * 一些CMD AMD的实现 如require.js sea.js 等
-     */
-    if ( typeof module != 'undefined' && module.exports ) {
-        module.exports = IScroll;
-    } else {
-        window.IScroll = IScroll;
-    }
+			// Horizontal scrollbar
+			if ( this.options.scrollX ) {
+				indicator = {
+					el: createDefaultScrollbar('h', interactive, this.options.scrollbars),
+					interactive: interactive,
+					defaultScrollbars: true,
+					customStyle: customStyle,
+					resize: this.options.resizeScrollbars,
+					shrink: this.options.shrinkScrollbars,
+					fade: this.options.fadeScrollbars,
+					listenY: false
+				};
+
+				this.wrapper.appendChild(indicator.el);
+				indicators.push(indicator);
+			}
+		}
+
+		if ( this.options.indicators ) {
+			// TODO: check concat compatibility
+			indicators = indicators.concat(this.options.indicators);
+		}
+
+		for ( var i = indicators.length; i--; ) {
+			this.indicators.push( new Indicator(this, indicators[i]) );
+		}
+
+		// TODO: check if we can use array.map (wide compatibility and performance issues)
+		function _indicatorsMap (fn) {
+			for ( var i = that.indicators.length; i--; ) {
+				fn.call(that.indicators[i]);
+			}
+		}
+
+		if ( this.options.fadeScrollbars ) {
+			this.on('scrollEnd', function () {
+				_indicatorsMap(function () {
+					this.fade();
+				});
+			});
+
+			this.on('scrollCancel', function () {
+				_indicatorsMap(function () {
+					this.fade();
+				});
+			});
+
+			this.on('scrollStart', function () {
+				_indicatorsMap(function () {
+					this.fade(1);
+				});
+			});
+
+			this.on('beforeScrollStart', function () {
+				_indicatorsMap(function () {
+					this.fade(1, true);
+				});
+			});
+		}
+
+
+		this.on('refresh', function () {
+			_indicatorsMap(function () {
+				this.refresh();
+			});
+		});
+
+		this.on('destroy', function () {
+			_indicatorsMap(function () {
+				this.destroy();
+			});
+
+			delete this.indicators;
+		});
+	},
+
+	_initWheel: function () {
+		utils.addEvent(this.wrapper, 'wheel', this);
+		utils.addEvent(this.wrapper, 'mousewheel', this);
+		utils.addEvent(this.wrapper, 'DOMMouseScroll', this);
+
+		this.on('destroy', function () {
+			utils.removeEvent(this.wrapper, 'wheel', this);
+			utils.removeEvent(this.wrapper, 'mousewheel', this);
+			utils.removeEvent(this.wrapper, 'DOMMouseScroll', this);
+		});
+	},
+
+	_wheel: function (e) {
+		if ( !this.enabled ) {
+			return;
+		}
+
+		e.preventDefault();
+		e.stopPropagation();
+
+		var wheelDeltaX, wheelDeltaY,
+			newX, newY,
+			that = this;
+
+		if ( this.wheelTimeout === undefined ) {
+			that._execEvent('scrollStart');
+		}
+
+		// Execute the scrollEnd event after 400ms the wheel stopped scrolling
+		clearTimeout(this.wheelTimeout);
+		this.wheelTimeout = setTimeout(function () {
+			that._execEvent('scrollEnd');
+			that.wheelTimeout = undefined;
+		}, 400);
+
+		if ( 'deltaX' in e ) {
+			wheelDeltaX = -e.deltaX;
+			wheelDeltaY = -e.deltaY;
+		} else if ( 'wheelDeltaX' in e ) {
+			wheelDeltaX = e.wheelDeltaX / 120 * this.options.mouseWheelSpeed;
+			wheelDeltaY = e.wheelDeltaY / 120 * this.options.mouseWheelSpeed;
+		} else if ( 'wheelDelta' in e ) {
+			wheelDeltaX = wheelDeltaY = e.wheelDelta / 120 * this.options.mouseWheelSpeed;
+		} else if ( 'detail' in e ) {
+			wheelDeltaX = wheelDeltaY = -e.detail / 3 * this.options.mouseWheelSpeed;
+		} else {
+			return;
+		}
+
+		wheelDeltaX *= this.options.invertWheelDirection;
+		wheelDeltaY *= this.options.invertWheelDirection;
+
+		if ( !this.hasVerticalScroll ) {
+			wheelDeltaX = wheelDeltaY;
+			wheelDeltaY = 0;
+		}
+
+		if ( this.options.snap ) {
+			newX = this.currentPage.pageX;
+			newY = this.currentPage.pageY;
+
+			if ( wheelDeltaX > 0 ) {
+				newX--;
+			} else if ( wheelDeltaX < 0 ) {
+				newX++;
+			}
+
+			if ( wheelDeltaY > 0 ) {
+				newY--;
+			} else if ( wheelDeltaY < 0 ) {
+				newY++;
+			}
+
+			this.goToPage(newX, newY);
+
+			return;
+		}
+
+		newX = this.x + Math.round(this.hasHorizontalScroll ? wheelDeltaX : 0);
+		newY = this.y + Math.round(this.hasVerticalScroll ? wheelDeltaY : 0);
+
+		if ( newX > 0 ) {
+			newX = 0;
+		} else if ( newX < this.maxScrollX ) {
+			newX = this.maxScrollX;
+		}
+
+		if ( newY > 0 ) {
+			newY = 0;
+		} else if ( newY < this.maxScrollY ) {
+			newY = this.maxScrollY;
+		}
+
+		this.scrollTo(newX, newY, 0);
+
+// INSERT POINT: _wheel
+	},
+
+	_initSnap: function () {
+		this.currentPage = {};
+
+		if ( typeof this.options.snap == 'string' ) {
+			this.options.snap = this.scroller.querySelectorAll(this.options.snap);
+		}
+
+		this.on('refresh', function () {
+			var i = 0, l,
+				m = 0, n,
+				cx, cy,
+				x = 0, y,
+				stepX = this.options.snapStepX || this.wrapperWidth,
+				stepY = this.options.snapStepY || this.wrapperHeight,
+				el;
+
+			this.pages = [];
+
+			if ( !this.wrapperWidth || !this.wrapperHeight || !this.scrollerWidth || !this.scrollerHeight ) {
+				return;
+			}
+
+			if ( this.options.snap === true ) {
+				cx = Math.round( stepX / 2 );
+				cy = Math.round( stepY / 2 );
+
+				while ( x > -this.scrollerWidth ) {
+					this.pages[i] = [];
+					l = 0;
+					y = 0;
+
+					while ( y > -this.scrollerHeight ) {
+						this.pages[i][l] = {
+							x: Math.max(x, this.maxScrollX),
+							y: Math.max(y, this.maxScrollY),
+							width: stepX,
+							height: stepY,
+							cx: x - cx,
+							cy: y - cy
+						};
+
+						y -= stepY;
+						l++;
+					}
+
+					x -= stepX;
+					i++;
+				}
+			} else {
+				el = this.options.snap;
+				l = el.length;
+				n = -1;
+
+				for ( ; i < l; i++ ) {
+					if ( i === 0 || el[i].offsetLeft <= el[i-1].offsetLeft ) {
+						m = 0;
+						n++;
+					}
+
+					if ( !this.pages[m] ) {
+						this.pages[m] = [];
+					}
+
+					x = Math.max(-el[i].offsetLeft, this.maxScrollX);
+					y = Math.max(-el[i].offsetTop, this.maxScrollY);
+					cx = x - Math.round(el[i].offsetWidth / 2);
+					cy = y - Math.round(el[i].offsetHeight / 2);
+
+					this.pages[m][n] = {
+						x: x,
+						y: y,
+						width: el[i].offsetWidth,
+						height: el[i].offsetHeight,
+						cx: cx,
+						cy: cy
+					};
+
+					if ( x > this.maxScrollX ) {
+						m++;
+					}
+				}
+			}
+
+			this.goToPage(this.currentPage.pageX || 0, this.currentPage.pageY || 0, 0);
+
+			// Update snap threshold if needed
+			if ( this.options.snapThreshold % 1 === 0 ) {
+				this.snapThresholdX = this.options.snapThreshold;
+				this.snapThresholdY = this.options.snapThreshold;
+			} else {
+				this.snapThresholdX = Math.round(this.pages[this.currentPage.pageX][this.currentPage.pageY].width * this.options.snapThreshold);
+				this.snapThresholdY = Math.round(this.pages[this.currentPage.pageX][this.currentPage.pageY].height * this.options.snapThreshold);
+			}
+		});
+
+		this.on('flick', function () {
+			var time = this.options.snapSpeed || Math.max(
+					Math.max(
+						Math.min(Math.abs(this.x - this.startX), 1000),
+						Math.min(Math.abs(this.y - this.startY), 1000)
+					), 300);
+
+			this.goToPage(
+				this.currentPage.pageX + this.directionX,
+				this.currentPage.pageY + this.directionY,
+				time
+			);
+		});
+	},
+
+	_nearestSnap: function (x, y) {
+		if ( !this.pages.length ) {
+			return { x: 0, y: 0, pageX: 0, pageY: 0 };
+		}
+
+		var i = 0,
+			l = this.pages.length,
+			m = 0;
+
+		// Check if we exceeded the snap threshold
+		if ( Math.abs(x - this.absStartX) < this.snapThresholdX &&
+			Math.abs(y - this.absStartY) < this.snapThresholdY ) {
+			return this.currentPage;
+		}
+
+		if ( x > 0 ) {
+			x = 0;
+		} else if ( x < this.maxScrollX ) {
+			x = this.maxScrollX;
+		}
+
+		if ( y > 0 ) {
+			y = 0;
+		} else if ( y < this.maxScrollY ) {
+			y = this.maxScrollY;
+		}
+
+		for ( ; i < l; i++ ) {
+			if ( x >= this.pages[i][0].cx ) {
+				x = this.pages[i][0].x;
+				break;
+			}
+		}
+
+		l = this.pages[i].length;
+
+		for ( ; m < l; m++ ) {
+			if ( y >= this.pages[0][m].cy ) {
+				y = this.pages[0][m].y;
+				break;
+			}
+		}
+
+		if ( i == this.currentPage.pageX ) {
+			i += this.directionX;
+
+			if ( i < 0 ) {
+				i = 0;
+			} else if ( i >= this.pages.length ) {
+				i = this.pages.length - 1;
+			}
+
+			x = this.pages[i][0].x;
+		}
+
+		if ( m == this.currentPage.pageY ) {
+			m += this.directionY;
+
+			if ( m < 0 ) {
+				m = 0;
+			} else if ( m >= this.pages[0].length ) {
+				m = this.pages[0].length - 1;
+			}
+
+			y = this.pages[0][m].y;
+		}
+
+		return {
+			x: x,
+			y: y,
+			pageX: i,
+			pageY: m
+		};
+	},
+
+	goToPage: function (x, y, time, easing) {
+		easing = easing || this.options.bounceEasing;
+
+		if ( x >= this.pages.length ) {
+			x = this.pages.length - 1;
+		} else if ( x < 0 ) {
+			x = 0;
+		}
+
+		if ( y >= this.pages[x].length ) {
+			y = this.pages[x].length - 1;
+		} else if ( y < 0 ) {
+			y = 0;
+		}
+
+		var posX = this.pages[x][y].x,
+			posY = this.pages[x][y].y;
+
+		time = time === undefined ? this.options.snapSpeed || Math.max(
+			Math.max(
+				Math.min(Math.abs(posX - this.x), 1000),
+				Math.min(Math.abs(posY - this.y), 1000)
+			), 300) : time;
+
+		this.currentPage = {
+			x: posX,
+			y: posY,
+			pageX: x,
+			pageY: y
+		};
+
+		this.scrollTo(posX, posY, time, easing);
+	},
+
+	next: function (time, easing) {
+		var x = this.currentPage.pageX,
+			y = this.currentPage.pageY;
+
+		x++;
+
+		if ( x >= this.pages.length && this.hasVerticalScroll ) {
+			x = 0;
+			y++;
+		}
+
+		this.goToPage(x, y, time, easing);
+	},
+
+	prev: function (time, easing) {
+		var x = this.currentPage.pageX,
+			y = this.currentPage.pageY;
+
+		x--;
+
+		if ( x < 0 && this.hasVerticalScroll ) {
+			x = 0;
+			y--;
+		}
+
+		this.goToPage(x, y, time, easing);
+	},
+
+	_initKeys: function (e) {
+		// default key bindings
+		var keys = {
+			pageUp: 33,
+			pageDown: 34,
+			end: 35,
+			home: 36,
+			left: 37,
+			up: 38,
+			right: 39,
+			down: 40
+		};
+		var i;
+
+		// if you give me characters I give you keycode
+		if ( typeof this.options.keyBindings == 'object' ) {
+			for ( i in this.options.keyBindings ) {
+				if ( typeof this.options.keyBindings[i] == 'string' ) {
+					this.options.keyBindings[i] = this.options.keyBindings[i].toUpperCase().charCodeAt(0);
+				}
+			}
+		} else {
+			this.options.keyBindings = {};
+		}
+
+		for ( i in keys ) {
+			this.options.keyBindings[i] = this.options.keyBindings[i] || keys[i];
+		}
+
+		utils.addEvent(window, 'keydown', this);
+
+		this.on('destroy', function () {
+			utils.removeEvent(window, 'keydown', this);
+		});
+	},
+
+	_key: function (e) {
+		if ( !this.enabled ) {
+			return;
+		}
+
+		var snap = this.options.snap,	// we are using this alot, better to cache it
+			newX = snap ? this.currentPage.pageX : this.x,
+			newY = snap ? this.currentPage.pageY : this.y,
+			now = utils.getTime(),
+			prevTime = this.keyTime || 0,
+			acceleration = 0.250,
+			pos;
+
+		if ( this.options.useTransition && this.isInTransition ) {
+			pos = this.getComputedPosition();
+
+			this._translate(Math.round(pos.x), Math.round(pos.y));
+			this.isInTransition = false;
+		}
+
+		this.keyAcceleration = now - prevTime < 200 ? Math.min(this.keyAcceleration + acceleration, 50) : 0;
+
+		switch ( e.keyCode ) {
+			case this.options.keyBindings.pageUp:
+				if ( this.hasHorizontalScroll && !this.hasVerticalScroll ) {
+					newX += snap ? 1 : this.wrapperWidth;
+				} else {
+					newY += snap ? 1 : this.wrapperHeight;
+				}
+				break;
+			case this.options.keyBindings.pageDown:
+				if ( this.hasHorizontalScroll && !this.hasVerticalScroll ) {
+					newX -= snap ? 1 : this.wrapperWidth;
+				} else {
+					newY -= snap ? 1 : this.wrapperHeight;
+				}
+				break;
+			case this.options.keyBindings.end:
+				newX = snap ? this.pages.length-1 : this.maxScrollX;
+				newY = snap ? this.pages[0].length-1 : this.maxScrollY;
+				break;
+			case this.options.keyBindings.home:
+				newX = 0;
+				newY = 0;
+				break;
+			case this.options.keyBindings.left:
+				newX += snap ? -1 : 5 + this.keyAcceleration>>0;
+				break;
+			case this.options.keyBindings.up:
+				newY += snap ? 1 : 5 + this.keyAcceleration>>0;
+				break;
+			case this.options.keyBindings.right:
+				newX -= snap ? -1 : 5 + this.keyAcceleration>>0;
+				break;
+			case this.options.keyBindings.down:
+				newY -= snap ? 1 : 5 + this.keyAcceleration>>0;
+				break;
+			default:
+				return;
+		}
+
+		if ( snap ) {
+			this.goToPage(newX, newY);
+			return;
+		}
+
+		if ( newX > 0 ) {
+			newX = 0;
+			this.keyAcceleration = 0;
+		} else if ( newX < this.maxScrollX ) {
+			newX = this.maxScrollX;
+			this.keyAcceleration = 0;
+		}
+
+		if ( newY > 0 ) {
+			newY = 0;
+			this.keyAcceleration = 0;
+		} else if ( newY < this.maxScrollY ) {
+			newY = this.maxScrollY;
+			this.keyAcceleration = 0;
+		}
+
+		this.scrollTo(newX, newY, 0);
+
+		this.keyTime = now;
+	},
+
+	_animate: function (destX, destY, duration, easingFn) {
+		var that = this,
+			startX = this.x,
+			startY = this.y,
+			startTime = utils.getTime(),
+			destTime = startTime + duration;
+
+		function step () {
+			var now = utils.getTime(),
+				newX, newY,
+				easing;
+
+			if ( now >= destTime ) {
+				that.isAnimating = false;
+				that._translate(destX, destY);
+
+				if ( !that.resetPosition(that.options.bounceTime) ) {
+					that._execEvent('scrollEnd');
+				}
+
+				return;
+			}
+
+			now = ( now - startTime ) / duration;
+			easing = easingFn(now);
+			newX = ( destX - startX ) * easing + startX;
+			newY = ( destY - startY ) * easing + startY;
+			that._translate(newX, newY);
+
+			if ( that.isAnimating ) {
+				rAF(step);
+			}
+		}
+
+		this.isAnimating = true;
+		step();
+	},
+	handleEvent: function (e) {
+		switch ( e.type ) {
+			case 'touchstart':
+			case 'MSPointerDown':
+			case 'mousedown':
+				this._start(e);
+				break;
+			case 'touchmove':
+			case 'MSPointerMove':
+			case 'mousemove':
+				this._move(e);
+				break;
+			case 'touchend':
+			case 'MSPointerUp':
+			case 'mouseup':
+			case 'touchcancel':
+			case 'MSPointerCancel':
+			case 'mousecancel':
+				this._end(e);
+				break;
+			case 'orientationchange':
+			case 'resize':
+				this._resize();
+				break;
+			case 'transitionend':
+			case 'webkitTransitionEnd':
+			case 'oTransitionEnd':
+			case 'MSTransitionEnd':
+				this._transitionEnd(e);
+				break;
+			case 'wheel':
+			case 'DOMMouseScroll':
+			case 'mousewheel':
+				this._wheel(e);
+				break;
+			case 'keydown':
+				this._key(e);
+				break;
+			case 'click':
+				if ( !e._constructed ) {
+					e.preventDefault();
+					e.stopPropagation();
+				}
+				break;
+		}
+	}
+};
+function createDefaultScrollbar (direction, interactive, type) {
+	var scrollbar = document.createElement('div'),
+		indicator = document.createElement('div');
+
+	if ( type === true ) {
+		scrollbar.style.cssText = 'position:absolute;z-index:9999';
+		indicator.style.cssText = '-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;position:absolute;background:rgba(0,0,0,0.5);border:1px solid rgba(255,255,255,0.9);border-radius:3px';
+	}
+
+	indicator.className = 'iScrollIndicator';
+
+	if ( direction == 'h' ) {
+		if ( type === true ) {
+			scrollbar.style.cssText += ';height:7px;left:2px;right:2px;bottom:0';
+			indicator.style.height = '100%';
+		}
+		scrollbar.className = 'iScrollHorizontalScrollbar';
+	} else {
+		if ( type === true ) {
+			scrollbar.style.cssText += ';width:7px;bottom:2px;top:2px;right:1px';
+			indicator.style.width = '100%';
+		}
+		scrollbar.className = 'iScrollVerticalScrollbar';
+	}
+
+	scrollbar.style.cssText += ';overflow:hidden';
+
+	if ( !interactive ) {
+		scrollbar.style.pointerEvents = 'none';
+	}
+
+	scrollbar.appendChild(indicator);
+
+	return scrollbar;
+}
+
+function Indicator (scroller, options) {
+	this.wrapper = typeof options.el == 'string' ? document.querySelector(options.el) : options.el;
+	this.wrapperStyle = this.wrapper.style;
+	this.indicator = this.wrapper.children[0];
+	this.indicatorStyle = this.indicator.style;
+	this.scroller = scroller;
+
+	this.options = {
+		listenX: true,
+		listenY: true,
+		interactive: false,
+		resize: true,
+		defaultScrollbars: false,
+		shrink: false,
+		fade: false,
+		speedRatioX: 0,
+		speedRatioY: 0
+	};
+
+	for ( var i in options ) {
+		this.options[i] = options[i];
+	}
+
+	this.sizeRatioX = 1;
+	this.sizeRatioY = 1;
+	this.maxPosX = 0;
+	this.maxPosY = 0;
+
+	if ( this.options.interactive ) {
+		if ( !this.options.disableTouch ) {
+			utils.addEvent(this.indicator, 'touchstart', this);
+			utils.addEvent(window, 'touchend', this);
+		}
+		if ( !this.options.disablePointer ) {
+			utils.addEvent(this.indicator, 'MSPointerDown', this);
+			utils.addEvent(window, 'MSPointerUp', this);
+		}
+		if ( !this.options.disableMouse ) {
+			utils.addEvent(this.indicator, 'mousedown', this);
+			utils.addEvent(window, 'mouseup', this);
+		}
+	}
+
+	if ( this.options.fade ) {
+		this.wrapperStyle[utils.style.transform] = this.scroller.translateZ;
+		this.wrapperStyle[utils.style.transitionDuration] = utils.isBadAndroid ? '0.001s' : '0ms';
+		this.wrapperStyle.opacity = '0';
+	}
+}
+
+Indicator.prototype = {
+	handleEvent: function (e) {
+		switch ( e.type ) {
+			case 'touchstart':
+			case 'MSPointerDown':
+			case 'mousedown':
+				this._start(e);
+				break;
+			case 'touchmove':
+			case 'MSPointerMove':
+			case 'mousemove':
+				this._move(e);
+				break;
+			case 'touchend':
+			case 'MSPointerUp':
+			case 'mouseup':
+			case 'touchcancel':
+			case 'MSPointerCancel':
+			case 'mousecancel':
+				this._end(e);
+				break;
+		}
+	},
+
+	destroy: function () {
+		if ( this.options.interactive ) {
+			utils.removeEvent(this.indicator, 'touchstart', this);
+			utils.removeEvent(this.indicator, 'MSPointerDown', this);
+			utils.removeEvent(this.indicator, 'mousedown', this);
+
+			utils.removeEvent(window, 'touchmove', this);
+			utils.removeEvent(window, 'MSPointerMove', this);
+			utils.removeEvent(window, 'mousemove', this);
+
+			utils.removeEvent(window, 'touchend', this);
+			utils.removeEvent(window, 'MSPointerUp', this);
+			utils.removeEvent(window, 'mouseup', this);
+		}
+
+		if ( this.options.defaultScrollbars ) {
+			this.wrapper.parentNode.removeChild(this.wrapper);
+		}
+	},
+
+	_start: function (e) {
+		var point = e.touches ? e.touches[0] : e;
+
+		e.preventDefault();
+		e.stopPropagation();
+
+		this.transitionTime();
+
+		this.initiated = true;
+		this.moved = false;
+		this.lastPointX	= point.pageX;
+		this.lastPointY	= point.pageY;
+
+		this.startTime	= utils.getTime();
+
+		if ( !this.options.disableTouch ) {
+			utils.addEvent(window, 'touchmove', this);
+		}
+		if ( !this.options.disablePointer ) {
+			utils.addEvent(window, 'MSPointerMove', this);
+		}
+		if ( !this.options.disableMouse ) {
+			utils.addEvent(window, 'mousemove', this);
+		}
+
+		this.scroller._execEvent('beforeScrollStart');
+	},
+
+	_move: function (e) {
+		var point = e.touches ? e.touches[0] : e,
+			deltaX, deltaY,
+			newX, newY,
+			timestamp = utils.getTime();
+
+		if ( !this.moved ) {
+			this.scroller._execEvent('scrollStart');
+		}
+
+		this.moved = true;
+
+		deltaX = point.pageX - this.lastPointX;
+		this.lastPointX = point.pageX;
+
+		deltaY = point.pageY - this.lastPointY;
+		this.lastPointY = point.pageY;
+
+		newX = this.x + deltaX;
+		newY = this.y + deltaY;
+
+		this._pos(newX, newY);
+
+// INSERT POINT: indicator._move
+
+		e.preventDefault();
+		e.stopPropagation();
+	},
+
+	_end: function (e) {
+		if ( !this.initiated ) {
+			return;
+		}
+
+		this.initiated = false;
+
+		e.preventDefault();
+		e.stopPropagation();
+
+		utils.removeEvent(window, 'touchmove', this);
+		utils.removeEvent(window, 'MSPointerMove', this);
+		utils.removeEvent(window, 'mousemove', this);
+
+		if ( this.scroller.options.snap ) {
+			var snap = this.scroller._nearestSnap(this.scroller.x, this.scroller.y);
+
+			var time = this.options.snapSpeed || Math.max(
+					Math.max(
+						Math.min(Math.abs(this.scroller.x - snap.x), 1000),
+						Math.min(Math.abs(this.scroller.y - snap.y), 1000)
+					), 300);
+
+			if ( this.scroller.x != snap.x || this.scroller.y != snap.y ) {
+				this.scroller.directionX = 0;
+				this.scroller.directionY = 0;
+				this.scroller.currentPage = snap;
+				this.scroller.scrollTo(snap.x, snap.y, time, this.scroller.options.bounceEasing);
+			}
+		}
+
+		if ( this.moved ) {
+			this.scroller._execEvent('scrollEnd');
+		}
+	},
+
+	transitionTime: function (time) {
+		time = time || 0;
+		this.indicatorStyle[utils.style.transitionDuration] = time + 'ms';
+
+		if ( !time && utils.isBadAndroid ) {
+			this.indicatorStyle[utils.style.transitionDuration] = '0.001s';
+		}
+	},
+
+	transitionTimingFunction: function (easing) {
+		this.indicatorStyle[utils.style.transitionTimingFunction] = easing;
+	},
+
+	refresh: function () {
+		this.transitionTime();
+
+		if ( this.options.listenX && !this.options.listenY ) {
+			this.indicatorStyle.display = this.scroller.hasHorizontalScroll ? 'block' : 'none';
+		} else if ( this.options.listenY && !this.options.listenX ) {
+			this.indicatorStyle.display = this.scroller.hasVerticalScroll ? 'block' : 'none';
+		} else {
+			this.indicatorStyle.display = this.scroller.hasHorizontalScroll || this.scroller.hasVerticalScroll ? 'block' : 'none';
+		}
+
+		if ( this.scroller.hasHorizontalScroll && this.scroller.hasVerticalScroll ) {
+			utils.addClass(this.wrapper, 'iScrollBothScrollbars');
+			utils.removeClass(this.wrapper, 'iScrollLoneScrollbar');
+
+			if ( this.options.defaultScrollbars && this.options.customStyle ) {
+				if ( this.options.listenX ) {
+					this.wrapper.style.right = '8px';
+				} else {
+					this.wrapper.style.bottom = '8px';
+				}
+			}
+		} else {
+			utils.removeClass(this.wrapper, 'iScrollBothScrollbars');
+			utils.addClass(this.wrapper, 'iScrollLoneScrollbar');
+
+			if ( this.options.defaultScrollbars && this.options.customStyle ) {
+				if ( this.options.listenX ) {
+					this.wrapper.style.right = '2px';
+				} else {
+					this.wrapper.style.bottom = '2px';
+				}
+			}
+		}
+
+		var r = this.wrapper.offsetHeight;	// force refresh
+
+		if ( this.options.listenX ) {
+			this.wrapperWidth = this.wrapper.clientWidth;
+			if ( this.options.resize ) {
+				this.indicatorWidth = Math.max(Math.round(this.wrapperWidth * this.wrapperWidth / (this.scroller.scrollerWidth || this.wrapperWidth || 1)), 8);
+				this.indicatorStyle.width = this.indicatorWidth + 'px';
+			} else {
+				this.indicatorWidth = this.indicator.clientWidth;
+			}
+
+			this.maxPosX = this.wrapperWidth - this.indicatorWidth;
+
+			if ( this.options.shrink == 'clip' ) {
+				this.minBoundaryX = -this.indicatorWidth + 8;
+				this.maxBoundaryX = this.wrapperWidth - 8;
+			} else {
+				this.minBoundaryX = 0;
+				this.maxBoundaryX = this.maxPosX;
+			}
+
+			this.sizeRatioX = this.options.speedRatioX || (this.scroller.maxScrollX && (this.maxPosX / this.scroller.maxScrollX));	
+		}
+
+		if ( this.options.listenY ) {
+			this.wrapperHeight = this.wrapper.clientHeight;
+			if ( this.options.resize ) {
+				this.indicatorHeight = Math.max(Math.round(this.wrapperHeight * this.wrapperHeight / (this.scroller.scrollerHeight || this.wrapperHeight || 1)), 8);
+				this.indicatorStyle.height = this.indicatorHeight + 'px';
+			} else {
+				this.indicatorHeight = this.indicator.clientHeight;
+			}
+
+			this.maxPosY = this.wrapperHeight - this.indicatorHeight;
+
+			if ( this.options.shrink == 'clip' ) {
+				this.minBoundaryY = -this.indicatorHeight + 8;
+				this.maxBoundaryY = this.wrapperHeight - 8;
+			} else {
+				this.minBoundaryY = 0;
+				this.maxBoundaryY = this.maxPosY;
+			}
+
+			this.maxPosY = this.wrapperHeight - this.indicatorHeight;
+			this.sizeRatioY = this.options.speedRatioY || (this.scroller.maxScrollY && (this.maxPosY / this.scroller.maxScrollY));
+		}
+
+		this.updatePosition();
+	},
+
+	updatePosition: function () {
+		var x = this.options.listenX && Math.round(this.sizeRatioX * this.scroller.x) || 0,
+			y = this.options.listenY && Math.round(this.sizeRatioY * this.scroller.y) || 0;
+
+		if ( !this.options.ignoreBoundaries ) {
+			if ( x < this.minBoundaryX ) {
+				if ( this.options.shrink == 'scale' ) {
+					this.width = Math.max(this.indicatorWidth + x, 8);
+					this.indicatorStyle.width = this.width + 'px';
+				}
+				x = this.minBoundaryX;
+			} else if ( x > this.maxBoundaryX ) {
+				if ( this.options.shrink == 'scale' ) {
+					this.width = Math.max(this.indicatorWidth - (x - this.maxPosX), 8);
+					this.indicatorStyle.width = this.width + 'px';
+					x = this.maxPosX + this.indicatorWidth - this.width;
+				} else {
+					x = this.maxBoundaryX;
+				}
+			} else if ( this.options.shrink == 'scale' && this.width != this.indicatorWidth ) {
+				this.width = this.indicatorWidth;
+				this.indicatorStyle.width = this.width + 'px';
+			}
+
+			if ( y < this.minBoundaryY ) {
+				if ( this.options.shrink == 'scale' ) {
+					this.height = Math.max(this.indicatorHeight + y * 3, 8);
+					this.indicatorStyle.height = this.height + 'px';
+				}
+				y = this.minBoundaryY;
+			} else if ( y > this.maxBoundaryY ) {
+				if ( this.options.shrink == 'scale' ) {
+					this.height = Math.max(this.indicatorHeight - (y - this.maxPosY) * 3, 8);
+					this.indicatorStyle.height = this.height + 'px';
+					y = this.maxPosY + this.indicatorHeight - this.height;
+				} else {
+					y = this.maxBoundaryY;
+				}
+			} else if ( this.options.shrink == 'scale' && this.height != this.indicatorHeight ) {
+				this.height = this.indicatorHeight;
+				this.indicatorStyle.height = this.height + 'px';
+			}
+		}
+
+		this.x = x;
+		this.y = y;
+
+		if ( this.scroller.options.useTransform ) {
+			this.indicatorStyle[utils.style.transform] = 'translate(' + x + 'px,' + y + 'px)' + this.scroller.translateZ;
+		} else {
+			this.indicatorStyle.left = x + 'px';
+			this.indicatorStyle.top = y + 'px';
+		}
+	},
+
+	_pos: function (x, y) {
+		if ( x < 0 ) {
+			x = 0;
+		} else if ( x > this.maxPosX ) {
+			x = this.maxPosX;
+		}
+
+		if ( y < 0 ) {
+			y = 0;
+		} else if ( y > this.maxPosY ) {
+			y = this.maxPosY;
+		}
+
+		x = this.options.listenX ? Math.round(x / this.sizeRatioX) : this.scroller.x;
+		y = this.options.listenY ? Math.round(y / this.sizeRatioY) : this.scroller.y;
+
+		this.scroller.scrollTo(x, y);
+	},
+
+	fade: function (val, hold) {
+		if ( hold && !this.visible ) {
+			return;
+		}
+
+		clearTimeout(this.fadeTimeout);
+		this.fadeTimeout = null;
+
+		var time = val ? 250 : 500,
+			delay = val ? 0 : 300;
+
+		val = val ? '1' : '0';
+
+		this.wrapperStyle[utils.style.transitionDuration] = time + 'ms';
+
+		this.fadeTimeout = setTimeout((function (val) {
+			this.wrapperStyle.opacity = val;
+			this.visible = +val;
+		}).bind(this, val), delay);
+	}
+};
+
+IScroll.utils = utils;
+
+if ( typeof module != 'undefined' && module.exports ) {
+	module.exports = IScroll;
+} else {
+	window.IScroll = IScroll;
+}
 
 })(window, document, Math);

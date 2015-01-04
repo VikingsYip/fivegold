@@ -24,8 +24,7 @@ $("#5gshoplist").bind("swipeleft", function() {
 
 var myScroll;
 function loaded() {
-	myScroll = new IScroll('wrapper');
-	//alert (myScroll);
+	myScroll = new iScroll('wrapper');
 }
 
 document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
@@ -36,3 +35,9 @@ document.addEventListener('touchmove', function (e) { e.preventDefault(); }, fal
  *
  */
 document.addEventListener('DOMContentLoaded', function () { setTimeout(loaded, 200); }, false);
+/*
+ * * * * * * * */
+
+function quote(string) {
+	return '"' + string.replace(/(\\|\"|\n|\r|\t)/g, "\\$1") + '"';
+}

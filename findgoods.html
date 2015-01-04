@@ -84,9 +84,9 @@ document.location.href="findgoods.html?goodsname="+encodeURIComponent(goodsname)
 	<div class="dp-main">
 	<div class="container">
 		<ol class="breadcrumb">
-		  <li ><a href="#">销量↓</a></li>
-		  <li ><a href="#">价格↑</a></li>
-		  <li class="active">最新↓</li>
+		   <li id="orderbest"><a href="javascript:reorder('best');">销量</a></li>
+		  <li id="orderprice"><a href="javascript:reorder('price');">价格</a></li>
+		  <li id="ordernew"><a href="javascript:reorder('new');">最新</a></li>
 		</ol>
 		
  <!--产品 begin-->
