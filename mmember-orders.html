@@ -37,7 +37,7 @@ function makeList() {
 			$.each(objData.mysalelist, function (index, term) {
 			html+='<tr data-role=\"listview\" class=\"order_list\" data-inset=\"true\" data-divider-theme=\"d\">';
 			html+='<td><p>订单编号：'+term.order_sn+'</p><p>订单金额：￥'+term.order_amount+'</p><p>下单日期：'+term.add_time+'</p><p>订单状态：<span style=\"color: red;\">'+term.handler+'</span></p></td>';
-			html+='<td><p><a href=\"morder.html\" class=\"btn btn-info\">付款</a></p><p><a href=\"mmember-orderdetail.html?orderid='+term.order_id+'\" class=\"btn btn-info\">查看</a></p></td>';
+			html+='<td><p><a href=\"morder.html?orderid='+term.order_id+'\" class=\"btn btn-info\">付款</a></p><p><a href=\"mmember-orderdetail.html?orderid='+term.order_id+'\" class=\"btn btn-info\">查看</a></p></td>';
 			html+='</tr>';
   	    });
   	    	html+='</table>';
