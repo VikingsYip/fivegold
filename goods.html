@@ -157,8 +157,11 @@ var xhr = new XMLHttpRequest();
 			//alert(resultfromphp);
 			//alert("添加成功");
       		      var objData = jQuery.parseJSON(resultfromphp);
-			alert (objData.rsgmsg);
-				document.location.href="listcollection.html";  //document.getElementById('prompt').innerHTML = objData.rsgmsg;
+			     //alert (objData.rsgcode);
+			     if (objData.rsgcode=='000')
+					document.location.href="listcollection.html";  //document.getElementById('prompt').innerHTML = objData.rsgmsg;
+				 else
+				    alert (objData.rsgmsg);
 				 //$('#bshop').popup('open');  
 			 
 		}
