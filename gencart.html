@@ -95,7 +95,7 @@ function makeList() {
 			$.each(term.goods_attr, function (index, att) 							{
 			html+=att.name+"："+att.value;
 			});
-			html+="）</p><p>单价：￥"+term.goods_price+"</p><div class=\"form-group\"><a class=\"btn btn-info\" id=\"minus_product\"   onClick=\"update_minus('goods_"+term.rec_id+"')\">-</a><input class=\"form-control\" style=\"width:40px;display:inline-block;\" type=\"text\" id=\"goods_"+term.rec_id+"\" min=\"1\" max=\"10\" value=\""+term.goods_number+"\"><a class=\"btn btn-info\" id=\"plus_product\"   onClick=\"update_plus('goods_"+term.rec_id+"')\">+</a></div><section><a href=\"javascript:delcart("+term.rec_id+")\" data-ajax=\"false\" data-rel=\"popup\" data-position-to=\"window\" data-transition=\"pop\" data-icon=\"delete\" data-theme=\"d\">删除</a>     </section></td></tr></table>";
+			html+="）</p>单价：<input type=\"text\" id=\"priceone\" value=\""+term.goods_price+"\" /><br/><div class=\"form-group\"><a class=\"btn btn-info\" id=\"minus_product\"   onClick=\"update_minus('goods_"+term.rec_id+"')\">-</a><input class=\"form-control\" style=\"width:40px;display:inline-block;\" type=\"text\" id=\"goods_"+term.rec_id+"\" min=\"1\" max=\"10\" value=\""+term.goods_number+"\"><a class=\"btn btn-info\" id=\"plus_product\"   onClick=\"update_plus('goods_"+term.rec_id+"')\">+</a></div><section><a href=\"javascript:delcart("+term.rec_id+")\" data-ajax=\"false\" data-rel=\"popup\" data-position-to=\"window\" data-transition=\"pop\" data-icon=\"delete\" data-theme=\"d\">删除</a>     </section></td></tr></table>";
 			});
 			   //alert(html);
 			document.getElementById('catHtml').innerHTML=html;
@@ -137,12 +137,16 @@ function delcart(recid){
 	    	$num--;
 	    	if($num<=1){
 	    		$('#'+e).val(1);
+	    			$priceone=$('#priceone').val();
+           	document.getElementById('total').innerHTML="<p>商品总金额：￥"+1*$priceone+"</p>";	
 	    		//update_cart(e,1);  //
 	    	}else{
 	    		$('#'+e).val($num);
+	    		$priceone=$('#priceone').val();
+           	document.getElementById('total').innerHTML="<p>商品总金额：￥"+$num*$priceone+"</p>";	
 	    		//update_cart(e,$num);
 	    	}
-
+	    
 	    }
 
 	    function update_plus(e){
@@ -150,11 +154,16 @@ function delcart(recid){
 	    	$num++;
 	    	if($num>=10){
 	    		$('#'+e).val(10);
+	    		$priceone=$('#priceone').val();
+           		document.getElementById('total').innerHTML="<p>商品总金额：￥"+10*$priceone+"</p>";	
 	    		//update_cart(e,10);
 	    	}else{
 	    		$('#'+e).val($num);
 	    		//update_cart(e,$num);
+	    			$priceone=$('#priceone').val();
+           			document.getElementById('total').innerHTML="<p>商品总金额：￥"+$num*$priceone+"</p>";	
 	    	}
+	   
 	    }
 		
 		function emptycart() {
@@ -233,46 +242,7 @@ function delcart(recid){
 		    </a>
 		  </div-->
 	<!-- /footer -->
-	<script type="text/javascript">
-	    function update_cart(e,n){
-	    	$.ajax({
-				  url: "#",
-				  cache: false,
-				  type: "POST",
-				  data:{'obj_ident':e,'num':n},
-				  success: function(html){
-					  location.href="mcart.html";
-				  }
-		    });
-	    }
 
-	    function update_minus(e){
-	    	$num = $('#'+e).val();
-	    	$num--;
-	    	if($num<=1){
-	    		$('#'+e).val(1);
-	    		//update_cart(e,1);  //
-	    	}else{
-	    		$('#'+e).val($num);
-	    		//update_cart(e,$num);
-	    	}
-
-	    }
-
-	    function update_plus(e){
-	    	$num = $('#'+e).val();
-	    	$num++;
-	    	if($num>=10){
-	    		$('#'+e).val(10);
-	    		//update_cart(e,10);
-	    	}else{
-	    		$('#'+e).val($num);
-	    		//update_cart(e,$num);
-	    	}
-	    }
-
-		
-	</script>
 </div>
 <!-- /page -->
 <!-- S criteo ---->

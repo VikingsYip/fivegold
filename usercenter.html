@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>会员中心</title>
+<meta name="keywords" content="">
+<meta name="description" content="">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta content="telephone=no" name="format-detection" />
+<link rel="stylesheet" href="css/bootstrap.min.css">
+<script src="css/jquery-1.10.2.min.js"></script>
+<script src="css/bootstrap.min.js"></script>
+<link href="css/base.mobile.css" rel="stylesheet" type="text/css" media="screen, projection" /></head>
+<body><!-- page -->
+<div class="user-ui-page">
+        <!-- header -->
+        <div class="user-ui-header clearfix">
+	        <a class="left-bar" href="/">
+	        	<span class="glyphicon glyphicon-home"></span>
+	        </a>
+	        <span >会员中心</span>
+	        <a class="right-bar" href="/">
+	        	<span class="glyphicon glyphicon-shopping-cart"></span>
+	        </a>
+        </div>
+	    <!-- /header -->
+		<!-- content -->
+		<div class="user-ui-content">
+			<div class="container">
+			<table class="table">
+	    		<!--<tr>
+	    			<th style="vertical-align: middle;">会员头像：</th>
+	    			<td>
+	    				<a href="#">
+					  		<img width="100" height="100" src="aa/logo.png" alt="会员头像" border="0" class="img-rounded" style="border: 1px solid #efefef;">
+					  	</a>
+	    			</td>
+	    		</tr>-->
+	    		<tr>
+	    			<th>用户名：</th>
+	    			<td>fionyxia</td>
+	    		</tr>
+	    		<tr>
+	    			<th>会员：</th>
+	    			<td>初级</td>
+	    		</tr>
+	    		<tr>
+	    			<th>手机号：</th>
+	    			<td>1372527140</td>
+	    		</tr>
+			</table>
+		    <div class="list-group public_section">
+		      <a href="#" class="list-group-item href_info">个人资料</a>
+			  <a href="#" class="list-group-item href_info">我的订单</a>
+			  <a href="#" class="list-group-item href_info">我的收藏</a>
+              <a href="#" class="list-group-item href_info">我的地址</a>
+              <a href="#" class="list-group-item href_info">修改密码</a>
+			</div>
+			<p>
+		    	<a class="btn btn-danger btn-block" href="javascript:void(0)" data-toggle="modal" data-target="#logout_dialog">注销当前账户</a>
+			</p>
+			</div>
+		</div>
+		<!-- /content -->
+		<!-- footer -->
+		<footer class="user-ui-footer">
+	<div class="container">
+		<div class="copyright">轮通之家</div>
+	</div>
+</footer>		<!-- /footer -->
+
+</div>
+<div class="modal fade" id="logout_dialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">注销确认</h4>
+      </div>
+      <div class="modal-body">
+        <p>您确认注销当前账户？</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+        <button id="logout_btn" type="button" class="btn btn-info">确认</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<!-- /page -->
+<script type="text/javascript">
+// 注销账户
+$('#logout_btn').click(function(){
+	location.href='mpassport-post_logout.html';
+});
+
+</script>
+</body>
+</html>
