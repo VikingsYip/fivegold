@@ -70,10 +70,17 @@
 }
 </style>
 <script type="text/javascript" src="fivegold.js"></script>
+    <!-- load the json2 library (required for jstorage use) -->
+<script src="json2.js"></script>
+<!-- load the jstorage library -->
+<script src="jstorage.js"></script>
+
     <script>	
 function makeList() {
     //var userid = request('catid');
-	var userid = 24;
+ var userid = $.jStorage.get('userid');
+     if (userid==null)
+        document.location.href="login.html"
 	//alert(catid);
 	var xhr = new XMLHttpRequest();
 	xhr.open("GET", "http://120.24.209.210/api/mobile.php?act=buylistcart&user_id="+userid, true);
