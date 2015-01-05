@@ -12,63 +12,7 @@
 <script src="css/jquery-1.10.2.min.js"></script>
 <script src="css/bootstrap.min.js"></script>
 <link href="css/base.mobile.css" rel="stylesheet" type="text/css" media="screen, projection" />
-
-
 <link href="fivegold.css" rel="stylesheet" type="text/css"/>
-  <script type="text/javascript" src="iscroll-lite.js"></script>
-      				<script type="text/javascript" src="iscroll.js"></script>
-<script type="text/javascript" src="fivegold.js"></script>
-<style>
-.public_section .href_info {
-	position: relative;
-	padding-right: 30px;
-}
-
-.public_section .href_info:after {
-	-webkit-transform: rotate(-45deg);
-	-moz-transform: rotate(-45deg);
-	-ms-transform: rotate(-45deg);
-	-o-transform: rotate(-45deg);
-	margin-top: -5px;
-	right: 15px;
-	content: '';
-	position: absolute;
-	width: 6px;
-	height: 6px;
-	top: 50%;
-	border-color: #444;
-	border-style: solid;
-	border-width: 0 2px 2px 0;
-}
-.user-ui-header{
-	font-size:20px;
-	color:#ffffff;
-	background:#b3a99f;
-	line-height:50px;
-	text-align: center;
-}
-.user-ui-header .left-bar{
-	float:left;
-	padding-left:10px;
-	color:#ffffff;
-}
-
-.user-ui-header .right-bar{
-	float:right;
-	padding-right:10px;
-	color:#ffffff;
-}
-.user-ui-content{
-	padding:10px 10px;
-}
-.user-ui-footer {
-	font-size: 20px;
-	color: #ffffff;
-	background: #b3a99f;
-	line-height: 50px;
-	text-align: center;
-}
-</style>
 <script type="text/javascript" src="fivegold.js"></script>
     <!-- load the json2 library (required for jstorage use) -->
 <script src="json2.js"></script>
@@ -91,11 +35,11 @@ function makeList() {
 			var html ='';
       		  var objData = jQuery.parseJSON(resultfromphp);
 			   $.each(objData.goods_list, function (index, term) {
-			html+="<table class=\"table\"><tr><td valign=\"top\" width=\"100px\"><img class=\"img-rounded\" width=\"100\" height=\"100\" src=\""+term.original_img+"\"></td><td><p>"+term.goods_name+"（";
+			html+="<table class=\"table\"><tr><td valign=\"top\" width=\"50px\"><img class=\"img-rounded\" width=\"50\" height=\"50\" src=\""+term.original_img+"\"></td><td><p>"+term.goods_name+"（";
 			$.each(term.goods_attr, function (index, att) 							{
 			html+=att.name+"："+att.value;
 			});
-			html+="）</p>单价：<input type=\"text\" id=\"priceone\" value=\""+term.goods_price+"\" /><br/><div class=\"form-group\"><a class=\"btn btn-info\" id=\"minus_product\"   onClick=\"update_minus('goods_"+term.rec_id+"')\">-</a><input class=\"form-control\" style=\"width:40px;display:inline-block;\" type=\"text\" id=\"goods_"+term.rec_id+"\" min=\"1\" max=\"10\" value=\""+term.goods_number+"\"><a class=\"btn btn-info\" id=\"plus_product\"   onClick=\"update_plus('goods_"+term.rec_id+"')\">+</a></div><section><a href=\"javascript:delcart("+term.rec_id+")\" data-ajax=\"false\" data-rel=\"popup\" data-position-to=\"window\" data-transition=\"pop\" data-icon=\"delete\" data-theme=\"d\">删除</a>     </section></td></tr></table>";
+			html+="）</p>单价：<input type=\"text\" readonly=\"true\" id=\"priceone\" value=\""+term.goods_price+"\" /><br/><div class=\"form-group\"><a class=\"btn btn-info\" id=\"minus_product\"   onClick=\"update_minus('"+term.rec_id+"')\">-</a><input class=\"form-control\" style=\"width:40px;display:inline-block;\" type=\"text\" id=\""+term.rec_id+"\" min=\"1\" max=\"10\" value=\""+term.goods_number+"\"><a class=\"btn btn-info\" id=\"plus_product\"   onClick=\"update_plus('"+term.rec_id+"')\">+</a></div><section><a href=\"javascript:delcart("+term.rec_id+")\" data-ajax=\"false\" data-rel=\"popup\" data-position-to=\"window\" data-transition=\"pop\" data-icon=\"delete\" data-theme=\"d\">删除</a>     </section></td></tr></table>";
 			});
 			   //alert(html);
 			document.getElementById('catHtml').innerHTML=html;
@@ -106,6 +50,42 @@ document.getElementById('total').innerHTML="<p>商品总金额：￥"+objData.to
 	xhr.send();
 	
 }
+
+function updatecart(newnumber,recid) {
+    //alert(newnumber);
+    //alert(recid);
+ var userid = $.jStorage.get('userid');
+     if (userid==null)
+        document.location.href="login.html"
+	//alert(catid);
+	var xhr = new XMLHttpRequest();
+	xhr.open("GET", "http://120.24.209.210/api/mobile.php?act=edltbuycart&user_id="+userid+"&new_number="+newnumber+"&rec_id="+recid+"&mode=test", true);
+	xhr.onreadystatechange = function() {
+  		 if (xhr.readyState==4 && xhr.status==200){
+    		var resultfromphp = xhr.responseText;
+			//alert(resultfromphp);
+			var html ='';
+      		  var objData = jQuery.parseJSON(resultfromphp);
+/*
+			   $.each(objData.goods_list, function (index, term) {
+			html+="<table class=\"table\"><tr><td valign=\"top\" width=\"50px\"><img class=\"img-rounded\" width=\"50\" height=\"50\" src=\""+term.original_img+"\"></td><td><p>"+term.goods_name+"（";
+			$.each(term.goods_attr, function (index, att) 							{
+			html+=att.name+"："+att.value;
+			});
+			html+="）</p>单价：<input type=\"text\" readonly=\"true\" id=\"priceone\" value=\""+term.goods_price+"\" /><br/><div class=\"form-group\"><a class=\"btn btn-info\" id=\"minus_product\"   onClick=\"update_minus('goods_"+term.rec_id+"')\">-</a><input class=\"form-control\" style=\"width:40px;display:inline-block;\" type=\"text\" id=\"goods_"+term.rec_id+"\" min=\"1\" max=\"10\" value=\""+term.goods_number+"\"><a class=\"btn btn-info\" id=\"plus_product\"   onClick=\"update_plus('goods_"+term.rec_id+"')\">+</a></div><section><a href=\"javascript:delcart("+term.rec_id+")\" data-ajax=\"false\" data-rel=\"popup\" data-position-to=\"window\" data-transition=\"pop\" data-icon=\"delete\" data-theme=\"d\">删除</a>     </section></td></tr></table>";
+			});
+			   //alert(html);
+			document.getElementById('catHtml').innerHTML=html;
+
+document.getElementById('total').innerHTML="<p>商品总金额：￥"+objData.total.goods_price+"</p>";	*/
+
+                 document.location.href="gencart.html";	 
+  		}
+	};
+	xhr.send();
+	
+}
+
 
 $(document).ready(function() {
 	//alert('hi');
@@ -137,14 +117,12 @@ function delcart(recid){
 	    	$num--;
 	    	if($num<=1){
 	    		$('#'+e).val(1);
-	    			$priceone=$('#priceone').val();
-           	document.getElementById('total').innerHTML="<p>商品总金额：￥"+1*$priceone+"</p>";	
-	    		//update_cart(e,1);  //
+	    			updatecart(1,e);
+	    		 //update_cart(e,1);  //
 	    	}else{
 	    		$('#'+e).val($num);
-	    		$priceone=$('#priceone').val();
-           	document.getElementById('total').innerHTML="<p>商品总金额：￥"+$num*$priceone+"</p>";	
-	    		//update_cart(e,$num);
+	    		updatecart($num,e);
+	    			//update_cart(e,$num);
 	    	}
 	    
 	    }
@@ -154,22 +132,20 @@ function delcart(recid){
 	    	$num++;
 	    	if($num>=10){
 	    		$('#'+e).val(10);
-	    		$priceone=$('#priceone').val();
-           		document.getElementById('total').innerHTML="<p>商品总金额：￥"+10*$priceone+"</p>";	
+	    		updatecart(10,e);
 	    		//update_cart(e,10);
 	    	}else{
 	    		$('#'+e).val($num);
-	    		//update_cart(e,$num);
-	    			$priceone=$('#priceone').val();
-           			document.getElementById('total').innerHTML="<p>商品总金额：￥"+$num*$priceone+"</p>";	
-	    	}
+	    			updatecart($num,e);
+	  	 }
 	   
 	    }
 		
 		function emptycart() {
-    //var userid = request('catid');
-	var userid = 24;
-	//alert(catid);
+   var userid = $.jStorage.get('userid');
+     if (userid==null)
+        document.location.href="login.html"
+
 	var xhr = new XMLHttpRequest();
 	xhr.open("GET", "http://120.24.209.210/api/mobile.php?act=emptycart&user_id="+userid, true);
 	xhr.onreadystatechange = function() {
@@ -186,9 +162,10 @@ function delcart(recid){
 }
 </script>
 </head>
-<body><div class="user-ui-page">
+<body>
+<div class="user-ui-page">
 	<!-- header -->
-	<div class="user-ui-header clearfix" id="header">
+	<div class="user-ui-header clearfix" >
 	      <a class="left-bar" href="go.html">
 	      	<span class="glyphicon glyphicon-home"></span>
 	      </a>
@@ -198,64 +175,62 @@ function delcart(recid){
 	      </a>
 	</div>
 <!-- /header -->
-     <div id="wrapper">
-	<div id="scroller">
 	<!-- content -->
-	<div class="panel">
-		<div class="panel-body">
-	    <form class="form-inline" action="checkcart.html" method="post" data-ajax="false">
-        <h4>商品列表</h4>
-        <div id ="catHtml"></div>
+ <form class="form-inline" action="checkcart.html" method="post" data-ajax="false">
+       
+	<div class="user-ui-content">
+		<div class="panel panel-default">
+		  <div class="panel-heading">
+		    <h3 class="panel-title">商品列表</h3>
+		  </div>
+		    <div class="panel-body" id="catHtml">
+		    
+		  </div>
+        </div>
+		<div class="panel panel-default">
+         	  <div class="panel-heading">
                 <h4>结算信息</h4>
-        <div class="alert alert-info">
-         <div id ="total"></div>
-                    </div>
-        <div>
-            <a class="btn btn-default" href="javascript:emptycart();">清除购物车</a>  <!--回到最初的购物界面-->
+                </div>
+		    <div class="alert alert-info" id="total">
+		    
+		  </div>
+            </div>
+                 <a class="btn btn-default" href="javascript:emptycart();">清除购物车</a>  <!--回到最初的购物界面-->
             <input class="btn btn-danger" type="submit" value="去结算">
 	    </div>
 	    </form>
-	</div>
-	</div>
-</div>
-
-			</div>
 	<!-- /content -->
 	<!-- footer -->
-	<!--div class="container dp-menu-box" id="footer">
+
+<div id="dp_footer" class="dp-footer	">
+		<nav class="navbar navbar-default navbar-fixed-bottom" role="navigation">
+		  <div class="container dp-menu-box">
 		    <a class="pull-left menu-btn" href="go.html">
 		    	<div class="menu-img glyphicon glyphicon-home"></div>
-		    	<div><img src="images/1.png" height="40"></div>
+		    	<div>首页</div>
 		    </a>
 		    <a class="pull-left menu-btn" href="listcat.html">
 		    	<div class="menu-img glyphicon glyphicon-th-large"></div>
-		    	<div><img src="images/2.png" height="40"></div>
+		    	<div>分类</div>
+		    </a>
+		    <a class="pull-left menu-btn" href="usercenter.html">
+		    	<div class="menu-img glyphicon glyphicon-user"></div>
+		    	<div>我的</div>
 		    </a>
 		    <a class="pull-left menu-btn" href="gencart.html">
-		    	<div class="menu-img glyphicon glyphicon-user"></div>
-		    	<div><img src="images/3.png" height="40"></div>
-		    	<div class="login-tag" style="display: none;"></div>
-		    </a>
-		    <a class="pull-left menu-btn" href="#">
 		    	<div class="menu-img glyphicon glyphicon-shopping-cart"></div>
-		    	<div><img src="images/4.png" height="40"></div>
+		    	<div>购物车</div>
 		    </a>
-		  </div-->
+		    <a class="pull-left menu-btn" href="mmember-orders.html">
+		    	<div class="menu-img glyphicon glyphicon-th-list"></div>
+		    	<div>订单</div>
+		    </a>
+		  </div>
+		</nav>
+</div>
 	<!-- /footer -->
 
 </div>
 <!-- /page -->
-<!-- S criteo ---->
-<script type="text/javascript">
-window.criteo_q = window.criteo_q || [];
-window.criteo_q.push(
-        { event: "setAccount", account: 15335 },
-        { event: "setCustomerId", id: $.cookie('UNAME') ? '"'+$.cookie('UNAME')+'"' : '' },
-        { event: "setSiteType", type: "m" },
-        { event: "viewBasket", item: [
-			                { id: "596", price: 26, quantity: 3 },
-                            { id: "710", price: 149, quantity: 1 }
-              ]});
-</script>
 </body>
 </html>

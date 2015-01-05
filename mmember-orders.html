@@ -13,11 +13,12 @@
 <script src="css/bootstrap.min.js"></script>
 <link href="css/base.mobile.css" rel="stylesheet" type="text/css" media="screen, projection" />
 <link href="fivegold.css" rel="stylesheet" type="text/css"/>
-  <script type="text/javascript" src="iscroll-lite.js"></script>
-      				<script type="text/javascript" src="iscroll.js"></script>
-<script type="text/javascript" src="fivegold.js"></script>
+  <script type="text/javascript" src="fivegold.js"></script>
+      <!-- load the json2 library (required for jstorage use) -->
+<script src="json2.js"></script>
 <!-- load the jstorage library -->
 <script src="jstorage.js"></script>
+
 <script language="javascript">
 
 function makeList() {
@@ -57,7 +58,7 @@ $(document).ready(function() {
 <body><!-- page -->
 <div class="user-ui-page">
         <!-- header -->
-	    <div class="user-ui-header clearfix" id="header">
+	    <div class="user-ui-header clearfix">
 		     <a class="left-bar" href="checkcart.html">
 		     	<span class="glyphicon glyphicon-chevron-left"></span>
 		     </a>
@@ -67,8 +68,6 @@ $(document).ready(function() {
 		     </a>
 	    </div>
 		<!-- /header -->
-		<div id="wrapper">
-	<div id="scroller">
 		<!-- content -->
 		<div class="user-ui-content">
 		<div class="container padding-none">
@@ -150,36 +149,37 @@ $(document).ready(function() {
 		</div>
 		</div>
 <!-- /content -->
-</div>
-		</div>
+
 
 <!-- footer -->
-<!--div id="dp_footer" class="dp-footer">
-	<nav class="navbar navbar-default navbar-fixed-bottom" role="navigation">
-		<div class="container dp-menu-box">
-			<a class="pull-left menu-btn" href="#">
+
+<div id="dp_footer" class="dp-footer	">
+		<nav class="navbar navbar-default navbar-fixed-bottom" role="navigation">
+		  <div class="container dp-menu-box">
+		    <a class="pull-left menu-btn" href="go.html">
 		    	<div class="menu-img glyphicon glyphicon-home"></div>
 		    	<div>首页</div>
 		    </a>
-		    <a class="pull-left menu-btn" href="#">
+		    <a class="pull-left menu-btn" href="listcat.html">
 		    	<div class="menu-img glyphicon glyphicon-th-large"></div>
 		    	<div>分类</div>
 		    </a>
-		    <a class="pull-left menu-btn" href="#">
+		    <a class="pull-left menu-btn" href="usercenter.html">
 		    	<div class="menu-img glyphicon glyphicon-user"></div>
 		    	<div>我的</div>
 		    </a>
-		    <a class="pull-left menu-btn" href="#">
+		    <a class="pull-left menu-btn" href="gencart.html">
 		    	<div class="menu-img glyphicon glyphicon-shopping-cart"></div>
 		    	<div>购物车</div>
 		    </a>
-		    <a class="pull-left menu-btn" href="#">
+		    <a class="pull-left menu-btn" href="mmember-orders.html">
 		    	<div class="menu-img glyphicon glyphicon-th-list"></div>
 		    	<div>订单</div>
 		    </a>
 		  </div>
 		</nav>
-</div-->		
+</div>
+	
 <!-- /footer -->
 		<script type="text/javascript">
 		$(document).ready(function() {

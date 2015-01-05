@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>会员中心</title>
+<meta name="keywords" content="">
+<meta name="description" content="">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta content="telephone=no" name="format-detection" />
+<link rel="stylesheet" href="css/bootstrap.min.css">
+<script src="css/jquery-1.10.2.min.js"></script>
+<script src="css/bootstrap.min.js"></script>
+<link href="css/base.mobile.css?983391" rel="stylesheet" type="text/css" media="screen, projection" /></head>
+<body><!-- page -->
+<div class="user-ui-page">
+	<!-- header -->
+    <div class="user-ui-header clearfix">
+	     <a class="left-bar" href="usercenter.html">
+	     	<span class="glyphicon glyphicon-chevron-left"></span>
+	     </a>
+	     <span >修改密码</span>
+	     <a class="right-bar" href="#">
+	     	<span class="glyphicon glyphicon-shopping-cart"></span>
+	     </a>
+    </div>
+	<!-- /header -->
+	<!-- content -->
+	<div class="user-ui-content">
+		<div class="container">
+		<div class="panel">
+			<div class="panel-body">
+				<form id="submit_form" role="form" action="#" method="post">
+				   <div class="form-group">
+					    <label for="passwd">新密码：</label>
+					    <input type="text" class="form-control" id="passwd" name="passwd" placeholder="请输入新密码">
+				   </div>
+				   <div class="form-group">
+					    <label for="passwd_re">再次输入：</label>
+					    <input type="text" class="form-control" id="passwd_re" name="passwd_re" placeholder="请再次输入新密码">
+				   </div>
+				</form>
+				<div class="form-group">
+					    <button id="submit_btn" type="botton" class="btn btn-info btn-block">提交</button>
+				</div>
+			</div>
+		</div>
+		</div>
+	</div>
+	<!-- /content -->
+<!-- footer -->
+	<footer class="user-ui-footer">
+	<div class="container">
+		<div class="copyright">轮通之家</div>
+	</div>
+</footer>	<!-- /footer -->
+</div>
+<script type="text/javascript">
+$(document).ready(function() {
+	$('#submit_btn').click(function(){
+		$passwd = $('#passwd').val();
+		$passwd_re = $('#passwd_re').val();
+		if($passwd != $passwd_re){
+			alert('2次输入的密码不一致');
+		}else{
+			$('#submit_form').submit();
+		}
+	});
+});
+</script></body>
+</html>

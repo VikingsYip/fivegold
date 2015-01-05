@@ -44,10 +44,9 @@ function makeList() {
 
 			  if (imagecount>0)
 			  {//初始化显示第一个图片
-			  //html+='<img src='+term.bought_goods[currentimage].img_url+' id="shopimg" width="100%">';
-			   //alert (term.bought_goods[currentimage].img_url);
-			   document.getElementById('shopimg').src=term.bought_goods[currentimage].img_url;
-			 
+			   document.getElementById('shopimg').src=term.bought_goods[currentimage].img_url;			 
+			  }
+			  
 			   document.getElementById('goods_name').innerHTML=term.goods_name;
 			   document.getElementById('goods_sn').innerHTML=term.goods_sn;
 			   document.getElementById('goods_brief').innerHTML=term.goods_brief;
@@ -61,7 +60,6 @@ function makeList() {
 			   //document.getElementById('market_price').innerHTML='<s>￥'+term.market_price+'</s>';
 			   document.getElementById('shop_price').innerHTML='￥'+term.shop_price;
 			   
-			  }
 			   /*html+='<li><h1>商品名称</h1><p>'+term.goods_name+'</p></li>';
 			   html+='<li><h1>商品货号</h1><p>'+term.goods_sn+'</p></li>';
 			   html+='<li><h1>商品简单说明</h1><p>'+term.goods_brief+'</p></li>';
@@ -80,10 +78,13 @@ function makeList() {
 	xhr.send();
 	
 }
+
+var cartprice = 0;
 function selectGoods(that,price){
 	document.getElementById('shop_price').innerHTML='￥'+price;
 	//alert(that.id);
-	spec=that.id;		   
+	spec=that.id;
+	cartprice = price;		   
 }
 $(document).ready(function() {
 	 makeList();
@@ -96,6 +97,9 @@ function addtocart(){
 var xhr = new XMLHttpRequest();
      var goods_num = document.getElementById('goods_num').value;
 	
+	if (cartprice!=0)
+	 var posturl = "http://120.24.209.210/api/mobile.php?act=addbuycart&goods_id="+shopid+"&number="+goods_num+"&userid="+userid+"&spec="+spec+"&price="+cartprice;	 
+	else
      var posturl = "http://120.24.209.210/api/mobile.php?act=addbuycart&goods_id="+shopid+"&number="+goods_num+"&userid="+userid+"&spec="+spec;
 	 
 	//alert(posturl);  	
@@ -328,7 +332,7 @@ function update_minus(){
 			
 		   
 <!-- S  快捷导航 -->
-<div class="modal fade" id="addtocart_dialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" style="padding-left:100px;padding-top:50px" id="addtocart_dialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -345,7 +349,7 @@ function update_minus(){
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
-<div class="modal fade" id="collect_dialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade" style="padding-left:100px;padding-top:50px" id="collect_dialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">

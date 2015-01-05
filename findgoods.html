@@ -22,12 +22,23 @@
 <!-- load the jstorage library -->
 <script src="jstorage.js"></script>
     <script>	
-function makeList() {
+    function reorder(ordertype){
+  makeList(ordertype);
+ }
+ 
+var sorting = 1;
+function makeList(ordertype) {
     var goodsname = request('goodsname');
     //goodsname=encodeURIComponent(goodsname);
 	//alert(goodsname);
+		if (ordertype==null)
+	  ordertype="colligate";
 	var xhr = new XMLHttpRequest();
-	xhr.open("GET", "http://120.24.209.210/api/mobile.php?act=findgoods&goodsname="+goodsname+"&intro=new&sorting=1&mode=test", true);
+	xhr.open("GET", "http://120.24.209.210/api/mobile.php?act=findgoods&goodsname="+goodsname+"&intro="+ordertype+"&sorting="+sorting+"&mode=test", true);
+	if (sorting == 1)
+	    sorting =2;
+	else
+	    sorting =1;
 	xhr.onreadystatechange = function() {
   		 if (xhr.readyState==4 && xhr.status==200){
     		var resultfromphp = xhr.responseText;
@@ -48,9 +59,8 @@ function makeList() {
 
 $(document).ready(function() {
 	//alert('hi');
-	 makeList();
+	 	 makeList('colligate');
 });
-
 function postfind(){
 var goodsname=document.getElementById('goodsname').value;
 document.location.href="findgoods.html?goodsname="+encodeURIComponent(goodsname);
@@ -79,14 +89,12 @@ document.location.href="findgoods.html?goodsname="+encodeURIComponent(goodsname)
 	</div>	
 	</div>
 <!-- search end -->
-     <div id="wrapper">
-	<div id="scroller">	
-	<div class="dp-main">
+    <div class="dp-main">
 	<div class="container">
 		<ol class="breadcrumb">
-		   <li id="orderbest"><a href="javascript:reorder('best');">销量</a></li>
+		  <li id="orderbest"><a href="javascript:reorder('sales');">销量</a></li>
 		  <li id="orderprice"><a href="javascript:reorder('price');">价格</a></li>
-		  <li id="ordernew"><a href="javascript:reorder('new');">最新</a></li>
+		  <li id="ordernew"><a href="javascript:reorder('colligate');">最新</a></li>
 		</ol>
 		
  <!--产品 begin-->
@@ -98,10 +106,32 @@ document.location.href="findgoods.html?goodsname="+encodeURIComponent(goodsname)
 	</div>
 </div>
 <!-- /content -->
-	</div><!-- /scroller -->
-</div><!-- /wrapper -->
-<div id="dp_footer" class="dp-footer ">
-		
+
+<div id="dp_footer" class="dp-footer">
+		<nav class="navbar navbar-default navbar-fixed-bottom" role="navigation">
+		  <div class="container dp-menu-box">
+		    <a class="pull-left menu-btn" href="go.html">
+		    	<div class="menu-img glyphicon glyphicon-home"></div>
+		    	<div>首页</div>
+		    </a>
+		    <a class="pull-left menu-btn" href="listcat.html">
+		    	<div class="menu-img glyphicon glyphicon-th-large"></div>
+		    	<div>分类</div>
+		    </a>
+		    <a class="pull-left menu-btn" href="usercenter.html">
+		    	<div class="menu-img glyphicon glyphicon-user"></div>
+		    	<div>我的</div>
+		    </a>
+		    <a class="pull-left menu-btn" href="gencart.html">
+		    	<div class="menu-img glyphicon glyphicon-shopping-cart"></div>
+		    	<div>购物车</div>
+		    </a>
+		    <a class="pull-left menu-btn" href="mmember-orders.html">
+		    	<div class="menu-img glyphicon glyphicon-th-list"></div>
+		    	<div>订单</div>
+		    </a>
+		  </div>
+		</nav>
 </div>
 <!-- E 快捷导航 -->
 </body>

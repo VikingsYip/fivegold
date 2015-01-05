@@ -14,8 +14,6 @@
 <link href="css/base.mobile.css" rel="stylesheet" type="text/css" media="screen, projection" />
 
 <link href="fivegold.css" rel="stylesheet" type="text/css"/>
-  <script type="text/javascript" src="iscroll-lite.js"></script>
-      				<script type="text/javascript" src="iscroll.js"></script>
 <script type="text/javascript" src="fivegold.js"></script>
 
 <!-- load the json2 library (required for jstorage use) -->
@@ -102,7 +100,7 @@ $(document).ready(function() {
 <body><!-- page -->
 <div class="user-ui-page">
         <!-- header -->
-	    <div class="user-ui-header clearfix" id="header">
+	    <div class="user-ui-header clearfix" >
 		     <a class="left-bar" href="mmember-orders.html">
 		     	<span class="glyphicon glyphicon-chevron-left"></span>
 		     </a>
@@ -112,8 +110,6 @@ $(document).ready(function() {
 		     </a>
 	    </div>
 		<!-- /header -->
-			<div id="wrapper">
-	<div id="scroller">
 		<!-- content -->
 		<div class="user-ui-content">
 		<div class="panel panel-default">
@@ -173,14 +169,36 @@ $(document).ready(function() {
 		</div>
 		</div>
 		<!-- /content -->
-		</div>
-		</div>
 		<!-- footer -->
-		<!--footer class="user-ui-footer" id="footer">
-	<div class="container">
-		<div class="copyright">© 轮通之家 </div>
-	</div>
-</footer>		<!-- /footer -->
+	
+<div id="dp_footer" class="dp-footer	">
+		<nav class="navbar navbar-default navbar-fixed-bottom" role="navigation">
+		  <div class="container dp-menu-box">
+		    <a class="pull-left menu-btn" href="go.html">
+		    	<div class="menu-img glyphicon glyphicon-home"></div>
+		    	<div>首页</div>
+		    </a>
+		    <a class="pull-left menu-btn" href="listcat.html">
+		    	<div class="menu-img glyphicon glyphicon-th-large"></div>
+		    	<div>分类</div>
+		    </a>
+		    <a class="pull-left menu-btn" href="usercenter.html">
+		    	<div class="menu-img glyphicon glyphicon-user"></div>
+		    	<div>我的</div>
+		    </a>
+		    <a class="pull-left menu-btn" href="gencart.html">
+		    	<div class="menu-img glyphicon glyphicon-shopping-cart"></div>
+		    	<div>购物车</div>
+		    </a>
+		    <a class="pull-left menu-btn" href="mmember-orders.html">
+		    	<div class="menu-img glyphicon glyphicon-th-list"></div>
+		    	<div>订单</div>
+		    </a>
+		  </div>
+		</nav>
+</div>
+	
+		<!-- /footer -->
 </div>
 <!-- /page --></body>
 </html>

@@ -22,22 +22,6 @@ $("#5gshoplist").bind("swipeleft", function() {
    history.go(-1)
 });  
 
-var myScroll;
-function loaded() {
-	myScroll = new iScroll('wrapper');
-}
-
-document.addEventListener('touchmove', function (e) { e.preventDefault(); }, false);
-
-/* * * * * * * *
- *
- * Use this for high compatibility (iDevice + Android)
- *
- */
-document.addEventListener('DOMContentLoaded', function () { setTimeout(loaded, 200); }, false);
-/*
- * * * * * * * */
-
 function quote(string) {
 	return '"' + string.replace(/(\\|\"|\n|\r|\t)/g, "\\$1") + '"';
 }
