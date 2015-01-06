@@ -52,22 +52,13 @@ function genOrder(){
 			var html ='';
 			
 			 if (objData.consignee.length>0){
-			      var i = 0;
-				// html+= '<li><h1>收货人信息</h1><select size="1" class="selector" id="selector_consignee">';
+				 html+= '<li><select size="1" class="selector" id="selector_consignee">';
 				 $.each(objData.consignee, function (index, term) {
-		  	 	 //html+=' <option value="'+term.address_id+'">'+term.consignee+'('+term.address+')('+term.tel+')</option>';
-		     		  //alert(i);
-		     		  if (i==0){;
-		     		  addressid = term.address_id;
-		     		html+='<section id="address_info" class="address_info">';
-		            html+='<section class="address_name">'+term.consignee+'&nbsp;'+term.mobile+'</section>';
-			     html+='<section class="address_content">'+term.address+'</section>';
-		   		  html+='</section>';
-		   		   i=1;
-		   		  }
+				  	 	 html+=' <option value="'+term.address_id+'">'+term.consignee+'('+term.address+')('+term.mobile+')</option>';
 		     		});
+		     		html+='</select></li>';
 		     			document.getElementById('addressHtml').innerHTML=html;
-		     		//html+='</select></li>';
+		     		
 			 }
 
                    // html+='<li><h1>收货人信息</h1><p>收货人姓名:'+objData.consignee.consignee+'</p><p>收货人详细地址:'+objData.consignee.address+'</p></li>';
@@ -94,23 +85,28 @@ function genOrder(){
 		    
                
 		       if (objData.shipping_list.length>0){
-				 //html+= '<li><h1>快递方式</h1><select size="1" class="selector" id="selector_ship">';
+		       html ='';
+				 html+= '<li><select size="1" class="selector" id="selector_ship">';
 				 $.each(objData.shipping_list, function (index, term) {
-		  	 	 //html+=' <option value="'+term.shipping_id+'">'+term.shipping_name+'(¥'+term.shipping_fee+')</option>';
+		  	 	 html+=' <option value="'+term.shipping_id+'">'+term.shipping_name+'(¥'+term.shipping_fee+')</option>';
 		     		 //document.getElementById('shipprice').innerHTML='¥'+term.shipping_fee;      
 		     		 //alert(term.shipping_fee)	;
 		     		});
 		     		
-		     		//html+='</select></li>';
+		     		html+='</select></li>';
+		     	document.getElementById('shipHtml').innerHTML=html;         
+		     		
 			 }
-			 /*if (objData.payment_list.length>0){
-				 html+= '<li><h1>支付方式</h1><select size="1" class="selector" id="selector_payment">';
+			 if (objData.payment_list.length>0){
+			    html ='';
+				 html+= '<li><select size="1" class="selector" id="selector_payment">';
 				 $.each(objData.payment_list, function (index, term) {
 			       html+=' <option value="'+term.pay_id+'">'+term.pay_name+'(手续费:¥'+term.format_pay_fee+')</option>';
 			 		});
-			 		html+='</select></li>';
+			 	html+='</select></li>';
+			 		document.getElementById('payHtml').innerHTML=html;     
 			 }
-		      */
+		      
 			 //$('#listallcat').append($(html));
                    // $('#listallcat').trigger('create');    
                    //$('#listallcat').listview('refresh');
@@ -128,11 +124,13 @@ function genOrder(){
 
 
 function addOrder(){
-     var shippingid = 1;//$("#selector_ship").val();
+     var shippingid = $("#selector_ship").val();
      //alert (shippingid);
-     var paymentid = 1;//$("#selector_payment").val();
-     //var addressid = $("#selector_consignee").val()
-     var memo=$("#memo").val()
+     var paymentid = $("#selector_payment").val();
+     var addressid = $("#selector_consignee").val();
+     //alert(addressid);
+     var memo=$("#memo").val();
+     //alert(memo);
     var need_inv=0;//1要，0不要;
     var inv_type=' ';//发票类型
     var postscript=memo;	//用户备注
@@ -142,7 +140,7 @@ function addOrder(){
    var posturl="http://120.24.209.210/api/mobile.php?act=orderconfirmation&user_id="+userid+"&mode=test&shipping_id="+shippingid+'&pay_id='+paymentid+'&need_inv='+need_inv+'&address_id='+addressid+'&postscript='+postscript;
    //alert (posturl);
       var xhr = new XMLHttpRequest();
-	xhr.open("GET", posturl, true);
+	xhr.open("POST", posturl, true);
 	xhr.onreadystatechange = function() {
   		 if (xhr.readyState==4 && xhr.status==200){
     		var resultfromphp = xhr.responseText;
@@ -192,13 +190,24 @@ $(document).ready(function() {
 	    <!-- 支付方式 -->
 	    <section class="checkout_section payment_section">
 	         <section class="checkout_title">支付方式</section>
-	         <section id="shippinglist">
+	            <div id="payHtml">
+	        
+		     </div>
+	         <!--section id="shippinglist">
 	           <input type="radio" data-role="none" name="delivery[shipping_id]" id="shipping_6"  value="6" checked="checked" onclick="check_payment(1)">
 			   <label for="shipping_6">快递：网上支付</label>
 			   			   <input type="radio" data-role="none" name="delivery[shipping_id]" id="shipping_2"  value="2" onclick="check_payment(-1)">
 			   <label for="shipping_2">快递：货到付款</label>
 			   			   <input type="hidden" id="pay_app_id" name="payment[pay_app_id]" value="99bill">
-	         </section>
+	         </section-->
+	    </section>
+	       <!-- 支付方式 -->
+	    <section class="checkout_section payment_section">
+	         <section class="checkout_title">快递方式</section>
+	            <div id="shipHtml">
+	        
+		     </div>
+	       
 	    </section>
 	    	    <input type="hidden" id="is_tax" name="payment[is_tax]"  value="false" />
 

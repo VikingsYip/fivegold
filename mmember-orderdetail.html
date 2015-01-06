@@ -47,12 +47,12 @@ var orderid = request('orderid');
 		     
 		      html ='';
 			
-			html+='<p>付款方式：支付宝</p>';
+			//html+='<p>付款方式：支付宝</p>';
 		    html+='<p>商品金额：￥'+objData.order.formated_goods_amount+'</p>';
 		    html+='<p>运费金额：￥'+objData.order.formated_shipping_fee+'</p>';		    
 		    html+='<p>应付金额：￥'+objData.order.formated_total_fee+'</p>';
 		    html+='<p>已付金额：￥'+objData.order.formated_money_paid+'</p>';
-		    html+='<p>付款状态：未付款[未发货]</p>';
+		    html+='<p>付款状态：'+objData.order.pay_status+'['+objData.order.shipping_status+']</p>';
 		    //html+='<p>付款时间：</p>';
 		    
 		    document.getElementById('payHtml').innerHTML=html; 
@@ -63,7 +63,7 @@ var orderid = request('orderid');
 		    html+='<p>手机号码：'+objData.order.mobile+'</p>';
 		     html+='<p>固定电话：'+objData.order.tel+'</p>';
 		      html+='<p>邮编号码：'+objData.order.zipcode+'</p>';
-		     html+='<p>配送方式：快递：网上支付</p>';
+		     //html+='<p>配送方式：快递：网上支付</p>';
 		       document.getElementById('shipHtml').innerHTML=html; 
 		       
 		       document.getElementById('memo').innerHTML="<p>"+objData.order.postscript+"</p>"; 

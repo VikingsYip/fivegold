@@ -10,11 +10,21 @@
 <meta content="telephone=no" name="format-detection" />
 <link href="css/jquery.mobile-1.3.2.css" rel="stylesheet" type="text/css" media="screen, projection" />
 <link href="css/jquery.mobile.my.css" rel="stylesheet" type="text/css" media="screen, projection" />
-<link href="css/jquery.nivo.slider-3.2.css" rel="stylesheet" type="text/css" media="screen, projection" />
 <link href="css/my.mobile-1.0.css" rel="stylesheet" type="text/css" media="screen, projection" />
 
 <script type="text/javascript" src="css/jquery-1.10.2.js"></script>
 <script type="text/javascript" src="css/jquery.mobile-1.3.2.js"></script>
+
+
+<link href="fivegold.css" rel="stylesheet" type="text/css"/>
+  <script type="text/javascript" src="iscroll-lite.js"></script>
+      				<script type="text/javascript" src="iscroll.js"></script>
+<script type="text/javascript" src="fivegold.js"></script>
+
+<!-- load the json2 library (required for jstorage use) -->
+<script src="json2.js"></script>
+<!-- load the jstorage library -->
+<script src="jstorage.js"></script>
 <style>
 .user-ui-footer {
 	font-size: 20px;
@@ -58,7 +68,7 @@ function newaddress(){
     		var resultfromphp = xhr.responseText;
     		//alert (resultfromphp);
     		var objData = jQuery.parseJSON(resultfromphp);
-    		alert (objData.rsgmsg);
+    		//alert (objData.rsgmsg);
     		document.location.href="checkout_myaddress.html";
 		 }
 	};
