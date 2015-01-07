@@ -27,10 +27,27 @@
 var shopid = request('goodsid') ;
 var imagecount = 0;
 var currentimage = 0;
+
+function makecartNum() {
+ var userid = $.jStorage.get('userid');
+     if (userid==null)
+        document.location.href="login.html"
+	var xhr = new XMLHttpRequest();
+	xhr.open("POST", "http://120.24.209.210/api/mobile.php?act=buylistcart&user_id="+userid, true);
+	xhr.onreadystatechange = function() {
+  		 if (xhr.readyState==4 && xhr.status==200){
+    		var resultfromphp = xhr.responseText;
+      		  var objData = jQuery.parseJSON(resultfromphp);      		  
+		  document.getElementById('cartnum').value="购物车("+objData.total.real_goods_count+")";
+		}
+	};
+	xhr.send();	
+}
+
 function makeList() {
 	 // alert(shopid+specval.label+);
 	var xhr = new XMLHttpRequest();
-	xhr.open("GET", "http://120.24.209.210/api/mobile.php?act=goodsdesc&goods_id="+shopid, true);
+	xhr.open("POST", "http://120.24.209.210/api/mobile.php?act=goodsdesc&goods_id="+shopid, true);
 	xhr.onreadystatechange = function() {
   		 if (xhr.readyState==4 && xhr.status==200){
     		var resultfromphp = xhr.responseText;
@@ -60,6 +77,7 @@ function makeList() {
 			   //document.getElementById('market_price').innerHTML='<s>￥'+term.market_price+'</s>';
 			   document.getElementById('shop_price').innerHTML='￥'+term.shop_price;
 			   
+			 makecartNum();
 			   /*html+='<li><h1>商品名称</h1><p>'+term.goods_name+'</p></li>';
 			   html+='<li><h1>商品货号</h1><p>'+term.goods_sn+'</p></li>';
 			   html+='<li><h1>商品简单说明</h1><p>'+term.goods_brief+'</p></li>';
@@ -89,34 +107,30 @@ function selectGoods(that,price){
 $(document).ready(function() {
 	 makeList();
 });
+
 var spec = 0;
+
 function addtocart(){
  var userid = $.jStorage.get('userid');
      if (userid==null)
         document.location.href="login.html";
 var xhr = new XMLHttpRequest();
      var goods_num = document.getElementById('goods_num').value;
-	
 	if (cartprice!=0)
 	 var posturl = "http://120.24.209.210/api/mobile.php?act=addbuycart&goods_id="+shopid+"&number="+goods_num+"&userid="+userid+"&spec="+spec+"&price="+cartprice;	 
 	else
      var posturl = "http://120.24.209.210/api/mobile.php?act=addbuycart&goods_id="+shopid+"&number="+goods_num+"&userid="+userid+"&spec="+spec;
-	 
-	//alert(posturl);  	
-	xhr.open("GET", posturl, true);
+
+	xhr.open("POST", posturl, true);
 	xhr.onreadystatechange = function() {
   		 if (xhr.readyState==4 && xhr.status==200){
     	       	var resultfromphp = xhr.responseText;
-			//alert("添加成功");
       		      var objData = jQuery.parseJSON(resultfromphp);
-		     //document.location.href="gencart.html";
-			// alert (objData.rsgmsg);
-			 document.getElementById('alertmsg').innerHTML=objData.rsgmsg;
-			  // alert(document.getElementById('alertmsg'));
-		//	$('#addtocart_dialog').show();
 		}
 	};
 	xhr.send();
+	 window.setTimeout(function(){ makecartNum();},100);
+
 }
 
 function showNextImage(){
@@ -306,9 +320,9 @@ function update_minus(){
 		       </div>
         	   <div class="alert alert-danger m_5_0" id="tishi" style="display:none;"></div>
         	   <div class="m_5_0">
-			   		<input type="buttom" onclick="javascript:collect();" value="关注" class="btn btn-danger" style="width:80px"> 
-			   		 <input type="buttom" onclick="javascript:addtocart();" value="加入购物车" class="btn btn-danger"  style="width:100px">
-                 	  <input type="buttom" onclick="javascript:document.location.href='gencart.html';" value="购物车" class="btn btn-danger" style="width:80px" >
+			   <input type="buttom" onclick="javascript:collect();" value="关注" class="btn btn-danger" style="width:80px"> 
+			   		 <input type="buttom" onclick="javascript:addtocart();" value="加入购物车" class="btn btn-danger"   style="width:100px">
+                 	  <input type="buttom" id="cartnum" onclick="javascript:document.location.href='gencart.html';" value="购物车" class="btn btn-danger" style="width:100px" >
                                   	
 			   </div> 
           

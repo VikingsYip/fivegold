@@ -10,7 +10,39 @@
 <link rel="stylesheet" href="css/bootstrap.min.css">
 <script src="css/jquery-1.10.2.min.js"></script>
 <script src="css/bootstrap.min.js"></script>
-<link href="css/base.mobile.css?983391" rel="stylesheet" type="text/css" media="screen, projection" /></head>
+<link href="css/base.mobile.css" rel="stylesheet" type="text/css" media="screen, projection" />
+<link href="fivegold.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="fivegold.js"></script>
+    <!-- load the json2 library (required for jstorage use) -->
+<script src="json2.js"></script>
+<!-- load the jstorage library -->
+<script src="jstorage.js"></script>
+
+    <script>	
+function changepwd() {
+    //var userid = request('catid');
+ var userid = $.jStorage.get('userid');
+     if (userid==null)
+        document.location.href="login.html"
+	//alert(catid);
+	var xhr = new XMLHttpRequest();
+	var new_pwd=$('#passwd').val();	
+	var old_pwd=$('#old_pwd').val();		
+	xhr.open("GET", "http://120.24.209.210/api/mobile.php?act=changepwd&mode=test&user_id="+userid+"&new_pwd="+new_pwd+"&old_pwd="+old_pwd, true);
+	xhr.onreadystatechange = function() {
+  		 if (xhr.readyState==4 && xhr.status==200){
+    		var resultfromphp = xhr.responseText;			
+			var html ='';
+      		  var objData = jQuery.parseJSON(resultfromphp);
+		 alert(objData.rsgmsg);
+  		}
+	};
+	xhr.send();
+	
+}
+</script>
+</head>
+
 <body><!-- page -->
 <div class="user-ui-page">
 	<!-- header -->
@@ -29,14 +61,18 @@
 		<div class="container">
 		<div class="panel">
 			<div class="panel-body">
-				<form id="submit_form" role="form" action="#" method="post">
+				<form id="submit_form" role="form" action="javascript:changepwd() " method="post">
+				<div class="form-group">
+					    <label for="passwd">旧密码：</label>
+					    <input type="password" class="form-control" id="old_pwd" name="old_pwd" placeholder="请输入旧密码">
+				   </div>
 				   <div class="form-group">
 					    <label for="passwd">新密码：</label>
-					    <input type="text" class="form-control" id="passwd" name="passwd" placeholder="请输入新密码">
+					    <input type="password" class="form-control" id="passwd" name="passwd" placeholder="请输入新密码">
 				   </div>
 				   <div class="form-group">
 					    <label for="passwd_re">再次输入：</label>
-					    <input type="text" class="form-control" id="passwd_re" name="passwd_re" placeholder="请再次输入新密码">
+					    <input type="password" class="form-control" id="passwd_re" name="passwd_re" placeholder="请再次输入新密码">
 				   </div>
 				</form>
 				<div class="form-group">
@@ -48,11 +84,33 @@
 	</div>
 	<!-- /content -->
 <!-- footer -->
-	<footer class="user-ui-footer">
-	<div class="container">
-		<div class="copyright">轮通之家</div>
-	</div>
-</footer>	<!-- /footer -->
+	<div id="dp_footer" class="dp-footer	">
+		<nav class="navbar navbar-default navbar-fixed-bottom" role="navigation">
+		  <div class="container dp-menu-box">
+		    <a class="pull-left menu-btn" href="go.html" rel="external">
+		    	<div class="menu-img glyphicon glyphicon-home"></div>
+		    	<div>首页</div>
+		    </a>
+		    <a class="pull-left menu-btn" href="listcat.html" rel="external">
+		    	<div class="menu-img glyphicon glyphicon-th-large"></div>
+		    	<div>分类</div>
+		    </a>
+		    <a class="pull-left menu-btn" href="usercenter.html" rel="external">
+		    	<div class="menu-img glyphicon glyphicon-user"></div>
+		    	<div>我的</div>
+		    </a>
+		    <a class="pull-left menu-btn" href="gencart.html" rel="external">
+		    	<div class="menu-img glyphicon glyphicon-shopping-cart"></div>
+		    	<div>购物车</div>
+		    </a>
+		    <a class="pull-left menu-btn" href="mmember-orders.html" rel="external">
+		    	<div class="menu-img glyphicon glyphicon-th-list"></div>
+		    	<div>订单</div>
+		    </a>
+		  </div>
+		</nav>
+</div>
+	<!-- /footer -->
 </div>
 <script type="text/javascript">
 $(document).ready(function() {

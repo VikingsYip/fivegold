@@ -35,7 +35,7 @@ function makeList() {
 			var html ='';
       		  var objData = jQuery.parseJSON(resultfromphp);
 			   $.each(objData.goods_list, function (index, term) {
-			html+="<table class=\"table\"><tr><td valign=\"top\" width=\"50px\"><img class=\"img-rounded\" width=\"50\" height=\"50\" src=\""+term.original_img+"\"></td><td><p>"+term.goods_name+"（";
+			html+="<table class=\"table\"><tr><td valign=\"top\" width=\"50px\"><a href=\"goods.html?goodsid="+term.goods_id+"\"><img class=\"img-rounded\" width=\"50\" height=\"50\" src=\""+term.original_img+"\"></a></td><td><p>"+term.goods_name+"（";
 			$.each(term.goods_attr, function (index, att) 							{
 			html+=att.name+"："+att.value;
 			});
