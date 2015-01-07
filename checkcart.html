@@ -30,6 +30,16 @@
 <script src="jstorage.js"></script>
 <script language="javascript">
 var addressid = 0;
+function selectaddress(_addressid){
+   addressid = _addressid;
+   //alert(addressid);
+   //location.href="checkout_myaddress.html";
+   var origclassName=document.getElementById('address_info_'+_addressid).className;
+   if (origclassName=="address_info")
+      document.getElementById('address_info_'+_addressid).className="receiver checkout_section address_section address_section_on";
+   else
+      document.getElementById('address_info_'+_addressid).className="address_info";
+}
 function genOrder(){
      var userid = $.jStorage.get('userid');
          if (userid==null)
@@ -50,14 +60,28 @@ function genOrder(){
 			 	document.location.href="newaddress.html";
 			 }
 			var html ='';
-			
+				//alert(html);
 			 if (objData.consignee.length>0){
-				 html+= '<li><select size="1" class="selector" id="selector_consignee">';
+			     //html+= '<li><select size="1" class="selector" id="selector_consignee">';
+			     var i =0;
 				 $.each(objData.consignee, function (index, term) {
-				  	 	 html+=' <option value="'+term.address_id+'">'+term.consignee+'('+term.address+')('+term.mobile+')</option>';
-		     		});
-		     		html+='</select></li>';
+		  	 	 //html+=' <option value="'+term.address_id+'">'+term.consignee+'('+term.address+')('+term.tel+')</option>';
+		     		 
+		     		  if (i==0){		     		 
+		     		html+='<a href=\"javascript:selectaddress('+term.address_id+')\"><section id="address_info_'+term.address_id+'" class="receiver checkout_section address_section address_section_on">';
+		     		 addressid = term.address_id;
+		     		}
+		     		else
+		     		html+='<a href=\"javascript:selectaddress('+term.address_id+')\"><section id="address_info_'+term.address_id+'" class="address_info">';
+		            html+='<section class="address_name">'+term.consignee+'&nbsp;'+term.mobile+'</section>';
+			     html+='<section class="address_content">'+term.address+'</section>';
+		   		  html+='</section></a>';
+		   		  i++;
+		   		  	});
+				  	 //	html+='</select></li>';
+				  	 //	alert(html);
 		     			document.getElementById('addressHtml').innerHTML=html;
+		     	
 		     		
 			 }
 
@@ -83,8 +107,8 @@ function genOrder(){
 		      document.getElementById('goodsprice').innerHTML='¥'+objData.total.goods_price;         
 		    document.getElementById('totalprice').innerHTML='¥'+objData.total.goods_price;         
 		    
-               
-		       if (objData.shipping_list.length>0){
+             /*
+		     if (objData.shipping_list.length>0){
 		       html ='';
 				 html+= '<li><select size="1" class="selector" id="selector_ship">';
 				 $.each(objData.shipping_list, function (index, term) {
@@ -96,7 +120,8 @@ function genOrder(){
 		     		html+='</select></li>';
 		     	document.getElementById('shipHtml').innerHTML=html;         
 		     		
-			 }
+			 }*/
+			 /*
 			 if (objData.payment_list.length>0){
 			    html ='';
 				 html+= '<li><select size="1" class="selector" id="selector_payment">';
@@ -106,6 +131,7 @@ function genOrder(){
 			 	html+='</select></li>';
 			 		document.getElementById('payHtml').innerHTML=html;     
 			 }
+			 */
 		      
 			 //$('#listallcat').append($(html));
                    // $('#listallcat').trigger('create');    
@@ -124,10 +150,11 @@ function genOrder(){
 
 
 function addOrder(){
-     var shippingid = $("#selector_ship").val();
+     var shippingid = 0;//$("#selector_ship").val();
      //alert (shippingid);
-     var paymentid = $("#selector_payment").val();
-     var addressid = $("#selector_consignee").val();
+     var paymentid = $("#paymentid").val();
+     //var addressid = $("#selector_consignee").val();
+     //alert (paymentid);
      //alert(addressid);
      var memo=$("#memo").val();
      //alert(memo);
@@ -193,22 +220,14 @@ $(document).ready(function() {
 	            <div id="payHtml">
 	        
 		     </div>
-	         <!--section id="shippinglist">
-	           <input type="radio" data-role="none" name="delivery[shipping_id]" id="shipping_6"  value="6" checked="checked" onclick="check_payment(1)">
+	        <section id="shippinglist">
+	           <input type="radio" data-role="none" name="delivery[shipping_id]" id="paymentid"  value="2" checked="checked" >
 			   <label for="shipping_6">快递：网上支付</label>
-			   			   <input type="radio" data-role="none" name="delivery[shipping_id]" id="shipping_2"  value="2" onclick="check_payment(-1)">
-			   <label for="shipping_2">快递：货到付款</label>
-			   			   <input type="hidden" id="pay_app_id" name="payment[pay_app_id]" value="99bill">
-	         </section-->
+			   <input type="radio" data-role="none" name="delivery[shipping_id]" id="paymentid"  value="1" >
+			   <label for="shipping_2">快递：货到付款</label>			   			 
+	         </section>
 	    </section>
-	       <!-- 支付方式 -->
-	    <section class="checkout_section payment_section">
-	         <section class="checkout_title">快递方式</section>
-	            <div id="shipHtml">
-	        
-		     </div>
-	       
-	    </section>
+	      
 	    	    <input type="hidden" id="is_tax" name="payment[is_tax]"  value="false" />
 
 

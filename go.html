@@ -14,6 +14,11 @@
 	<link rel="stylesheet" href="css/idangerous.swiper.css">
 	<script src="css/idangerous.swiper.min.js"></script>
 	<link href="css/base.mobile.css" rel="stylesheet" type="text/css" media="screen, projection" />	
+	<!-- load the json2 library (required for jstorage use) -->
+<script src="json2.js"></script>
+<!-- load the jstorage library -->
+<script src="jstorage.js"></script>
+	
 	<script>
 	function makelist(){
 			
@@ -38,13 +43,87 @@
 			  document.getElementById('showimage').innerHTML+=html;
 			   });
 			
-		
+		// 首交轮播图初始化
+	 var $total_img = $('.total_img .swiper-container').swiper({
+		loop: true,
+		autoplay: 2000
+	 });
+	 
+	  // 上一页
+	 $('.previous').click(function(){
+		 $total_img.swipePrev();
+	 });
+
+	 // 下一页
+	 $('.next').click(function(){
+		 $total_img.swipeNext();
+	 });
 		 }
 	};
 	xhr.send();
 }
+
+	function makehomegoods(){
+			
+    var posturl ="http://www.zgltong.com/api/mobile.php?act=homegoods";
+
+      var xhr = new XMLHttpRequest();
+	xhr.open("GET", posturl, true);
+	xhr.onreadystatechange = function() {
+  		 if (xhr.readyState==4 && xhr.status==200){
+    		var resultfromphp = xhr.responseText;
+    		//alert (resultfromphp);
+    		var objData = jQuery.parseJSON(resultfromphp);
+    		 var html = "";
+    		html+="<table class=\"table table-bordered\">";	
+		    var i =0;
+    		 $.each(objData.listallcat, function (index, term) {	
+    		       //alert(term.ad_code);
+    		      if (i%2==0) html+="<tr>";
+    		       html+="<td align=\"center\" width=\"50%\"><div class=\"p_box\"><div class=\"p_img\"><a href=\"goods.html?goodsid="+term.id+"\" target=\"_blank\"><img class=\"img-rounded\" src=\""+term.img+"\" alt=\"\"></a>";
+				   html+="</div><div class=\"p-name\"><a href=\"goods.html?goodsid="+term.id+" \" target=\"_blank\">"+term.name+"</a></div><div class=\"p_price\"><p><span class=\"sale_price\">销售价：￥"+term.shop_price+"</span>";
+				   html+="</p></div><a href=\"javascript:addtocart("+term.id+")\" class=\"btn btn-default\">&nbsp;购 &nbsp;&nbsp;买&nbsp;</a></div></td>";
+			      if (i%2==1) html+="</tr>";
+			      i++;
+			   });
+		   html+="</table>";
+		   //alert(html);
+		     document.getElementById('homegoods').innerHTML+=html;
+		 }
+	};
+	xhr.send();
+}
+
+function addtocart(shopid){
+ var userid = $.jStorage.get('userid');
+     if (userid==null)
+        document.location.href="login.html";
+var xhr = new XMLHttpRequest();
+     var goods_num = 1;
+	
+     var posturl = "http://120.24.209.210/api/mobile.php?act=addbuycart&goods_id="+shopid+"&number="+goods_num+"&userid="+userid
+	 
+	//alert(posturl);  	
+	xhr.open("GET", posturl, true);
+	xhr.onreadystatechange = function() {
+  		 if (xhr.readyState==4 && xhr.status==200){
+    	       	var resultfromphp = xhr.responseText;
+			//alert("添加成功");
+      		      var objData = jQuery.parseJSON(resultfromphp);
+		     //document.location.href="gencart.html";
+			 //alert (objData.rsgmsg);
+			 //document.getElementById('alertmsg').innerHTML=objData.rsgmsg;
+			  // alert(document.getElementById('alertmsg'));
+			//$('#addtocart_dialog').show();
+			document.location.href="gencart.html";
+		}
+	};
+	xhr.send();
+}
+
 $(document).ready(function() {
      	 makelist();
+     	 makehomegoods();
 });
 
 function postfind(){
@@ -137,21 +216,9 @@ $(function(){
 	     width: _width
 	 });
 
-	 // 首交轮播图初始化
-	 var $total_img = $('.total_img .swiper-container').swiper({
-		loop: true,
-		autoplay: 5000
-	 });
+	 
 
-	 // 上一页
-	 $('.previous').click(function(){
-		 $total_img.swipePrev();
-	 });
-
-	 // 下一页
-	 $('.next').click(function(){
-		 $total_img.swipeNext();
-	 });
+	
 });
 </script>
 	<!-- E 轮播 -->
@@ -248,8 +315,8 @@ $(function(){
 	text-overflow: ellipsis;
 }
 </style>
-<div class="clearfix">
-		<table class="table table-bordered">
+<div class="clearfix" id="homegoods">
+		<!--table class="table table-bordered">
 			<tr>
 	    		<td align="center" width="50%">
 					<div class="p_box">
@@ -324,7 +391,7 @@ $(function(){
 					</div>
 				</td>
 			</tr>
-		</table>
+		</table-->
 </div>	<!-- E 热卖轮播 -->
 </div>
 <!-- S 单品推荐  -->
