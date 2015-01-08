@@ -59,7 +59,7 @@ function login(){
 	var password=encodeURIComponent(document.getElementById('password').value);						
     var posturl ="http://120.24.209.210/api/mobile.php?act=loginusr&mode=test&user="+username+"&password="+password;
 
-      var xhr = new XMLHttpRequest();
+    var xhr = new XMLHttpRequest();
 	xhr.open("GET", posturl, true);
 	xhr.onreadystatechange = function() {
   		 if (xhr.readyState==4 && xhr.status==200){
@@ -73,18 +73,17 @@ function login(){
          	      $.jStorage.set('userid', objData.userid , {TTL: 28800000}); // {TTL... is optional time, in milliseconds, until key/value pair expires}
          	      $.jStorage.set('username', username , {TTL: 28800000}); // {TTL... is optional time, in milliseconds, until key/value pair expires}
          	      $.jStorage.set('password', password , {TTL: 28800000}); // {TTL... is optional time, in milliseconds, until key/value pair expires}
-    			
     		}
 		 }
 	};
 	xhr.send();
 }
 function confirm(){
-var userid = $.jStorage.get('userid');
-if (userid!=null)
-	document.location.href='usercenter.html';
-else
-      void(0);
+	var userid = $.jStorage.get('userid');
+	if (userid!=null)
+		document.location.href='usercenter.html';
+	else
+		void(0);
 }
 </script>
 </head>

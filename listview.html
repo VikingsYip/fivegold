@@ -8,16 +8,15 @@
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 	<meta content="telephone=no" name="format-detection" />
-<link rel="stylesheet" href="css/bootstrap.min.css">
+	<link rel="stylesheet" href="css/bootstrap.min.css">
 	<script src="css/jquery-1.10.2.min.js"></script>
 	<script src="css/jquery.cookie.js"></script>
 	<script src="css/bootstrap.min.js"></script>
 	<link rel="stylesheet" href="css/idangerous.swiper.css">
 	<script src="css/idangerous.swiper.min.js"></script>
 	<link href="css/base.mobile.css" rel="stylesheet" type="text/css" media="screen, projection" />	
-	
 	<link href="fivegold.css" rel="stylesheet" type="text/css"/>
- <script type="text/javascript" src="fivegold.js"></script>
+	<script type="text/javascript" src="fivegold.js"></script>
  
     <script>	
 function reorder(ordertype){
@@ -42,11 +41,17 @@ function makeList(ordertype) {
     		var resultfromphp = xhr.responseText;
 			//alert(resultfromphp);
 			var html ='';
-      		  var objData = jQuery.parseJSON(resultfromphp);
-			   $.each(objData.listallcat, function (index, term) {
+      		var objData = jQuery.parseJSON(resultfromphp);
+			$.each(objData.listallcat, function (index, term) {
 			html+="<div class=\"center-block goods-item\"><a class=\"href_info\" href=\"goods.html?goodsid="+term.goods_id+"\"><img style=\"margin-right:5px;\" class=\"img-rounded pull-left\" src=\""+term.goods_img+"\" alt=\""+term.goods_name+"\" width=\"80\" height=\"80\"/><div class=\"clearfix\"><p class=\"product_name\">"+term.goods_name+"</p><p class=\"product_name\">所有的参数</p><div class=\"product_price clearfix\" style=\"line-height:30px;\"><p style=\"font-size:16px;float:left;color:red\">￥"+term.shop_price+"</p></div></div></a></div>";
 			});
-			   //alert(html);
+			
+			if (html=='')
+			{
+				html='<section style=\"text-align:center;\"><p style=\"margin:30px 0px;\">暂无商品...<p></section>';
+			}
+
+			//alert(html);
 			document.getElementById('catHtml').innerHTML=html;
 			 
   		}
@@ -56,7 +61,6 @@ function makeList(ordertype) {
 }
 
 $(document).ready(function() {
-	//alert('hi');
 	 makeList('colligate');
 });
 function postfind(){
@@ -67,25 +71,18 @@ document.location.href="findgoods.html?goodsname="+encodeURIComponent(goodsname)
 </script>
 </head>
 <body>
-<div class="dp-header">
-	<div class="container-fluid" style="background-color:#E0DFDB;margin-bottom:5px;padding:10px 10px;">
-	<div class="row" style="margin:0 0;">
-			<div class="col-xs-12" style="padding:0 0;">
-		<form id="search_form" action="javascript:postfind()" method="get">
-					<div class="col-xs-99">
-					<img alt="轮通之家" src="img/logo.png" width="45px" border="0">
-				</div>
-				<div class="input-group col-xs-100">
-				      <input type="text" class="form-control" name="scontent"  id="goodsname" value="" placeholder="搜索商品">
-				      <span class="input-group-btn">
-				        <input class="btn btn-default" type="submit" value="搜索">
-				      </span>
-				</div>
-			</form>
-			</div>
-	</div>
-	</div>	
-	</div>
+<!-- header -->
+<div class="user-ui-header clearfix">
+	<a class="left-bar" href="listcat.html">
+		<span class="glyphicon glyphicon-chevron-left"></span>
+	</a>
+	<span>查询结果</span>
+	<a class="right-bar" href="checkcart.html">
+		<span class="glyphicon glyphicon-shopping-cart"></span>
+	</a>
+</div>
+<!-- /header -->
+
 <!-- search end -->	
 	<div class="dp-main">
 	<div class="container">
@@ -133,7 +130,6 @@ document.location.href="findgoods.html?goodsname="+encodeURIComponent(goodsname)
 		</nav>
 </div>
 
-	
-<!-- E 快捷导航 -->
+
 </body>
 </html>

@@ -590,4 +590,6 @@ body {
 	}
 }
 
-
+.btnbuy {
+	background: url(../images/airfinish.png) no-repeat;
+}

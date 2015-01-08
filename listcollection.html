@@ -14,10 +14,8 @@
 	<script src="css/bootstrap.min.js"></script>
 	<link href="css/base.mobile.css" rel="stylesheet" type="text/css" media="screen, projection" />
     <script type="text/javascript" src="fivegold.js"></script>
-    <!-- load the json2 library (required for jstorage use) -->
-<script src="json2.js"></script>
-<!-- load the jstorage library -->
-<script src="jstorage.js"></script>
+	<script src="json2.js"></script>
+	<script src="jstorage.js"></script>
     <script>	
 function makeList() {
     //var catid = request('catid');
@@ -92,9 +90,35 @@ document.location.href="findgoods.html?goodsname="+encodeURIComponent(goodsname)
 <!-- /content -->
 	</div><!-- /scroller -->
 </div><!-- /wrapper -->
-<div id="dp_footer" class="dp-footer ">
-		
+
+	<!-- footer -->
+
+<div id="dp_footer" class="dp-footer	">
+		<nav class="navbar navbar-default navbar-fixed-bottom" role="navigation">
+		  <div class="container dp-menu-box">
+		    <a class="pull-left menu-btn" href="go.html">
+		    	<div class="menu-img glyphicon glyphicon-home"></div>
+		    	<div>首页</div>
+		    </a>
+		    <a class="pull-left menu-btn" href="listcat.html">
+		    	<div class="menu-img glyphicon glyphicon-th-large"></div>
+		    	<div>分类</div>
+		    </a>
+		    <a class="pull-left menu-btn" href="usercenter.html">
+		    	<div class="menu-img glyphicon glyphicon-user"></div>
+		    	<div>我的</div>
+		    </a>
+		    <a class="pull-left menu-btn" href="gencart.html">
+		    	<div class="menu-img glyphicon glyphicon-shopping-cart"></div>
+		    	<div>购物车</div>
+		    </a>
+		    <a class="pull-left menu-btn" href="mmember-orders.html">
+		    	<div class="menu-img glyphicon glyphicon-th-list"></div>
+		    	<div>订单</div>
+		    </a>
+		  </div>
+		</nav>
 </div>
-<!-- E 快捷导航 -->
+	<!-- /footer -->
 </body>
 </html>

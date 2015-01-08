@@ -38,24 +38,19 @@
 <script src="jstorage.js"></script>
 <script>
 function deladdress(id){
-  // alert(id);
-  var userid = $.jStorage.get('userid');
-      if (userid==null)
-        document.location.href="login.html";
-  //alert (userid);
-   var xhr = new XMLHttpRequest();
+	var userid = $.jStorage.get('userid');
+	if (userid==null)
+		document.location.href="login.html";
+	//alert (userid);
+	var xhr = new XMLHttpRequest();
 	xhr.open("GET", "http://120.24.209.210/api/mobile.php?act=deladdress&id="+id+"&user_id="+userid, true);
 	
 	xhr.onreadystatechange = function() {
   		 if (xhr.readyState==4 && xhr.status==200){
-    		var resultfromphp = xhr.responseText;
-				//alert (resultfromphp);
-			//alert ('删除成功');
+			var resultfromphp = xhr.responseText;
 			var objData = jQuery.parseJSON(resultfromphp);
 			alert(objData.rsgmsg);
-			 //$('#listallcat').removeData(;
-			 document.location.href="checkout_myaddress.html";
-				// makeList();
+			document.location.href="checkout_myaddress.html";
   		}
 	};
 	xhr.send();
@@ -63,8 +58,8 @@ function deladdress(id){
 
 
 function makeList() {
-      var userid = $.jStorage.get('userid');
-          if (userid==null)
+	var userid = $.jStorage.get('userid');
+	if (userid==null)
         document.location.href="login.html";
 	var xhr = new XMLHttpRequest();
 	xhr.open("GET", "http://120.24.209.210/api/mobile.php?act=myaddressmgn&user_id="+userid, true);
@@ -74,51 +69,42 @@ function makeList() {
 			//alert(resultfromphp);
       		  //var objData = jQuery.parseJSON(resultfromphp);
 			  //alert(objData);
-		 var objData = jQuery.parseJSON(resultfromphp);
+			var objData = jQuery.parseJSON(resultfromphp);
 			  //alert(objData.goods_list.length);
 			var html ='';
 	  		if (objData.listallcat.length>0){
 			 $.each(objData.listallcat, function (index, term) {
                  //html+='<li><a href="#" data-inline="true" ><h1>收货人:'+term.consignee+'</h1><p>地址:'+term.address+'</p><p>电话:'+term.tel+'</p><p>移动电话:'+term.mobile+'</p><p>电子邮件:'+term.email+'</p></a><a href="javascript:deladdress('+term.address_id+')">删除</a></li>';
 				html+='	<section class=\"receiver checkout_section address_section address_section_on\">';
-		            html+='<section class=\"address_info\">';
+		        html+='<section class=\"address_info\">';
 			    html+='<section class=\"address_name\">'+term.consignee+'&nbsp;'+term.mobile+'(<a href="javascript:deladdress('+term.address_id+')">删除</a>)</section>';
 			    html+='<section class=\"address_content\">'+term.address+'</section>';
-		          html+='</section>';
-		         html+='<section class=\"check_address\">';
-		      //  html+='<form class=\"check_address_form\" action=\"javascript:deladdress('+term.addressid+')\" method=\"post\" data-ajax=\"false\">';
-		       // html+='<input type=\"hidden\" name=\"addr_id\" value=\"46704\">';
-			  //  html+='</form>';
-			    // html+='<p><a href="javascript:deladdress('+term.addressid+')">删除</a></p>';
-		   html+='</section>';
-		html+='</section>';
-					   });
-					   //alert(html);
-					   	document.getElementById('addressman').innerHTML=html;
-		   
-				 //alert(html);
-					 
-          
-            
+		        html+='</section>';
+		        html+='<section class=\"check_address\">';
+		        //html+='<form class=\"check_address_form\" action=\"javascript:deladdress('+term.addressid+')\" method=\"post\" data-ajax=\"false\">';
+		        //html+='<input type=\"hidden\" name=\"addr_id\" value=\"46704\">';
+			    //html+='</form>';
+			    //html+='<p><a href="javascript:deladdress('+term.addressid+')">删除</a></p>';
+				html+='</section>';
+				html+='</section>';
+			});
+			//alert(html);
+			document.getElementById('addressman').innerHTML=html;
             }else{
                
             }
-				
-        
-           // }
   		}
 	};
 	xhr.send();
-	
 }
 
-
 $(document).ready(function() {
-	 makeList();
+	 //makeList();
 });
 </script>
 </head>
-<body><div data-role="page" id="cart" data-title="我的订单">
+<body>
+<div data-role="page" id="cart" data-title="我的订单">
 	<!-- header -->
 	<div data-role="header" data-theme="h">
 	    <a href="checkcart.html" data-role="button" data-iconpos="notext" data-icon="arrow-l" data-ajax="false"></a>
@@ -127,23 +113,38 @@ $(document).ready(function() {
 	<!-- /header -->
 	<!-- content -->
 	<div data-role="content" id="addressman">
-	    	
-		
-			</div>
+
+		<section class="receiver checkout_section address_section address_section_on">
+			<section class="address_info">
+				<section class="address_name">xia&nbsp;13725275140</section>
+				<section class="address_content">安徽-亳州市-涡阳县-广州</section>
+			</section>
+			<section class="check_address">
+				<form class="check_address_form" action="checkcart.html?vtype=1" method="post" data-ajax="false">
+					<input type="hidden" name="addr_id" value="46704">
+			    </form>
+			</section>
+		</section>
+
+
+	</div>
 	<!-- /content -->
 	<div data-role="footer"  data-theme="c">
 	    <div style="padding:5px 5px;">
 	    <input id="new_address_btn" type="button" value="添加新地址" data-mini="false">
 	    </div>
     </div>
-	<script type="text/javascript">
+
+
+
+<script type="text/javascript">
 	$('.receiver').click(function(){
 		$(this).siblings().removeClass('address_section_on');
 		$(this).addClass('address_section_on');
 		$(this).find('.check_address_form').submit();
 	});
 	$('#new_address_btn').click(function(){
-		location.href="newaddress.html";
+		//location.href="newaddress.html";
 	});
 	</script>
 </div>

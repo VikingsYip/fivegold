@@ -14,16 +14,14 @@
 	<script src="css/bootstrap.min.js"></script>
 	<link href="css/base.mobile.css" rel="stylesheet" type="text/css" media="screen, projection" />
 	<link href="fivegold.css" rel="stylesheet" type="text/css"/>
-  <script type="text/javascript" src="iscroll-lite.js"></script>
-      				<script type="text/javascript" src="iscroll.js"></script>
+	<script type="text/javascript" src="iscroll-lite.js"></script>
+     <script type="text/javascript" src="iscroll.js"></script>
 <script type="text/javascript" src="fivegold.js"></script>
-    <!-- load the json2 library (required for jstorage use) -->
 <script src="json2.js"></script>
-<!-- load the jstorage library -->
 <script src="jstorage.js"></script>
-    <script>	
+<script>	
     function reorder(ordertype){
-  makeList(ordertype);
+		makeList(ordertype);
  }
  
 var sorting = 1;
@@ -31,7 +29,7 @@ function makeList(ordertype) {
     var goodsname = request('goodsname');
     //goodsname=encodeURIComponent(goodsname);
 	//alert(goodsname);
-		if (ordertype==null)
+	if (ordertype==null)
 	  ordertype="colligate";
 	var xhr = new XMLHttpRequest();
 	xhr.open("GET", "http://120.24.209.210/api/mobile.php?act=findgoods&goodsname="+goodsname+"&intro="+ordertype+"&sorting="+sorting+"&mode=test", true);
@@ -44,13 +42,16 @@ function makeList(ordertype) {
     		var resultfromphp = xhr.responseText;
 			//alert(resultfromphp);
 			var html ='';
-      		  var objData = jQuery.parseJSON(resultfromphp);
-			   $.each(objData.listallcat, function (index, term) {
+      		var objData = jQuery.parseJSON(resultfromphp);
+			$.each(objData.listallcat, function (index, term) {
 			html+="<div class=\"center-block goods-item\"><a class=\"href_info\" href=\"goods.html?goodsid="+term.goods_id+"\"><img style=\"margin-right:5px;\" class=\"img-rounded pull-left\" src=\""+term.goods_img+"\" alt=\""+term.goods_name+"\" width=\"80\" height=\"80\"/><div class=\"clearfix\"><p class=\"product_name\">"+term.goods_name+"</p><p class=\"product_name\">所有的参数</p><div class=\"product_price clearfix\" style=\"line-height:30px;\"><p style=\"font-size:16px;float:left;color:red\">￥"+term.shop_price+"</p></div></div></a></div>";
 			});
-			   //alert(html);
+			//alert(html);
+			if (html=='')
+			{
+				html='<section style=\"text-align:center;\"><p style=\"margin:30px 0px;\">暂无商品...<p></section>';
+			}
 			document.getElementById('catHtml').innerHTML=html;
-			 
   		}
 	};
 	xhr.send();
@@ -59,11 +60,11 @@ function makeList(ordertype) {
 
 $(document).ready(function() {
 	//alert('hi');
-	 	 makeList('colligate');
+	makeList('colligate');
 });
 function postfind(){
-var goodsname=document.getElementById('goodsname').value;
-document.location.href="findgoods.html?goodsname="+encodeURIComponent(goodsname);
+	var goodsname=document.getElementById('goodsname').value;
+	document.location.href="findgoods.html?goodsname="+encodeURIComponent(goodsname);
 }
 </script>
 </head>
@@ -97,9 +98,9 @@ document.location.href="findgoods.html?goodsname="+encodeURIComponent(goodsname)
 		  <li id="ordernew"><a href="javascript:reorder('colligate');">最新</a></li>
 		</ol>
 		
- <!--产品 begin-->
+<!--产品 begin-->
  <div id ="catHtml"></div>
-		<!--产品 end-->
+<!--产品 end-->
 
 		
 
@@ -133,6 +134,5 @@ document.location.href="findgoods.html?goodsname="+encodeURIComponent(goodsname)
 		  </div>
 		</nav>
 </div>
-<!-- E 快捷导航 -->
 </body>
 </html>

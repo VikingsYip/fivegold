@@ -6,16 +6,15 @@
 <meta name="keywords" content="">
 <meta name="description" content="">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+
 <meta content="telephone=no" name="format-detection" />
 <link rel="stylesheet" href="css/bootstrap.min.css">
 <script src="css/jquery-1.10.2.min.js"></script>
 <script src="css/bootstrap.min.js"></script>
-<link href="css/base.mobile.css" rel="stylesheet" type="text/css" media="screen, projection" />
+<link href="css/base.mobile.css?6bffde" rel="stylesheet" type="text/css" media="screen, projection" />
 
 <script type="text/javascript" src="fivegold.js"></script>
-<!-- load the json2 library (required for jstorage use) -->
 <script src="json2.js"></script>
-<!-- load the jstorage library -->
 <script src="jstorage.js"></script>
 <script type="text/javascript" src="css/jquery.mobile-1.3.2.js"></script>
 
@@ -136,7 +135,7 @@ function makelist(){
 		</nav>
 </div>
 	
-		<!-- /footer -->
+<!-- /footer -->
 
 </div>
 <div class="modal fade" id="logout_dialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -162,10 +161,10 @@ function makelist(){
 // 注销账户
 $('#logout_btn').click(function(){
 
-	$.jStorage.set('userid', null , {TTL: 28800000}); // {TTL... is optional time, in milliseconds, until key/value pair expires}
-       $.jStorage.set('username', null , {TTL: 28800000}); // {TTL... is optional time, in milliseconds, until key/value pair expires}
-       $.jStorage.set('password', null , {TTL: 28800000}); // {TTL... is optional time, in milliseconds, until key/value pair expires}
-      location.href='login.html';
+	$.jStorage.set('userid', null , {TTL: 28800000}); 
+    $.jStorage.set('username', null , {TTL: 28800000}); 
+    $.jStorage.set('password', null , {TTL: 28800000}); 
+    location.href='login.html';
 });
 
 </script>

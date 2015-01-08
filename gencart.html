@@ -14,18 +14,15 @@
 <link href="css/base.mobile.css" rel="stylesheet" type="text/css" media="screen, projection" />
 <link href="fivegold.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="fivegold.js"></script>
-    <!-- load the json2 library (required for jstorage use) -->
 <script src="json2.js"></script>
-<!-- load the jstorage library -->
 <script src="jstorage.js"></script>
 
     <script>	
 function makeList() {
     //var userid = request('catid');
- var userid = $.jStorage.get('userid');
+	var userid = $.jStorage.get('userid');
      if (userid==null)
         document.location.href="login.html"
-	//alert(catid);
 	var xhr = new XMLHttpRequest();
 	xhr.open("GET", "http://120.24.209.210/api/mobile.php?act=buylistcart&user_id="+userid, true);
 	xhr.onreadystatechange = function() {
@@ -44,7 +41,7 @@ function makeList() {
 			   //alert(html);
 			document.getElementById('catHtml').innerHTML=html;
 
-document.getElementById('total').innerHTML="<p>商品总金额：￥"+objData.total.goods_price+"</p>";		 
+			document.getElementById('total').innerHTML="<p>商品总金额：￥"+objData.total.goods_price+"</p>";		 
   		}
 	};
 	xhr.send();
@@ -66,12 +63,9 @@ function updatecart(newnumber,recid) {
 			//alert(resultfromphp);
 			//var html ='';
       		  var objData = jQuery.parseJSON(resultfromphp);
-
 				if (objData.rsgcode == '000'){
 				makeList();
 				}
-				   
-			  
                  //document.location.href="gencart.html";	 
   		}
 	};
@@ -87,19 +81,18 @@ $(document).ready(function() {
 
 
 function delcart(recid){
-
     var xhr = new XMLHttpRequest();
 	xhr.open("GET", "http://120.24.209.210/api/mobile.php?act=delbuycart&rec_id="+recid, true);
 	xhr.onreadystatechange = function() {
   		 if (xhr.readyState==4 && xhr.status==200){
     		var resultfromphp = xhr.responseText;
-				//alert (resultfromphp);
+			//alert (resultfromphp);
 			//alert ('删除成功');
-				var objData = jQuery.parseJSON(resultfromphp);
+			var objData = jQuery.parseJSON(resultfromphp);
 			//alert(objData.rsgmsg);
-			 //$('#listallcat').removeData(;
-			 document.location.href="gencart.html";
-				// makeList();
+			//$('#listallcat').removeData(;
+			document.location.href="gencart.html";
+			// makeList();
   		}
 	};
 	xhr.send();
@@ -134,7 +127,7 @@ function delcart(recid){
 	   
 	    }
 		
-		function emptycart() {
+   function emptycart() {
    var userid = $.jStorage.get('userid');
      if (userid==null)
         document.location.href="login.html"
@@ -146,7 +139,7 @@ function delcart(recid){
     		var resultfromphp = xhr.responseText;
 			//alert(resultfromphp);
 			//var html ='';
-      		  var objData = jQuery.parseJSON(resultfromphp);
+      		var objData = jQuery.parseJSON(resultfromphp);
 			document.location.href="nocart.html";
   		}
 	};
@@ -157,19 +150,20 @@ function delcart(recid){
 </head>
 <body>
 <div class="user-ui-page">
-	<!-- header -->
+<!-- header -->
 	<div class="user-ui-header clearfix" >
 	      <a class="left-bar" href="go.html">
 	      	<span class="glyphicon glyphicon-home"></span>
 	      </a>
 	      <span>购物车</span>
-	      <a class="right-bar" href="#">
+	      <a class="right-bar" href="gencart.html">
 	      	<span class="glyphicon glyphicon-shopping-cart"></span>
 	      </a>
 	</div>
 <!-- /header -->
-	<!-- content -->
- <form class="form-inline" action="checkcart.html" method="post" data-ajax="false">
+
+<!-- content -->
+<form class="form-inline" action="checkcart.html" method="post" data-ajax="false">
        
 	<div class="user-ui-content">
 		<div class="panel panel-default">
@@ -188,14 +182,15 @@ function delcart(recid){
 		    
 		  </div>
             </div>
-                 <a class="btn btn-default" href="javascript:emptycart();">清除购物车</a>  <!--回到最初的购物界面-->
-            <input class="btn btn-danger" type="submit" value="去结算">
+            <a class="btn btn-default" href="javascript:emptycart();">清除购物车</a>  <!--回到最初的购物界面-->
+            <input class="btn btn-danger" type="submit" value="去结算" readonly>
+			<input type="buttom" id="cartnum" onclick="javascript:document.location.href='listcat.html';" value="继续购物" class="btn btn-danger aa" style="width:100px" readonly >
 	    </div>
 	    </form>
 	<!-- /content -->
-	<!-- footer -->
+<!-- footer -->
 
-<div id="dp_footer" class="dp-footer	">
+<div id="dp_footer" class="dp-footer">
 		<nav class="navbar navbar-default navbar-fixed-bottom" role="navigation">
 		  <div class="container dp-menu-box">
 		    <a class="pull-left menu-btn" href="go.html">
@@ -221,9 +216,17 @@ function delcart(recid){
 		  </div>
 		</nav>
 </div>
-	<!-- /footer -->
+<!-- /footer -->
 
 </div>
 <!-- /page -->
+
+<style>
+.aa 
+{
+margin-left:30px;}
+
+
+</style>
 </body>
 </html>

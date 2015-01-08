@@ -1,0 +1,155 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>购物车</title>
+<meta name="keywords" content="">
+<meta name="description" content="">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta content="telephone=no" name="format-detection" />
+<link rel="stylesheet" href="css/bootstrap.min.css">
+<script src="css/jquery-1.10.2.min.js"></script>
+<script src="css/bootstrap.min.js"></script>
+<link href="css/base.mobile.css" rel="stylesheet" type="text/css" media="screen, projection" />
+
+
+<link href="fivegold.css" rel="stylesheet" type="text/css"/>
+  <script type="text/javascript" src="iscroll-lite.js"></script>
+      				<script type="text/javascript" src="iscroll.js"></script>
+<script type="text/javascript" src="fivegold.js"></script>
+<style>
+.public_section .href_info {
+	position: relative;
+	padding-right: 30px;
+}
+
+.public_section .href_info:after {
+	-webkit-transform: rotate(-45deg);
+	-moz-transform: rotate(-45deg);
+	-ms-transform: rotate(-45deg);
+	-o-transform: rotate(-45deg);
+	margin-top: -5px;
+	right: 15px;
+	content: '';
+	position: absolute;
+	width: 6px;
+	height: 6px;
+	top: 50%;
+	border-color: #444;
+	border-style: solid;
+	border-width: 0 2px 2px 0;
+}
+.user-ui-header{
+	font-size:20px;
+	color:#ffffff;
+	background:#b3a99f;
+	line-height:50px;
+	text-align: center;
+}
+.user-ui-header .left-bar{
+	float:left;
+	padding-left:10px;
+	color:#ffffff;
+}
+
+.user-ui-header .right-bar{
+	float:right;
+	padding-right:10px;
+	color:#ffffff;
+}
+.user-ui-content{
+	padding:10px 10px;
+}
+.user-ui-footer {
+	font-size: 20px;
+	color: #ffffff;
+	background: #b3a99f;
+	line-height: 50px;
+	text-align: center;
+}
+</style>
+<script type="text/javascript" src="fivegold.js"></script>
+    
+</head>
+<body><div class="user-ui-page">
+<!-- header -->
+	<div class="user-ui-header clearfix">
+		<a class="left-bar" href="listcat.html">
+			<span class="glyphicon glyphicon-chevron-left"></span>
+		</a>
+		<span>我的订单</span>
+		<a class="right-bar" href="checkcart.html">
+			<span class="glyphicon glyphicon-shopping-cart"></span>
+		</a>
+	</div>
+<!-- /header -->
+     <div id="wrapper">
+	<div id="scroller">
+	<!-- content -->
+	<div class="panel">
+		<div class="panel-body">
+	     <a href="listcat.html"><img src="images/cart-temp.png" width="100%"></a>
+	</div>
+	</div>
+</div>
+
+			</div>
+<!-- /content -->
+
+	<script type="text/javascript">
+	    function update_cart(e,n){
+	    	$.ajax({
+				  url: "#",
+				  cache: false,
+				  type: "POST",
+				  data:{'obj_ident':e,'num':n},
+				  success: function(html){
+					  location.href="mcart.html";
+				  }
+		    });
+	    }
+
+	    function update_minus(e){
+	    	$num = $('#'+e).val();
+	    	$num--;
+	    	if($num<=1){
+	    		$('#'+e).val(1);
+	    		//update_cart(e,1);  //
+	    	}else{
+	    		$('#'+e).val($num);
+	    		//update_cart(e,$num);
+	    	}
+
+	    }
+
+	    function update_plus(e){
+	    	$num = $('#'+e).val();
+	    	$num++;
+	    	if($num>=10){
+	    		$('#'+e).val(10);
+	    		//update_cart(e,10);
+	    	}else{
+	    		$('#'+e).val($num);
+	    		//update_cart(e,$num);
+	    	}
+	    }
+
+		
+	</script>
+</div>
+<!-- /page -->
+<!-- S criteo ---->
+<script type="text/javascript">
+window.criteo_q = window.criteo_q || [];
+window.criteo_q.push(
+        { event: "setAccount", account: 15335 },
+        { event: "setCustomerId", id: $.cookie('UNAME') ? '"'+$.cookie('UNAME')+'"' : '' },
+        { event: "setSiteType", type: "m" },
+        { event: "viewBasket", item: [
+			                { id: "596", price: 26, quantity: 3 },
+                            { id: "710", price: 149, quantity: 1 }
+              ]});
+</script>
+</body>
+</html>

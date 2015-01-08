@@ -15,19 +15,16 @@
 
 <link href="fivegold.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="fivegold.js"></script>
-
-<!-- load the json2 library (required for jstorage use) -->
 <script src="json2.js"></script>
-<!-- load the jstorage library -->
 <script src="jstorage.js"></script>
 <script language="javascript">
 
 function genOrder(){
- var userid = $.jStorage.get('userid');
-     if (userid==null)
+	var userid = $.jStorage.get('userid');
+	if (userid==null)
         document.location.href="login.html";
-var orderid = request('orderid');
-      //document.location.href="addressMange.html";
+	var orderid = request('orderid');
+    //document.location.href="addressMange.html";
 	var xhr = new XMLHttpRequest();
 	xhr.open("GET", "http://120.24.209.210/api/mobile.php?act=mysaledesc&user_id="+userid+"&order_id="+orderid, true);
 	xhr.onreadystatechange = function() {
@@ -61,17 +58,17 @@ var orderid = request('orderid');
 			html+='<p>收货姓名：'+objData.order.consignee+'</p>';
 		    html+='<p>收货地址：'+objData.order.address+'</p>';
 		    html+='<p>手机号码：'+objData.order.mobile+'</p>';
-		     html+='<p>固定电话：'+objData.order.tel+'</p>';
-		      html+='<p>邮编号码：'+objData.order.zipcode+'</p>';
+		    html+='<p>固定电话：'+objData.order.tel+'</p>';
+		    html+='<p>邮编号码：'+objData.order.zipcode+'</p>';
 		     //html+='<p>配送方式：快递：网上支付</p>';
-		       document.getElementById('shipHtml').innerHTML=html; 
+		    document.getElementById('shipHtml').innerHTML=html; 
 		       
-		       document.getElementById('memo').innerHTML="<p>"+objData.order.postscript+"</p>"; 
+		    document.getElementById('memo').innerHTML="<p>"+objData.order.postscript+"</p>"; 
 			
 			if (objData.goods_list.length>0){
-				   html ='';
-				  html+='<table class="table table-striped">';
-				 $.each(objData.goods_list, function (index, term) {
+				html ='';
+				html+='<table class="table table-striped">';
+				$.each(objData.goods_list, function (index, term) {
 			 	html+=' <tr>';
 		  		html+='<td><a href=\"goods.html?goodsid='+term.goods_id+'\"><img width=\"100\" height=\"100\" class=\"img-rounded\" src=\"'+term.goods_thumb+'\"/></a></td>';
 		  		html+='<td><p>'+term.goods_name+'()</p>';
