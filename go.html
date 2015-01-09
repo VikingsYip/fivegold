@@ -134,10 +134,12 @@ document.location.href="findgoods.html?goodsname="+encodeURIComponent(goodsname)
 	
 </head>
 <body>
+
+
 <div id="dp_header" class="dp-header hide">
-	<!-- logo and slogan begin -->
-	<div class="container-fluid dp-logo-box">
-	<div class="row" style="margin:0 0;">
+		<nav class="navbar navbar-fixed-top" role="navigation">
+		  <div class="container dp-menu-box myserch">
+		    <div class="row" style="margin:0 0;">
 			<div class="col-xs-12" style="padding:0 0;">
 				<form id="search_form" action="javascript:postfind()" method="get">
 					<div class="col-xs-99">
@@ -152,16 +154,25 @@ document.location.href="findgoods.html?goodsname="+encodeURIComponent(goodsname)
 			</form>
 			</div>
 	</div>
-	</div>	
-</div><div id="dp_main" class="dp-main hide">
-	<!-- S 轮播 -->
-	<style>
+		  </div>
+		</nav>
+</div>
+
+
+<div id="dp_main" class="dp-main hide">
+<!-- S 轮播 -->
+<style>
+.myserch{
+  background:red;
+}
+
 .total_img{
 	width: 100%;
 	max-width: 640px;
 	min-width: 320px;
 	margin:0px auto;
 	position: relative;
+	padding-top:58px;
 }
 .total_img .swiper-container,.total_img .swiper-slide {
 	width: 640px;
