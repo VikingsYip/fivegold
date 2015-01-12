@@ -177,7 +177,7 @@ body {
 	position: relative;
 }
 
-.dp-menu-box .menu-btn:hover{
+.dp-menu-box .menu-btn:clickeed{
 	color:red;
 	text-decoration: none;
 }
@@ -592,4 +592,56 @@ body {
 
 .btnbuy {
 	background: url(../images/airfinish.png) no-repeat;
+}
+
+
+
+/*新的分类图*/
+.wx_wrap{
+	padding-top: 45px;
+	min-height: 375px;
+}
+
+
+.category1 {
+	background-color: #f3f3f3;
+	width: 76px
+}
+
+.category1 ul,li{ 
+	list-style-type:none;
+	width:100%; 
+}
+
+.category1 li {
+	height: 44px;
+	line-height: 44px;
+	padding: 0 10px;
+	border-top: 1px solid #e5e5e5
+}
+
+.category1 li:first-child {
+	border-top: 0
+}
+
+.category1 .cur {
+	color: #ec4c4c;
+	position: relative
+}
+
+.category1 .cur:after {
+	content: '\20';
+	display: block;
+	width: 0;
+	height: 0;
+	overflow: hidden;
+	font-size: 0;
+	display: inline-block;
+	border-width: 5px;
+	border-color: transparent #fff transparent transparent;
+	border-style: dashed solid dashed dashed;
+	position: absolute;
+	top: 50%;
+	right: 0;
+	margin-top: -5px
 }

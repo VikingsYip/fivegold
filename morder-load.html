@@ -3,26 +3,57 @@
 <html>
 <head>
 <meta charset="utf-8" />
-<title></title>
+<title>提示</title>
 <meta name="keywords" content="">
 <meta name="description" content="">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <meta content="telephone=no" name="format-detection" />
-<link href="css/jquery.mobile-1.3.2.css" rel="stylesheet" type="text/css" media="screen, projection" />
-<link href="css/jquery.mobile.my.css" rel="stylesheet" type="text/css" media="screen, projection" />
-<link href="css/my.mobile-1.0.css" rel="stylesheet" type="text/css" media="screen, projection" />
-
-<script type="text/javascript" src="css/jquery-1.10.2.js"></script>
-<script type="text/javascript" src="css/jquery.mobile-1.3.2.js"></script>
-
-<link href="fivegold.css" rel="stylesheet" type="text/css"/>
-<script type="text/javascript" src="iscroll-lite.js"></script>
-<script type="text/javascript" src="iscroll.js"></script>
-<script type="text/javascript" src="fivegold.js"></script>
-
-<script src="json2.js"></script>
-<script src="jstorage.js"></script>
+<link rel="stylesheet" href="css/bootstrap.min.css">
+<script src="css/jquery-1.10.2.min.js"></script>
+<script src="css/bootstrap.min.js"></script>
 <style>
+.public_section .href_info {
+	position: relative;
+	padding-right: 30px;
+}
+
+.public_section .href_info:after {
+	-webkit-transform: rotate(-45deg);
+	-moz-transform: rotate(-45deg);
+	-ms-transform: rotate(-45deg);
+	-o-transform: rotate(-45deg);
+	margin-top: -5px;
+	right: 15px;
+	content: '';
+	position: absolute;
+	width: 6px;
+	height: 6px;
+	top: 50%;
+	border-color: #444;
+	border-style: solid;
+	border-width: 0 2px 2px 0;
+}
+.user-ui-header{
+	font-size:20px;
+	color:#ffffff;
+	background:#b3a99f;
+	line-height:50px;
+	text-align: center;
+}
+.user-ui-header .left-bar{
+	float:left;
+	padding-left:10px;
+	color:#ffffff;
+}
+
+.user-ui-header .right-bar{
+	float:right;
+	padding-right:10px;
+	color:#ffffff;
+}
+.user-ui-content{
+	padding:10px 10px;
+}
 .user-ui-footer {
 	font-size: 20px;
 	color: #ffffff;
@@ -31,200 +62,51 @@
 	text-align: center;
 }
 </style>
-
-<script>
-
-function newaddress(){
-	var address=encodeURIComponent(document.getElementById('delivery_address').value);
-	var consignee=encodeURIComponent(document.getElementById('delivery_name').value);
-	var email=0;//encodeURIComponent(document.getElementById('email').value);	
-	var tel=0;//encodeURIComponent(document.getElementById('tel').value);	
-	var mobile=encodeURIComponent(document.getElementById('delivery_mobile').value);	
-	var defaultval = encodeURIComponent(document.getElementById("delivery_default").value);
-	alert (defaultval);
-	var zipcode=encodeURIComponent(document.getElementById('delivery_zip').value);						
-	//var zipcode = 0;
-	 var userid = $.jStorage.get('userid');
-	 if (userid==null) {  document.location.href="login.html"; }
-	var posturl ="http://120.24.209.210/api/mobile.php?act=newaddress&user_id="+userid+"&country=0&province=0&city=0&district=0&address="+address+"&consignee="+consignee+"&email="+email+"&tel="+tel+"&mobile="+mobile+"&zipcode="+zipcode+"&mode=test&default="+defaultval;
-     //alert(posturl);
-     //posturl=encodeURIComponent(posturl);
-     
-      var xhr = new XMLHttpRequest();
-	xhr.open("GET", posturl, true);
-	xhr.onreadystatechange = function() {
-  		 if (xhr.readyState==4 && xhr.status==200){
-    		var resultfromphp = xhr.responseText;
-    		//alert (resultfromphp);
-    		var objData = jQuery.parseJSON(resultfromphp);
-    		//alert (objData.rsgmsg);
-    		document.location.href="checkout_myaddress.html";
-		 }
-	};
-	xhr.send();
-}
-
-</script>
 </head>
-<body><div data-role="page" id="cart" data-title="我的订单">
-	<!-- header -->
-	<div data-role="header" data-theme="h">
-	    <a href="checkout_myaddress.html" data-role="button" data-iconpos="notext" data-icon="arrow-l" data-ajax="false"></a>
-	    <h1>新增收货地址</h1>
-	</div>
-	<!-- /header -->
-	<!-- content -->
-	<div data-role="content">
-		<form id="new_address_form" action="javascript:newaddress();" method="post">
-		<section class="checkout_section address_section">
-	         <section>
-	             <label for="delivery_name" ><span style="color:red">*</span>收货人：</label>
-	             <input type="text" name="delivery[ship_name]" id="delivery_name"  maxlength="5" placeholder="请输入收货人">
-			     <label for="delivery_mobile"><span style="color:red">*</span>手机：</label>
-			     <input type="number" data-clear-btn="true" name="delivery[ship_mobile]" id="delivery_mobile"  maxlength="11" placeholder="请输入手机号码">
-			     <input id="shipping_area" type="hidden" name="delivery[ship_area]">
-<fieldset data-role="controlgroup" data-mini="true">
-    <legend><span style="color:red">*</span>收货地区：</legend>
-    <label for="select1">省</label>
-    <select name="select1" id="select1" onchange="selectArea(this,2)">
-		<option value='_NULL_'>请选择...</option>
-				<option value='1'>北京</option>
-				<option value='21'>上海</option>
-				<option value='42'>天津</option>
-				<option value='62'>重庆</option>
-				<option value='104'>安徽</option>
-				<option value='227'>福建</option>
-				<option value='322'>甘肃</option>
-				<option value='423'>广东</option>
-				<option value='566'>广西</option>
-				<option value='690'>贵州</option>
-				<option value='788'>海南</option>
-				<option value='814'>河北</option>
-				<option value='998'>河南</option>
-				<option value='1176'>黑龙江</option>
-				<option value='1320'>湖北</option>
-				<option value='1436'>湖南</option>
-				<option value='1573'>吉林</option>
-				<option value='1643'>江苏</option>
-				<option value='1763'>江西</option>
-				<option value='1874'>辽宁</option>
-				<option value='1989'>内蒙古</option>
-				<option value='2103'>宁夏</option>
-				<option value='2130'>青海</option>
-				<option value='2182'>山东</option>
-				<option value='2340'>山西</option>
-				<option value='2471'>陕西</option>
-				<option value='2589'>四川</option>
-				<option value='2792'>西藏</option>
-				<option value='2873'>新疆</option>
-				<option value='2987'>云南</option>
-				<option value='3133'>浙江</option>
-				<option value='3235'>香港</option>
-				<option value='3239'>澳门</option>
-				<option value='3242'>台湾</option>
-			</select>
-    <label for="select2">市</label>
-    <select name="select2" id="select2" onchange="selectArea(this,3)">
-        <option value='_NULL_'>请选择...</option>
-    </select>
-    <label for="select3">区</label>
-    <select name="select3" id="select3" onchange="saveArea()">
-        <option value='_NULL_'>请选择...</option>
-    </select>
-</fieldset>
-<script type="text/javascript">
-function selectArea(e,n){
-	if('_NULL_' == $(e).val()){
-		// 如果是空的话，将下一级清空
-		$('#select'+n).text('');
-		$html = "<option value='_NULL_'>请选择...</option>";
-		$('#select'+n).append($html);
-		$('#select'+n).selectmenu('refresh', true);
-		n++;
-		if($('#select'+n)){
-			$('#select'+n).text('');
-			$html = "<option value='_NULL_'>请选择...</option>";
-			$('#select'+n).append($html);
-			$('#select'+n).selectmenu('refresh', true);
-		}
-	}else{
-		$.ajax({
-			  url: "/mcart-ajax_getregions.html",
-			  cache: false,
-			  type: "POST",
-			  data:{'parent_id':$(e).val(),'num':n},
-			  success: function(html){
-				  $('#select'+n).text('');
-				  $('#select'+n).append(html);
-				  $('#select'+n).selectmenu('refresh', true);
-				  n++;
-				  if($('#select'+n)){
-					  $('#select'+n).text('');
-					  $html = "<option value='_NULL_'>请选择...</option>";
-					  $('#select'+n).append($html);
-					  $('#select'+n).selectmenu('refresh', true);
-				  }
-
-			  }
-	    });
-	}
-}
-function saveArea(){
-	var _select1 = $('#select1 option:selected').text();
-	var _select2 = $('#select2 option:selected').text();
-	var _select3 = $('#select3 option:selected').text();
-	var $str = "mainland:"+_select1+"/"+_select2+"/"+_select3+":"+$('#select3 option:selected').val();
-	$('#shipping_area').val($str);
-}
-</script>
-
-
-
-			     <label for="delivery_address"><span style="color:red">*</span>收货地址：</label>
-			     <input type="text" data-clear-btn="true" name="delivery[ship_addr_area]" id="delivery_address"  maxlength="30" placeholder="请输入详细地址">
-			     <label for="delivery_zip">邮编：</label>
-			     <input type="number" data-clear-btn="true" name="delivery[ship_zip]" id="delivery_zip"  maxlength="6" placeholder="请输入邮编">
-				 <label for="delivery_day">是否为默认地址：</label>
-			     <select id="delivery_default" >
-                       <option value="1">默认地址</option>
-                       <option value="0">非默认地址</option>
-	         </section>
-	    </section>
-		<br/><br/>
-	    <section>
-	    <input id="save_address_btn" data-role="botton" type="button" value="保存地址">
-	    </section>
-		</form>
-	</div>
-	<!-- /content -->
-	<!-- footer -->
-	<div data-role="footer" data-position="inline" data-theme="d">
-	<!-- 网站信息 -->
-    <footer class="user-ui-footer">
-	<div class="container">
-		<div class="copyright">轮通之路</div>
-	</div>
-</footer>    <!-- /网站信息 -->
-</div>
-<!-- /footer -->	<!-- /footer -->
-	<script type="text/javascript">
-	$('#save_address_btn').click(function(){
-		if(!$('#delivery_name').val()){
-			alert('请填写收货人');
-			return;
-		}
-		if(!$('#delivery_mobile').val()){
-			alert('请填写手机');
-			return;
-		}
-		if(!$('#delivery_address').val()){
-			alert('请填写详细收货地址');
-			return;
-		}
-		$('#new_address_form').submit();
-	});
-	</script>
-</div>
+<body><!-- page -->
+<div class="user-ui-page">
+        <!-- header -->
+        <div class="user-ui-header clearfix">
+	        <a class="left-bar" href="go.html">
+	        	<span class="glyphicon glyphicon-home"></span>
+	        </a>
+	        <span >成功提示</span>
+	        <a class="right-bar" href="#">
+	        	<span class="glyphicon glyphicon-shopping-cart"></span>
+	        </a>
+        </div>
+        <!-- /header -->
+		<!-- content -->
+		<div class="user-ui-content">
+			<div class="user-ui-btn user-text-center" style="text-align:center;margin:20px 0px;height:200px;">
+			  <p>
+		      <span style="font-size:30px;line-height:30px;" class="glyphicon glyphicon-ok-sign"></span>
+		      </p>
+		      <p><span style="line-height:30px;" class="user-ui-error-text">订单生成成功！</span></p>
+		      		      	<span id="timershow"></span>
+		      		    </div>
+		    <div>
+		    <a href="morder.html" class="btn btn-info btn-block">直接跳转</a>
+		    </div>
+		</div>
+		<!-- /content -->
+				<script type="text/javascript">
+			var times = 5;
+		 	var timer = setInterval(function () {
+				if(times == 0){
+					window.clearInterval(timer);
+					location.href = 'morder.html';
+				}else{
+					showtime();
+					times--;
+				}
+		    }, 1000);
+		 	function showtime(){
+			 	$('#timershow').html(times+'秒后自动跳转');
+		 	}
+		 	showtime();
+		</script>
+		</div>
 <!-- /page -->
 </body>
 </html>

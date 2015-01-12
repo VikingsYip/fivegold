@@ -54,12 +54,10 @@ function makeList() {
 	  		
 			 $.each(objData.listallcat, function (index, term) {	
 			  imagecount = term.bought_goods.length;
-
 			  if (imagecount>0)
 			  {//初始化显示第一个图片
 			   document.getElementById('shopimg').src=term.bought_goods[currentimage].img_url;			 
 			  }
-			  
 			   document.getElementById('goods_name').innerHTML=term.goods_name;
 			   document.getElementById('goods_sn').innerHTML=term.goods_sn;
 			   document.getElementById('goods_brief').innerHTML=term.goods_brief;
@@ -82,11 +80,6 @@ function makeList() {
 			   html+='<li><h1>商店售价</h1><p>¥'+term.shop_price+'</p></li>';
 			*/
 			   });
-			//alert(html);
-            /*$('#listallcat').append($(html));
-            $('#listallcat').trigger('create');    
-            $('#listallcat').listview('refresh');
-  		*/
   		}
 	};
 	xhr.send();
@@ -136,26 +129,24 @@ function showNextImage(){
 	xhr.open("GET", "http://120.24.209.210/api/mobile.php?act=goodsdesc&goods_id="+shopid, true);
 	xhr.onreadystatechange = function() {
   		 if (xhr.readyState==4 && xhr.status==200){
-    		var resultfromphp = xhr.responseText;
-			//alert(resultfromphp);
-      		  var objData = jQuery.parseJSON(resultfromphp);
-			 
-			 $.each(objData.listallcat, function (index, term) {	
+			var resultfromphp = xhr.responseText;
+			var objData = jQuery.parseJSON(resultfromphp);
+			$.each(objData.listallcat, function (index, term) {	
 			  //alert(imagecount);
 			  //alert(currentimage);
 			  
 			  if (imagecount>0 && currentimage<imagecount-1)
 			  {
-		      //alert(document.getElementById('shopimg').src);
-			  //alert(term.bought_goods[++currentimage].img_url);
-			  //显示下一张图片
-			  document.getElementById('shopimg').src=term.bought_goods[++currentimage].img_url;
-			  }else{
+				  //alert(document.getElementById('shopimg').src);
+				  //alert(term.bought_goods[++currentimage].img_url);
+				  //显示下一张图片
+				  document.getElementById('shopimg').src=term.bought_goods[++currentimage].img_url;
+			  }
+			  else{
 				 currentimage=0;
 				 document.getElementById('shopimg').src=term.bought_goods[currentimage].img_url;
 			  }
-			   });
-			
+			});
   		}
 	};
 	xhr.send();	
@@ -194,8 +185,8 @@ function update_minus(){
 	document.getElementById('goods_num').value = parseInt(document.getElementById('goods_num').value)-1;
 }
 </script>  
+</head>
 
-	</head>
 <body scrolling="no">
 <div class="user-ui-page"  id="5gshoplist">
 	<!-- header -->
@@ -248,7 +239,6 @@ function update_minus(){
 		<div class="swiper-slide" align="center">
 			<img id="shopimg"  width="80%" src="img/logo.png" border="0">
 	    </div>
-	
 	</div>
 	<a href="javascript:showNextImage();"><div class="previous">Previous</div></a>
 	<a href="javascript:showNextImage();"><div class="next">Next</div></a>
@@ -276,13 +266,6 @@ function update_minus(){
 		    </td>
 		</tr>
 
-		<tr>
-		    <td><label>尺寸：</label></td>
-		    <td class="spec_list">
-		     	<span id="specification" ></span>
-			</td>
-		   </tr-->
-
 		   <!--tr>
 		     <td>
 		     <label>市场价：</label>
@@ -291,7 +274,21 @@ function update_minus(){
 		     	<span id="market_price" style="color:#b10000;"></span>
 		     </td>
 		   </tr-->
-              <tr>
+		 <tr>
+		     <td>
+		     <label>数量说明:</label>
+		     </td>
+		     <td>
+		     	<span id="shop_desc" style="color:#b10000;"></span>
+		     </td>
+		   </tr>
+		 <tr>
+		    <td><label>尺寸：</label></td>
+		    <td class="spec_list">
+		     	<span id="specification" ></span>
+			</td>
+		 </tr>
+		 <tr>
 		     <td>
 		     <label>销售价：</label>
 		     </td>
@@ -299,9 +296,9 @@ function update_minus(){
 		     	<span id="shop_price" style="color:#b10000;"></span>
 		     </td>
 		   </tr>
+
 		</table>
 	    <div class="m_10_0" style="padding:0 10px;">
-		
            	   <div class="form-group">
            	       <input class="btn btn-default" id="minus_product" type="button" onClick="update_minus()" value="-">
 		           <input class="form-control" name="goods[num]" data-role="none" style="width:50px;display:inline-block;" type="text" id="goods_num" min="1" max="10" value="1">
@@ -310,9 +307,7 @@ function update_minus(){
         	   <div class="alert alert-danger m_5_0" id="tishi" style="display:none;"></div>
         	   <div class="m_5_0">
 					<a class="btn btn-warning" style="width:80px"  href="javascript:collect();">关注</a>
-
 					<a class="btn btn-danger" style="width:100px"  href="javascript:addtocart();">加入购物车</a>
-         
 					<a class="right-bar" href="gencart.html">
 						<span class="glyphicon glyphicon-shopping-cart btn-lg"><span id="cartnum" style="font-size:small" ></span></span>
 					</a>
@@ -325,7 +320,6 @@ function update_minus(){
 <!-- /page -->
 <!-- 底部导航  -->
 		   
-<!-- S  快捷导航 -->
 <div class="modal fade" style="padding-left:100px;padding-top:50px" id="addtocart_dialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">

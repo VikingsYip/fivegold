@@ -27,8 +27,7 @@ function makeList(ordertype) {
     //alert(ordertype);
     var catid = request('catid');
 	//alert(catid);
-	if (ordertype==null)
-	  ordertype="colligate";
+	if (ordertype==null)   ordertype="colligate";
 	var xhr = new XMLHttpRequest();
 	
 	xhr.open("GET", "http://120.24.209.210/api/mobile.php?act=listcatgoods&cat_id="+catid+"&intro="+ordertype+"&sorting="+sorting, true);
