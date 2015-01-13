@@ -1,0 +1,124 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>轮通之家</title>
+	<meta name="keywords" content="">
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<meta content="telephone=no" name="format-detection" />
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<script src="css/jquery-1.10.2.min.js"></script>
+	<script src="css/jquery.cookie.js"></script>
+	<script src="css/bootstrap.min.js"></script>
+	<link href="css/base.mobile.css" rel="stylesheet" type="text/css" media="screen, projection" />
+    <script type="text/javascript" src="fivegold.js"></script>
+	<script src="json2.js"></script>
+	<script src="jstorage.js"></script>
+    <script>	
+function makeList() {
+    //var catid = request('catid');
+	//alert(catid);
+	 var userid = $.jStorage.get('userid');
+	     if (userid==null)
+        document.location.href="login.html";
+	var xhr = new XMLHttpRequest();
+	xhr.open("GET", "http://120.24.209.210/api/mobile.php?act=collection_list&user_id="+userid, true);
+	xhr.onreadystatechange = function() {
+  		 if (xhr.readyState==4 && xhr.status==200){
+    		var resultfromphp = xhr.responseText;
+			//alert(resultfromphp);
+			var html ='';
+      		  var objData = jQuery.parseJSON(resultfromphp);
+			   $.each(objData.listallcat, function (index, term) {
+			html+="<div class=\"center-block goods-item\"><a class=\"href_info\" href=\"goods.html?goodsid="+term.goods_id+"\"><div class=\"clearfix\"><p class=\"product_name\">"+term.goods_name+"</p><div class=\"product_price clearfix\" style=\"line-height:30px;\"><p style=\"font-size:16px;float:left;color:red\">￥"+term.shop_price+"</p></div></div></a></div>";
+			});
+			   //alert(html);
+			document.getElementById('catHtml').innerHTML=html;
+			 
+  		}
+	};
+	xhr.send();
+	
+}
+
+$(document).ready(function() {
+	//alert('hi');
+	 makeList();
+});
+function postfind(){
+var goodsname=document.getElementById('goodsname').value;
+document.location.href="findgoods.html?goodsname="+encodeURIComponent(goodsname);
+}
+</script>
+</head>
+<body>
+<div class="dp-header" id="header">
+	<div class="container-fluid" style="background-color:#E0DFDB;margin-bottom:5px;padding:10px 10px;">
+	<div class="row" style="margin:0 0;">
+			<div class="col-xs-12" style="padding:0 0;">
+			<form id="search_form" action="search.html" method="get">
+				<div class="col-xs-99">
+					<img alt="轮通之家" src="img/logo.png" width="45px" border="0">
+				</div>
+				<div class="input-group col-xs-100">
+				      <input type="text" class="form-control" name="scontent" value="" placeholder="搜索商品">
+				      <span class="input-group-btn">
+				        <input class="btn btn-default" type="submit" value="搜索">
+				      </span>
+				</div>
+			</form>
+			</div>
+	</div>
+	</div>	
+	</div>
+<!-- search end -->
+<div id="wrapper">
+	<div id="scroller">	
+	<div class="dp-main">
+	<div class="container">
+		
+ <!--产品 begin-->
+ <div id ="catHtml"></div>
+		<!--产品 end-->
+
+		
+
+	</div>
+</div>
+<!-- /content -->
+	</div><!-- /scroller -->
+</div><!-- /wrapper -->
+
+	<!-- footer -->
+
+<div id="dp_footer" class="dp-footer	">
+		<nav class="navbar navbar-default navbar-fixed-bottom" role="navigation">
+		  <div class="container dp-menu-box">
+		    <a class="pull-left menu-btn" href="go.html">
+		    	<div class="menu-img glyphicon glyphicon-home"></div>
+		    	<div>首页</div>
+		    </a>
+		    <a class="pull-left menu-btn" href="listcat.html">
+		    	<div class="menu-img glyphicon glyphicon-th-large"></div>
+		    	<div>分类</div>
+		    </a>
+		    <a class="pull-left menu-btn" href="usercenter.html">
+		    	<div class="menu-img glyphicon glyphicon-user"></div>
+		    	<div>我的</div>
+		    </a>
+		    <a class="pull-left menu-btn" href="gencart.html">
+		    	<div class="menu-img glyphicon glyphicon-shopping-cart"></div>
+		    	<div>购物车</div>
+		    </a>
+		    <a class="pull-left menu-btn" href="mmember-orders.html">
+		    	<div class="menu-img glyphicon glyphicon-th-list"></div>
+		    	<div>订单</div>
+		    </a>
+		  </div>
+		</nav>
+</div>
+	<!-- /footer -->
+</body>
+</html>

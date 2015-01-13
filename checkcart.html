@@ -1,0 +1,241 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>app</title>
+<meta name="keywords" content="">
+<meta name="description" content="">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta content="telephone=no" name="format-detection" />
+<meta content="telephone=no" name="format-detection" />
+<link href="css/jquery.mobile-1.3.2.css" rel="stylesheet" type="text/css" media="screen, projection" />
+<link href="css/jquery.mobile.my.css" rel="stylesheet" type="text/css" media="screen, projection" />
+<link href="css/my.mobile-1.0.css" rel="stylesheet" type="text/css" media="screen, projection" />
+
+<link rel="stylesheet" href="css/bootstrap.min.css">
+<script src="css/jquery-1.10.2.min.js"></script>
+<script src="css/bootstrap.min.js"></script>
+<link href="css/base.mobile.css" rel="stylesheet" type="text/css" media="screen, projection" />
+<script type="text/javascript" src="css/jquery-1.10.2.js"></script>
+<script type="text/javascript" src="css/jquery.mobile-1.3.2.js"></script>
+<script type="text/javascript" src="css/jquery.nivo.slider-3.2.js"></script>
+<script type="text/javascript" src="css/swipe-2.0.js"></script>
+<script type="text/javascript" src="css/jquery.lazyload.js"></script>
+
+<link href="fivegold.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="fivegold.js"></script>
+<script src="json2.js"></script>
+<script src="jstorage.js"></script>
+<script language="javascript">
+var addressid = 0;
+function selectaddress(_addressid){
+   addressid = _addressid;
+   var origclassName=document.getElementById('address_info_'+_addressid).className;
+   if (origclassName=="address_info")
+      document.getElementById('address_info_'+_addressid).className="receiver checkout_section address_section address_section_on";
+   else
+      document.getElementById('address_info_'+_addressid).className="address_info";
+}
+
+function genOrder(){
+		var userid = $.jStorage.get('userid');
+        if (userid==null) { document.location.href="login.html";}
+		var address_id = request('address_id');
+		var xhr = new XMLHttpRequest();
+		xhr.open("GET", "http://120.24.209.210/api/mobile.php?act=generateorders&user_id="+userid+"&address_id="+address_id, true);
+		xhr.onreadystatechange = function() {
+  		 if (xhr.readyState==4 && xhr.status==200){
+    		var resultfromphp = xhr.responseText;
+			 var objData = jQuery.parseJSON(resultfromphp);
+			 if (objData.consignee){
+			 if (objData.consignee.length==0){
+			 	document.location.href="newaddress.html";
+			 }
+				var html ='';
+				if (objData.consignee.length>0){
+			     var i =0;
+				 $.each(objData.consignee, function (index, term) {
+		            html+='<section class="address_name">'+term.consignee+'&nbsp;'+term.mobile+'</section>';
+					html+='<section class="address_content">'+term.address+'</section>';
+		   		  	});
+		     	 document.getElementById('address_info').innerHTML=html;
+				}
+            // html+='<li><h1>收货人信息</h1><p>收货人姓名:'+objData.consignee.consignee+'</p><p>收货人详细地址:'+objData.consignee.address+'</p></li>';
+			if (objData.cart_goods.length>0){
+			 html ='';
+		     html +='<section>';
+                html +=' <ul>';
+				$.each(objData.cart_goods, function (index, term) {
+			 	html +='<li class=\"clearfix\" style=\"margin-bottom:5px;\"><a class=\"pro_img\" href=\"#\" data-ajax=\"false\">';
+	            html+='<img alt=\"'+term.goods_name+'\" width=\"60\" height=\"60\" src=\"'+term.goods_thumb+'\"></a>';
+	            html+='<p class=\"pro_name\">'+term.goods_name+'（）</p>';
+	            html+='<p class=\"pro_price\">共'+term.goods_number+'件<span>￥'+term.goods_price+'</span></p></li>';
+              
+			 	});
+			 	
+			 	html +=' </ul>';
+			 	html +='</section>';          
+			 	document.getElementById('goodsHtml').innerHTML=html;         
+			 }
+			 //html+='<li><h1>总计</h1><p>商品数量:'+objData.total.real_goods_count+'</p><p>商品总价:¥'+objData.total.goods_price+'</p><p><s>市场总价:¥'+objData.total.market_price+'</s></p><p>节省了:¥'+objData.total.saving_formated+'</p></li>';
+		      document.getElementById('goodsprice').innerHTML='¥'+objData.total.goods_price;         
+		      document.getElementById('totalprice').innerHTML='¥'+objData.total.goods_price;         
+		    
+             /*
+		     if (objData.shipping_list.length>0){
+		       html ='';
+				 html+= '<li><select size="1" class="selector" id="selector_ship">';
+				 $.each(objData.shipping_list, function (index, term) {
+		  	 	 html+=' <option value="'+term.shipping_id+'">'+term.shipping_name+'(¥'+term.shipping_fee+')</option>';
+		     		 //document.getElementById('shipprice').innerHTML='¥'+term.shipping_fee;      
+		     		 //alert(term.shipping_fee)	;
+		     		});
+		     		
+		     		html+='</select></li>';
+		     	document.getElementById('shipHtml').innerHTML=html;         
+		     		
+			 }*/
+			 /*
+			 if (objData.payment_list.length>0){
+			    html ='';
+				 html+= '<li><select size="1" class="selector" id="selector_payment">';
+				 $.each(objData.payment_list, function (index, term) {
+			       html+=' <option value="'+term.pay_id+'">'+term.pay_name+'(手续费:¥'+term.format_pay_fee+')</option>';
+			 		});
+			 	html+='</select></li>';
+			 		document.getElementById('payHtml').innerHTML=html;     
+			 }
+			 */
+		      
+			 //$('#listallcat').append($(html));
+                   // $('#listallcat').trigger('create');    
+                   //$('#listallcat').listview('refresh');
+                   }
+              if (objData.rsgcode){
+			 	//alert(objData.rsgmsg);
+			 	document.location.href="nocart.html";
+			 }
+			 
+  		}
+	};
+	xhr.send();
+	
+}
+
+
+function addOrder(){
+     var shippingid = 0;//$("#selector_ship").val();
+     //alert (shippingid);
+     var paymentid = $("#paymentid").val();
+     //var addressid = $("#selector_consignee").val();
+     //alert (paymentid);
+     //alert(addressid);
+     var memo=$("#memo").val();
+     //alert(memo);
+    var need_inv=0;//1要，0不要;
+    var inv_type=' ';//发票类型
+    var postscript=memo;	//用户备注
+	//alert(memo);
+    var userid = $.jStorage.get('userid');
+    if (userid==null)
+        document.location.href="login.html";
+   var posturl="http://120.24.209.210/api/mobile.php?act=orderconfirmation&user_id="+userid+"&mode=test&shipping_id="+shippingid+'&pay_id='+paymentid+'&need_inv='+need_inv+'&address_id='+addressid+'&postscript='+postscript;
+  //alert (posturl);
+    var xhr = new XMLHttpRequest();
+	xhr.open("POST", posturl, true);
+	
+	xhr.onreadystatechange = function() {
+  		 if (xhr.readyState==4 && xhr.status==200){
+    		var resultfromphp = xhr.responseText;
+			//alert(resultfromphp);
+			//var objData = jQuery.parseJSON(resultfromphp);
+			document.location.href="mmember-orders.html";
+  		}
+	};
+	xhr.send();
+	
+}
+
+$(document).ready(function() {
+  genOrder();
+});
+</script>
+
+<style>
+.user-ui-footer {
+	font-size: 20px;
+	color: #ffffff;
+	background: #b3a99f;
+	line-height: 50px;
+	text-align: center;
+}
+</style>
+</head>
+<body><div data-role="page" id="cart" data-title="我的订单">
+	<!-- header -->
+	<div data-role="header" data-theme="h">
+	<a href="gencart.html" data-role="button" data-ajax="false"></a>
+	    <h1>订单确认</h1>
+	</div>
+	<!-- /header -->
+	<div data-role="content">
+	    <form id="order_form" action="morder-load.html" method="post" data-ajax="false">
+	    <input type="hidden" id="md5_cart_info" name="md5_cart_info" value="045e1bbcf0a96c8d88903448adaadd05">
+	    <input type="hidden" id="area" name="area" value="135">
+	    <!-- 收货地址 -->
+	    <section class="checkout_section address_section">
+	         <section class="checkout_title">收货地址</section>
+	         <section id="address_info" class="address_info">
+			 </section>
+	    </section>
+	    <!-- 支付方式 -->
+	    <section class="checkout_section payment_section">
+	         <section class="checkout_title">支付方式</section>
+	            <div id="payHtml"></div>
+	        <section id="shippinglist">
+	           <input type="radio" data-role="none" name="delivery[shipping_id]" id="paymentid"  value="1" checked="checked" >
+			   <label for="shipping_6">支付宝付款</label>
+			   <input type="radio" data-role="none" name="delivery[shipping_id]" id="paymentid"  value="2" >
+			   <label for="shipping_2">货到付款</label>			   			 
+	         </section>
+	    </section>
+	      
+		<input type="hidden" id="is_tax" name="payment[is_tax]"  value="false" />
+
+		<section class="checkout_section product_section">
+			<section class="checkout_title">商品信息（<a href="gencart.html" data-ajax="false">修改</a>）</section>
+			<div id="goodsHtml"></div>
+        </section>
+
+        <section class="checkout_section product_section">
+              <section class="checkout_title">备注(最多输入50个文字)</section>
+	          <section>
+	              <input type="text" id="memo" name="memo" maxlength="50">
+	          </section>
+        </section>
+        <section class="checkout_section price_section">
+			<section class="clearfix"><label>商品总价</label><span id='goodsprice'><span></section>
+			<section class="clearfix"><label>运费金额</label><span id='shipprice'>¥0<span></section>
+			<section class="clearfix"><label>应付金额</label><span id='totalprice'><span></section>
+        </section>
+        <section style="padding:5px 5px;">
+	    	<input type="button" value="提交订单" data-theme="f" onclick="addOrder()">
+	    </section>
+	    </form>
+	</div>
+	<!-- /content -->
+	<!-- footer -->
+	<div data-role="footer" data-theme="c">
+    </div>
+	</div>
+<!-- /page -->
+
+<script type="text/javascript">
+   $("#address_info").click(function(){
+   // 重定向到列表页
+   location.href="checkout_myaddress.html";
+  });
+</script>
+</body>
+</html>

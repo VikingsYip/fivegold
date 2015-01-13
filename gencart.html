@@ -1,0 +1,227 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>购物车</title>
+<meta name="keywords" content="">
+<meta name="description" content="">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta content="telephone=no" name="format-detection" />
+<link rel="stylesheet" href="css/bootstrap.min.css">
+<script src="css/jquery-1.10.2.min.js"></script>
+<script src="css/bootstrap.min.js"></script>
+<link href="css/base.mobile.css" rel="stylesheet" type="text/css" media="screen, projection" />
+<link href="fivegold.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="fivegold.js"></script>
+<script src="json2.js"></script>
+<script src="jstorage.js"></script>
+
+    <script>	
+function makeList() {
+    //var userid = request('catid');
+	var userid = $.jStorage.get('userid');
+     if (userid==null)
+        document.location.href="login.html"
+	var xhr = new XMLHttpRequest();
+	xhr.open("GET", "http://120.24.209.210/api/mobile.php?act=buylistcart&user_id="+userid, true);
+	xhr.onreadystatechange = function() {
+  		 if (xhr.readyState==4 && xhr.status==200){
+    		var resultfromphp = xhr.responseText;
+			//alert(resultfromphp);
+			var html ='';
+      		  var objData = jQuery.parseJSON(resultfromphp);
+			   $.each(objData.goods_list, function (index, term) {
+			html+="<table class=\"table\"><tr><td valign=\"top\" width=\"50px\"><a href=\"goods.html?goodsid="+term.goods_id+"\"><img class=\"img-rounded\" width=\"50\" height=\"50\" src=\""+term.original_img+"\"></a></td><td><p>"+term.goods_name+"（";
+			$.each(term.goods_attr, function (index, att) 							{
+			html+=att.name+"："+att.value;
+			});
+			html+="）</p>单价："+term.goods_price+"\<br/><div class=\"form-group\"><a class=\"btn btn-info\" id=\"minus_product\"   onClick=\"update_minus('"+term.rec_id+"')\">-</a><input class=\"form-control\" style=\"width:40px;display:inline-block;\" type=\"text\" id=\""+term.rec_id+"\" min=\"1\" max=\"10\" value=\""+term.goods_number+"\"><a class=\"btn btn-info\" id=\"plus_product\"   onClick=\"update_plus('"+term.rec_id+"')\">+</a></div><section><a href=\"javascript:delcart("+term.rec_id+")\" data-ajax=\"false\" data-rel=\"popup\" data-position-to=\"window\" data-transition=\"pop\" data-icon=\"delete\" data-theme=\"d\">删除</a>     </section></td></tr></table>";
+			});
+			//alert(html);
+			document.getElementById('catHtml').innerHTML=html;
+
+			document.getElementById('total').innerHTML="<p>商品总金额：￥"+objData.total.goods_price+"</p>";		 
+  		}
+	};
+	xhr.send();
+	
+}
+
+function updatecart(newnumber,recid) {
+    //alert(newnumber);
+    //alert(recid);
+ var userid = $.jStorage.get('userid');
+     if (userid==null)
+        document.location.href="login.html"
+	//alert(recid);
+	var xhr = new XMLHttpRequest();
+	xhr.open("GET", "http://120.24.209.210/api/mobile.php?act=edltbuycart&user_id="+userid+"&new_number="+newnumber+"&rec_id="+recid+"&mode=test", true);
+	xhr.onreadystatechange = function() {
+  		 if (xhr.readyState==4 && xhr.status==200){
+    		var resultfromphp = xhr.responseText;
+			//alert(resultfromphp);
+			//var html ='';
+      		  var objData = jQuery.parseJSON(resultfromphp);
+				if (objData.rsgcode == '000'){
+				makeList();
+				}
+                 //document.location.href="gencart.html";	 
+  		}
+	};
+	xhr.send();
+	
+}
+
+
+$(document).ready(function() {
+	//alert('hi');
+	 makeList();
+});
+
+
+function delcart(recid){
+    var xhr = new XMLHttpRequest();
+	xhr.open("GET", "http://120.24.209.210/api/mobile.php?act=delbuycart&rec_id="+recid, true);
+	xhr.onreadystatechange = function() {
+  		 if (xhr.readyState==4 && xhr.status==200){
+    		var resultfromphp = xhr.responseText;
+			//alert (resultfromphp);
+			//alert ('删除成功');
+			var objData = jQuery.parseJSON(resultfromphp);
+			//alert(objData.rsgmsg);
+			//$('#listallcat').removeData(;
+			document.location.href="gencart.html";
+			// makeList();
+  		}
+	};
+	xhr.send();
+}
+
+ function update_minus(e){
+	    	$num = $('#'+e).val();
+	    	$num--;
+	    	if($num<=1){
+	    		$('#'+e).val(1);
+	    			updatecart(1,e);
+	    		 //update_cart(e,1);  //
+	    	}else{
+	    		$('#'+e).val($num);
+	    		updatecart($num,e);
+	    			//update_cart(e,$num);
+	    	}
+	    
+	    }
+
+	    function update_plus(e){
+	    	$num = $('#'+e).val();
+	    	$num++;
+	    	if($num>=10){
+	    		$('#'+e).val(10);
+	    		updatecart(10,e);
+	    		//update_cart(e,10);
+	    	}else{
+	    		$('#'+e).val($num);
+	    			updatecart($num,e);
+	  	 }
+	   
+	    }
+		
+   function emptycart() {
+   var userid = $.jStorage.get('userid');
+     if (userid==null)
+        document.location.href="login.html"
+
+	var xhr = new XMLHttpRequest();
+	xhr.open("GET", "http://120.24.209.210/api/mobile.php?act=emptycart&user_id="+userid, true);
+	xhr.onreadystatechange = function() {
+  		 if (xhr.readyState==4 && xhr.status==200){
+    		var resultfromphp = xhr.responseText;
+      		var objData = jQuery.parseJSON(resultfromphp);
+			document.location.href="nocart.html";
+  		}
+	};
+	xhr.send();
+	
+}
+</script>
+</head>
+<body>
+<div class="user-ui-page">
+<!-- header -->
+	<div class="user-ui-header clearfix" >
+	      <a class="left-bar" href="go.html">
+	      	<span class="glyphicon glyphicon-home"></span>
+	      </a>
+	      <span>购物车</span>
+	      <a class="right-bar" href="gencart.html">
+	      	<span class="glyphicon glyphicon-shopping-cart"></span>
+	      </a>
+	</div>
+<!-- /header -->
+
+<!-- content -->
+<form class="form-inline" action="checkcart.html" method="post" data-ajax="false">
+	<div class="user-ui-content">
+		<div class="panel panel-default">
+		  <div class="panel-heading">
+		    <h3 class="panel-title">商品列表</h3>
+		  </div>
+		    <div class="panel-body" id="catHtml">
+		    
+		  </div>
+        </div>
+		<div class="panel panel-default">
+         	  <div class="panel-heading">
+                <h4>结算信息</h4>
+                </div>
+		    <div class="alert alert-info" id="total">
+		  </div>
+            </div>
+            <a class="btn btn-default" href="javascript:emptycart();">清除购物车</a>  <!--回到最初的购物界面-->
+            <input class="btn btn-danger" type="submit" value="去结算" readonly>
+			<input type="buttom" id="cartnum" onclick="javascript:document.location.href='listcat.html';" value="继续购物" class="btn btn-danger aa" style="width:100px" readonly >
+	    </div>
+	    </form>
+	<!-- /content -->
+<!-- footer -->
+
+<div id="dp_footer" class="dp-footer">
+		<nav class="navbar navbar-default navbar-fixed-bottom" role="navigation">
+		  <div class="container dp-menu-box">
+		    <a class="pull-left menu-btn" href="go.html">
+		    	<div class="menu-img glyphicon glyphicon-home"></div>
+		    	<div>首页</div>
+		    </a>
+		    <a class="pull-left menu-btn" href="listcat.html">
+		    	<div class="menu-img glyphicon glyphicon-th-large"></div>
+		    	<div>分类</div>
+		    </a>
+		    <a class="pull-left menu-btn" href="usercenter.html">
+		    	<div class="menu-img glyphicon glyphicon-user"></div>
+		    	<div>我的</div>
+		    </a>
+		    <a class="pull-left menu-btn" href="gencart.html">
+		    	<div class="menu-img glyphicon glyphicon-shopping-cart"></div>
+		    	<div>购物车</div>
+		    </a>
+		    <a class="pull-left menu-btn" href="mmember-orders.html">
+		    	<div class="menu-img glyphicon glyphicon-th-list"></div>
+		    	<div>订单</div>
+		    </a>
+		  </div>
+		</nav>
+</div>
+<!-- /footer -->
+
+</div>
+<!-- /page -->
+
+<style>
+.aa 
+{
+	margin-left:30px;
+}
+</style>
+</body>
+</html>

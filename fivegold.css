@@ -1,0 +1,15 @@
+@charset "utf-8";
+
+.left{
+	float:left;
+	display:inline;
+	}
+.home_image {
+	  position:absolute; z-index:2;
+            top:0; left:0;
+            width:100%;
+            height:40px;
+			 background: url(images/head-backgroup.png) 50% 50% repeat; 
+ }
+.search_image {background: url(images/search-bg.png) 50% 50% repeat; background-size: 40px 25px;}
+

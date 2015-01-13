@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>轮通之家</title>
+	<meta name="keywords" content="">
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<meta content="telephone=no" name="format-detection" />
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<script src="css/jquery-1.10.2.min.js"></script>
+	<script src="css/jquery.cookie.js"></script>
+	<script src="css/bootstrap.min.js"></script>
+	<link rel="stylesheet" href="css/idangerous.swiper.css">
+	<script src="css/idangerous.swiper.min.js"></script>
+	<link href="css/base.mobile.css" rel="stylesheet" type="text/css" media="screen, projection" />	
+	<!-- load the json2 library (required for jstorage use) -->
+<script src="json2.js"></script>
+<!-- load the jstorage library -->
+<script src="jstorage.js"></script>
+	
+	<script>
+	function makelist(){
+			
+    var posturl ="http://www.zgltong.com/api/mobile.php?act=carousel";
+
+      var xhr = new XMLHttpRequest();
+	xhr.open("GET", posturl, true);
+	xhr.onreadystatechange = function() {
+  		 if (xhr.readyState==4 && xhr.status==200){
+    		var resultfromphp = xhr.responseText;
+    		//alert (resultfromphp);
+    		var objData = jQuery.parseJSON(resultfromphp);
+    		
+    		 $.each(objData.listallcat, function (index, term) {	
+    		       //alert(term.ad_code);
+    		       var html = "";
+    		       html+=	"<div class=\"swiper-slide\" >";
+			html+="<a href=\"#\">";
+			html+="<img src=\""+term.ad_code+"\" width=\"100%\" >";
+			html+="</a>";
+			html+="</div>";
+			  document.getElementById('showimage').innerHTML+=html;
+			   });
+			
+		// 首交轮播图初始化
+	 var $total_img = $('.total_img .swiper-container').swiper({
+		loop: true,
+		autoplay: 2000
+	 });
+	 
+	  // 上一页
+	 $('.previous').click(function(){
+		 $total_img.swipePrev();
+	 });
+
+	 // 下一页
+	 $('.next').click(function(){
+		 $total_img.swipeNext();
+	 });
+		 }
+	};
+	xhr.send();
+}
+
+	function makehomegoods(){
+			
+    var posturl ="http://www.zgltong.com/api/mobile.php?act=homegoods";
+
+      var xhr = new XMLHttpRequest();
+	xhr.open("GET", posturl, true);
+	xhr.onreadystatechange = function() {
+  		 if (xhr.readyState==4 && xhr.status==200){
+    		var resultfromphp = xhr.responseText;
+    		//alert (resultfromphp);
+    		var objData = jQuery.parseJSON(resultfromphp);
+    		 var html = "";
+    		html+="<table class=\"table table-bordered\">";	
+		    var i =0;
+    		 $.each(objData.listallcat, function (index, term) {	
+    		       //alert(term.ad_code);
+    		      if (i%2==0) html+="<tr>";
+    		       html+="<td align=\"center\" width=\"50%\"><div class=\"p_box\"><div class=\"p_img\"><a href=\"goods.html?goodsid="+term.id+"\" target=\"_blank\"><img class=\"img-rounded\" src=\""+term.img+"\" alt=\"\"></a>";
+				   html+="</div><div class=\"p-name\"><a href=\"goods.html?goodsid="+term.id+" \" target=\"_blank\">"+term.name+"</a></div><div class=\"p_price\"><p><span class=\"sale_price\">销售价：￥"+term.shop_price+"</span>";
+				   html+="</p></div><a href=\"javascript:addtocart("+term.id+")\" class=\"btn btn-default\">&nbsp;购 &nbsp;&nbsp;买&nbsp;</a></div></td>";
+			      if (i%2==1) html+="</tr>";
+			      i++;
+			   });
+		   html+="</table>";
+		   //alert(html);
+		     document.getElementById('homegoods').innerHTML+=html;
+		 }
+	};
+	xhr.send();
+}
+
+function addtocart(shopid){
+ var userid = $.jStorage.get('userid');
+     if (userid==null)
+        document.location.href="login.html";
+var xhr = new XMLHttpRequest();
+     var goods_num = 1;
+	
+     var posturl = "http://120.24.209.210/api/mobile.php?act=addbuycart&goods_id="+shopid+"&number="+goods_num+"&userid="+userid
+	 
+	//alert(posturl);  	
+	xhr.open("GET", posturl, true);
+	xhr.onreadystatechange = function() {
+  		 if (xhr.readyState==4 && xhr.status==200){
+    	       	var resultfromphp = xhr.responseText;
+			//alert("添加成功");
+      		      var objData = jQuery.parseJSON(resultfromphp);
+		     //document.location.href="gencart.html";
+			 //alert (objData.rsgmsg);
+			 //document.getElementById('alertmsg').innerHTML=objData.rsgmsg;
+			  // alert(document.getElementById('alertmsg'));
+			//$('#addtocart_dialog').show();
+			document.location.href="gencart.html";
+		}
+	};
+	xhr.send();
+}
+
+$(document).ready(function() {
+     	 makelist();
+     	 makehomegoods();
+});
+
+function postfind(){
+var goodsname=document.getElementById('goodsname').value;
+document.location.href="findgoods.html?goodsname="+encodeURIComponent(goodsname);
+}
+</script>
+	
+</head>
+<body>
+
+
+<div id="dp_header" class="dp-header hide">
+		<nav class="navbar navbar-fixed-top" role="navigation">
+		  <div class="container dp-menu-box myserch">
+		    <div class="row" style="margin:0 0;">
+			<div class="col-xs-12" style="padding:0 0;">
+				<form id="search_form" action="javascript:postfind()" method="get">
+					<div class="col-xs-99">
+					<img alt="轮通之家" src="img/logo.png" width="45px" border="0">
+				</div>
+				<div class="input-group col-xs-100">
+				      <input type="text" class="form-control" name="scontent"  id="goodsname" value="" placeholder="搜索商品">
+				      <span class="input-group-btn">
+				        <input class="btn btn-default" type="submit" value="搜索">
+				      </span>
+				</div>
+			</form>
+			</div>
+	</div>
+		  </div>
+		</nav>
+</div>
+
+
+<div id="dp_main" class="dp-main hide">
+<!-- S 轮播 -->
+<style>
+.myserch{
+  background:red;
+}
+
+.total_img{
+	width: 100%;
+	max-width: 640px;
+	min-width: 320px;
+	margin:0px auto;
+	position: relative;
+	padding-top:58px;
+}
+.total_img .swiper-container,.total_img .swiper-slide {
+	width: 640px;
+	max-width: 640px;
+	min-width: 320px;
+	height:130px;
+}
+.total_img .swiper-container .previous{
+	position: absolute;
+	top: 25%;
+	left: 25px;
+	cursor: pointer;
+	background: url(img/bg101.png) no-repeat top left;
+	width: 24px;
+	height: 48px;
+	cursor: pointer;
+	text-indent: -9999px;
+	display: block;
+	opacity:0.3;
+	filter:alpha(opacity=30)
+}
+.total_img .swiper-container .next{
+	position: absolute;
+	top: 25%;
+	right: 25px;
+	cursor: pointer;
+	background: url(img/bg101.png) no-repeat top right;
+	width: 24px;
+	height: 48px;
+	cursor: pointer;
+	text-indent: -9999px;
+	display: block;
+	opacity:0.3;
+	filter:alpha(opacity=30)
+}
+</style>
+<div class="total_img">
+	<div class="swiper-container">
+		<div class="swiper-wrapper" id="showimage"></div>
+		<div class="previous">Previous</div>
+		<div class="next">Next</div>
+	</div>
+</div>
+<script type="text/javascript">
+$(function(){
+	 var _height = $(window).height();
+	 var _width = $(window).width();
+	 _width = _width > 640 ? 640 : _width;
+	 $(".total_img .swiper-container,.total_img .swiper-wrapper").css({
+	     width: _width
+	 });
+});
+</script>
+<!-- E 轮播 -->
+<!-- S 热卖轮播 -->
+<style>
+*{
+	font-family: "Microsoft YaHei";
+}
+.public_section .href_info {
+	position: relative;
+	padding-right: 30px;
+}
+
+.public_section .href_info:after {
+	-webkit-transform: rotate(-45deg);
+	-moz-transform: rotate(-45deg);
+	-ms-transform: rotate(-45deg);
+	-o-transform: rotate(-45deg);
+	margin-top: -5px;
+	right: 15px;
+	content: '';
+	position: absolute;
+	width: 6px;
+	height: 6px;
+	top: 50%;
+	border-color: #444;
+	border-style: solid;
+	border-width: 0 2px 2px 0;
+}
+.user-ui-header{
+	font-size:20px;
+	color:#ffffff;
+	background:#b3a99f;
+	line-height:50px;
+	text-align: center;
+}
+.user-ui-header .left-bar{
+	float:left;
+	padding-left:10px;
+	color:#ffffff;
+}
+
+.user-ui-header .right-bar{
+	float:right;
+	padding-right:10px;
+	color:#ffffff;
+}
+.user-ui-content{
+	padding:10px 10px;
+}
+.user-ui-footer {
+	font-size: 20px;
+	color: #ffffff;
+	background: #b3a99f;
+	line-height: 50px;
+	text-align: center;
+}
+.home_fl {
+	padding: 0px 0px;
+}
+
+.fl6 .pro_box {
+	float: left;
+	width: 32%;
+	position: relative;
+}
+
+.fl6 .pro_box_margin {
+	margin-left: 2%;
+}
+
+.p_box img {
+	width: 100%;
+}
+
+.p_box .sale_price{
+	display:block;
+	color:red;
+}
+
+.p_box .mkt_price{
+	display:none;
+	text-decoration: line-through;
+}
+.user-ui-page{
+	width:100%;
+	max-width:640px;
+	margin:0px auto;
+}
+.p-name{
+	width:120px;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+</style>
+<div class="clearfix" id="homegoods">
+		
+</div>	<!-- E 热卖轮播 -->
+</div>
+<!-- S 单品推荐  -->
+<div class="dp-main">
+<style>
+.single-goods {
+	width: 100%;
+	max-width: 640px;
+	min-width: 320px;
+	height: 100%;
+	position: absolute;
+	overflow: hidden;
+	background-color: #ffffff;
+	z-index: 10;
+}
+
+.single-goods .swiper-container,.single-goods .swiper-slide {
+	width: 100%;
+	max-width: 640px;
+	min-width: 320px;
+	height: 100%;
+	position: relative;
+}
+
+.single-goods .backhome {
+	display: block;
+	width: 200px;
+	height: 60px;
+	border: 1px solid #808080;
+	color: #808080;
+	text-align: center;
+	line-height: 60px;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin-left: -100px;
+	margin-top: -30px;
+	text-decoration: none;
+	font-family: "Microsoft YaHei";
+	border-radius: 6px 6px;
+}
+
+.single-goods .backhome:hover {
+	background-color: #808080;
+	color: #ffffff;
+}
+
+.single-goods .links {
+	display: block;
+	width: 100%;
+	height: 100%;
+}
+
+.single-goods .slogan {
+	font-family: "Microsoft YaHei";
+	color: #808080;
+	text-align: center;
+	position: absolute;
+	top: 20%;
+	left: 50%;
+	width: 300px;
+	margin-left: -150px;
+}
+
+.bounceIn {
+	-webkit-animation: bounceIn 1s .2s ease both;
+	-moz-animation: bounceIn 1s .2s ease both;
+}
+
+
+
+</style>
+<div id="single_goods" class="single-goods">
+	<div class="swiper-container">
+		<div class="swiper-wrapper">
+			<div class="swiper-slide page-3">
+				<a class="links" href="#"></a>
+			</div>
+			<div class="swiper-slide page-6 hide">
+				<h3 class="slogan bounceIn">轮通之家</h3>
+				<a class="backhome" href="javascript:void(0);">去首页</a>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="next-page"></div>
+<script type="text/javascript">
+$(function(){
+	 $('#single_goods').addClass("hide");
+	 $('#dp_header').removeClass("hide");
+	 $('#dp_main').removeClass("hide");
+	 $('#dp_footer').removeClass("hide");
+
+	 // 单品推荐轮播初始化
+	 var $single_goods = $('.single-goods .swiper-container').swiper({
+		mode:'vertical',
+		loop: false,
+		autoplay: 5000,
+		onSlideChangeEnd:function(){
+			$($single_goods.activeSlide()).removeClass('hide');
+		}
+	 });
+
+	 // 去首页点击事件
+	 $('.backhome').click(function(){
+		 $('#single_goods').addClass("hide");
+		 $('#dp_header').removeClass("hide");
+		 $('#dp_main').removeClass("hide");
+		 $('#dp_footer').removeClass("hide");
+	 });
+});
+
+// 设置cookie
+function setcookie(cookieName, cookieValue, seconds, path, domain, secure) {
+	var expires = new Date();
+	expires.setTime(expires.getTime() + seconds);
+	document.cookie = escape(cookieName) + '=' + escape(cookieValue)
+	+ (expires ? '; expires=' + expires.toGMTString() : '')
+	+ (path ? '; path=' + path : '/')
+	+ (domain ? '; domain=' + domain : '')
+	+ (secure ? '; secure' : '');
+}
+</script></div>
+
+<!-- 底部导航  -->
+
+<div id="dp_footer" class="dp-footer hide">
+		<nav class="navbar navbar-default navbar-fixed-bottom" role="navigation">
+		  <div class="container dp-menu-box">
+		    <a class="pull-left menu-btn" href="go.html">
+		    	<div class="menu-img glyphicon glyphicon-home"></div>
+		    	<div>首页</div>
+		    </a>
+		    <a class="pull-left menu-btn" href="listcat.html">
+		    	<div class="menu-img glyphicon glyphicon-th-large"></div>
+		    	<div>分类</div>
+		    </a>
+		    <a class="pull-left menu-btn" href="usercenter.html">
+		    	<div class="menu-img glyphicon glyphicon-user"></div>
+		    	<div>我的</div>
+		    </a>
+		    <a class="pull-left menu-btn" href="gencart.html">
+		    	<div class="menu-img glyphicon glyphicon-shopping-cart"></div>
+		    	<div>购物车</div>
+		    </a>
+		    <a class="pull-left menu-btn" href="mmember-orders.html">
+		    	<div class="menu-img glyphicon glyphicon-th-list"></div>
+		    	<div>订单</div>
+		    </a>
+		  </div>
+		</nav>
+</div>
+
+</body>
+</html>

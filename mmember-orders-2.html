@@ -1,0 +1,217 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>会员中心</title>
+<meta name="keywords" content="">
+<meta name="description" content="">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta content="telephone=no" name="format-detection" />
+<link rel="stylesheet" href="css/bootstrap.min.css">
+<script src="css/jquery-1.10.2.min.js"></script>
+<script src="css/bootstrap.min.js"></script>
+<link href="css/base.mobile.css" rel="stylesheet" type="text/css" media="screen, projection" />
+<link href="fivegold.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="fivegold.js"></script>
+<script src="json2.js"></script>
+<script src="jstorage.js"></script>
+
+<script language="javascript">
+
+function makeList() {
+     var userid = $.jStorage.get('userid');
+         if (userid==null)
+        document.location.href="login.html";
+	var xhr = new XMLHttpRequest();
+	xhr.open("GET", "http://120.24.209.210/api/mobile.php?act=mysalelist&userid="+userid, true);
+	xhr.onreadystatechange = function() {
+  		 if (xhr.readyState==4 && xhr.status==200){
+    		var resultfromphp = xhr.responseText;
+			//alert(resultfromphp);
+      		var objData = jQuery.parseJSON(resultfromphp);
+			 // alert(objData.listallcat);
+			var html ='';
+			html+='<table id=\"order_list\" class=\"table table-striped\"><tr><th>订单信息</th><th>操作</th></tr>';
+			$.each(objData.mysalelist, function (index, term) {
+			html+='<tr data-role=\"listview\" class=\"order_list\" data-inset=\"true\" data-divider-theme=\"d\">';
+			html+='<td><p>订单编号：'+term.order_sn+'</p><p>订单金额：￥'+term.order_amount+'</p><p>下单日期：'+term.add_time+'</p><p>订单状态：<span style=\"color: red;\">'+term.handler+'</span></p></td>';
+			html+='<td><p><a href=\"morder.html?orderid='+term.order_id+'\" class=\"btn btn-info\">付款</a></p><p><a href=\"mmember-orderdetail.html?orderid='+term.order_id+'\" class=\"btn btn-info\">查看</a></p></td>';
+			html+='</tr>';
+  	    });
+  	    	html+='</table>';
+			//alert(html);
+  	    	document.getElementById('listallcat').innerHTML=html;
+  		}
+	};
+	xhr.send();
+}
+
+$(document).ready(function() {
+	 makeList();
+});
+
+</script>
+</head>
+<body><!-- page -->
+<div class="user-ui-page">
+        <!-- header -->
+	    <div class="user-ui-header clearfix">
+		     <a class="left-bar" href="usercenter.html">
+		     	<span class="glyphicon glyphicon-chevron-left"></span>
+		     </a>
+		     <span>我的订单</span>
+		     <a class="right-bar" href="gencart.html">
+		     	<span class="glyphicon glyphicon-shopping-cart"></span>
+		     </a>
+	    </div>
+		<!-- /header -->
+		<!-- content -->
+		<div class="user-ui-content">
+		<div class="container padding-none">
+
+		<ul id="order_nav_bar" class="nav nav-tabs">
+		      <li id="tab1"><a href="mmember-orders.html">全部</a></li>
+			  <li id="tab3" ><a href="mmember-orders-1.html">待支付</a></li>
+			  <li id="tab2" class="active"><a href="mmember-orders-2.html">已取消</a></li>
+		    </ul>
+
+	<div class="panel">
+		<div id="listallcat"></div><!--定单信息-->
+	</div>
+
+<!--取消订单-->
+<div class="modal fade" id="removedialogDiv" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title"></a>确定取消订单?</h4>
+            </div>
+            <div class="modal-body">
+                <p id="order_id">&hellip;</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button id="cancle_order" type="button" class="btn btn-primary">确定</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+<script>
+    function cancleAllorder(order_id){
+        $('#removedialogDiv').modal('show');
+        $('#order_id').html(order_id);
+        $('#cancle_order').click(function(){
+            cancle_order(order_id);
+        });
+    }
+    function cancle_order(order_id) {
+        if(!order_id>0){
+            return false;
+        }
+        $.post("#", {'order_id': order_id},
+                function (data) {
+                   if(data=='success'){
+                       $('#removedialogDiv').modal('hide');
+                       window.location.reload();
+                   }else{
+                       $('#removedialogDiv').modal('hide');
+                   }
+                });
+    }
+
+    function delAfterSale(order_id,member_Id){
+        $('#del_after_sale').modal('show');
+        $('#del_order_id').html(order_id);
+        $('#delete_after_sale').click(function(){
+            deleteAfterSale(order_id,member_Id);
+            $('#del_after_sale').modal('hide');
+            window.location.reload();
+        });
+    }
+
+    function deleteAfterSale(order_id,member_Id){
+        if(!order_id>0 && !member_Id>0){
+            return false;
+        }
+        $.post("/morder-deleteAfterSale.html", {'order_id':order_id,'member_id':member_Id},
+                function (data) {
+                    if(data=='success'){
+                        $('#del_after_sale').modal('hide');
+                        window.location.reload();
+                    }else{
+                        $('#del_after_sale').modal('hide');
+                    }
+                });
+    }
+</script>
+			</table>
+			</div>
+		</div>
+		</div>
+<!-- /content -->
+
+
+<!-- footer -->
+
+<div id="dp_footer" class="dp-footer	">
+		<nav class="navbar navbar-default navbar-fixed-bottom" role="navigation">
+		  <div class="container dp-menu-box">
+		    <a class="pull-left menu-btn" href="go.html">
+		    	<div class="menu-img glyphicon glyphicon-home"></div>
+		    	<div>首页</div>
+		    </a>
+		    <a class="pull-left menu-btn" href="listcat.html">
+		    	<div class="menu-img glyphicon glyphicon-th-large"></div>
+		    	<div>分类</div>
+		    </a>
+		    <a class="pull-left menu-btn" href="usercenter.html">
+		    	<div class="menu-img glyphicon glyphicon-user"></div>
+		    	<div>我的</div>
+		    </a>
+		    <a class="pull-left menu-btn" href="gencart.html">
+		    	<div class="menu-img glyphicon glyphicon-shopping-cart"></div>
+		    	<div>购物车</div>
+		    </a>
+		    <a class="pull-left menu-btn" href="mmember-orders.html">
+		    	<div class="menu-img glyphicon glyphicon-th-list"></div>
+		    	<div>订单</div>
+		    </a>
+		  </div>
+		</nav>
+</div>
+	
+<!-- /footer -->
+		<script type="text/javascript">
+		$(document).ready(function() {
+			  $('#order_nav_bar li').click(function(){
+				  $(this).addClass('active');
+				  $(this).siblings().removeClass('active');
+			  });
+		});
+		function getMore(obj){
+				var next_page = $('input[name=next_page]:last').val();
+				if(next_page == 'false'){
+					$(obj).find('#getmoreorder').hide();
+					return;
+				}
+				$.get(next_page, function( data ) {
+					$("#order_list" ).append( data );
+					// 重新渲染jqm的样式
+					$("#order_list" ).trigger( "create" );
+					$.mobile.loading( "hide" );
+
+					var next_page = $('input[name=next_page]:last').val();
+					if(next_page == 'false'){
+						$(obj).find('#getmoreorder').hide();
+					}
+				});
+		}
+		</script>
+</div>
+<!-- /page -->
+</body>
+</html>
