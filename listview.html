@@ -30,7 +30,7 @@ function makeList(ordertype) {
 	if (ordertype==null)   ordertype="colligate";
 	var xhr = new XMLHttpRequest();
 	
-	xhr.open("GET", "http://120.24.209.210/api/mobile.php?act=listcatgoods&cat_id="+catid+"&intro="+ordertype+"&sorting="+sorting, true);
+	xhr.open("GET", "http://www.zgltong.com/api/mobile.php?act=listcatgoods&cat_id="+catid+"&intro="+ordertype+"&sorting="+sorting, true);
 		if (sorting == 1)
 	    sorting =2;
 	else
@@ -85,10 +85,21 @@ document.location.href="findgoods.html?goodsname="+encodeURIComponent(goodsname)
 <!-- search end -->	
 	<div class="dp-main" style="padding-top:70px">
 	<div class="container">
-			<ol class="breadcrumb" style="white-space:nowrap;">
-		  <a href="javascript:reorder('sales');">销量</a>/<a href="javascript:reorder('price');">价格</a>/<a href="javascript:reorder('colligate');">最新</a>	
-		</ol>
-		
+<style>
+#mytop1 th {text-align:center;border: 1px solid blue; }
+</style>
+		<div id="mytop1">
+		<table id="order_list" class="table table-striped">
+		<tbody>
+			<tr>
+				<th><a href="mmember-orders.html">全部</a></th>
+				<th><a href="mmember-orders-1.html" >待支付</a></th>
+				<th><a href="mmember-orders-2.html">已取消</a></th>
+				<th><a href="mmember-orders-3.html" style="color:red">已支付</a></th>
+			</tr>
+		</tbody>
+		</table>
+        </div>
  <!--产品 begin-->
  <div id ="catHtml"></div>
 		<!--产品 end-->

@@ -24,7 +24,7 @@ function makeList() {
          if (userid==null)
         document.location.href="login.html";
 	var xhr = new XMLHttpRequest();
-	xhr.open("GET", "http://120.24.209.210/api/mobile.php?act=mysalelist&userid="+userid, true);
+	xhr.open("GET", "http://www.zgltong.com/api/mobile.php?act=mysalelist&userid="+userid, true);
 	xhr.onreadystatechange = function() {
   		 if (xhr.readyState==4 && xhr.status==200){
     		var resultfromphp = xhr.responseText;
@@ -69,10 +69,21 @@ $(document).ready(function() {
 		<!-- content -->
 		<div class="user-ui-content">
 		<div class="container padding-none">
-
-		<ul id="order_nav_bar" class="nav nav-tabs">
-		      <a href="mmember-orders.html">全部</a>/<a href="mmember-orders-1.html" style="color:red">待支付</a>/<a href="mmember-orders-2.html">已取消</a>
-		    </ul>
+<style>
+#mytop1 th {text-align:center;border: 1px solid blue; }
+</style>
+		<div id="mytop1">
+		<table id="order_list" class="table table-striped">
+		<tbody>
+			<tr>
+				<th><a href="mmember-orders.html" >全部</a></th>
+				<th><a href="mmember-orders-1.html" style="color:red">待支付</a></th>
+				<th><a href="mmember-orders-2.html">已取消</a></th>
+				<th><a href="mmember-orders-3.html">已支付</a></th>
+			</tr>
+		</tbody>
+		</table>
+        </div>
 
 	<div class="panel">
 		<div id="listallcat"></div><!--定单信息-->

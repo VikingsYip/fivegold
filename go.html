@@ -101,7 +101,7 @@ function addtocart(shopid){
 var xhr = new XMLHttpRequest();
      var goods_num = 1;
 	
-     var posturl = "http://120.24.209.210/api/mobile.php?act=addbuycart&goods_id="+shopid+"&number="+goods_num+"&userid="+userid
+     var posturl = "http://www.zgltong.com/api/mobile.php?act=addbuycart&goods_id="+shopid+"&number="+goods_num+"&userid="+userid
 	 
 	//alert(posturl);  	
 	xhr.open("GET", posturl, true);
@@ -232,68 +232,6 @@ $(function(){
 *{
 	font-family: "Microsoft YaHei";
 }
-.public_section .href_info {
-	position: relative;
-	padding-right: 30px;
-}
-
-.public_section .href_info:after {
-	-webkit-transform: rotate(-45deg);
-	-moz-transform: rotate(-45deg);
-	-ms-transform: rotate(-45deg);
-	-o-transform: rotate(-45deg);
-	margin-top: -5px;
-	right: 15px;
-	content: '';
-	position: absolute;
-	width: 6px;
-	height: 6px;
-	top: 50%;
-	border-color: #444;
-	border-style: solid;
-	border-width: 0 2px 2px 0;
-}
-.user-ui-header{
-	font-size:20px;
-	color:#ffffff;
-	background:#b3a99f;
-	line-height:50px;
-	text-align: center;
-}
-.user-ui-header .left-bar{
-	float:left;
-	padding-left:10px;
-	color:#ffffff;
-}
-
-.user-ui-header .right-bar{
-	float:right;
-	padding-right:10px;
-	color:#ffffff;
-}
-.user-ui-content{
-	padding:10px 10px;
-}
-.user-ui-footer {
-	font-size: 20px;
-	color: #ffffff;
-	background: #b3a99f;
-	line-height: 50px;
-	text-align: center;
-}
-.home_fl {
-	padding: 0px 0px;
-}
-
-.fl6 .pro_box {
-	float: left;
-	width: 32%;
-	position: relative;
-}
-
-.fl6 .pro_box_margin {
-	margin-left: 2%;
-}
 
 .p_box img {
 	width: 100%;
@@ -308,25 +246,12 @@ $(function(){
 	display:none;
 	text-decoration: line-through;
 }
-.user-ui-page{
-	width:100%;
-	max-width:640px;
-	margin:0px auto;
-}
 .p-name{
 	width:120px;
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
 }
-</style>
-<div class="clearfix" id="homegoods">
-		
-</div>	<!-- E 热卖轮播 -->
-</div>
-<!-- S 单品推荐  -->
-<div class="dp-main">
-<style>
 .single-goods {
 	width: 100%;
 	max-width: 640px;
@@ -390,10 +315,13 @@ $(function(){
 	-webkit-animation: bounceIn 1s .2s ease both;
 	-moz-animation: bounceIn 1s .2s ease both;
 }
-
-
-
 </style>
+<div class="clearfix" id="homegoods">
+		
+</div>	<!-- E 热卖轮播 -->
+</div>
+<!-- S 单品推荐  -->
+<div class="dp-main">
 <div id="single_goods" class="single-goods">
 	<div class="swiper-container">
 		<div class="swiper-wrapper">
@@ -434,16 +362,6 @@ $(function(){
 	 });
 });
 
-// 设置cookie
-function setcookie(cookieName, cookieValue, seconds, path, domain, secure) {
-	var expires = new Date();
-	expires.setTime(expires.getTime() + seconds);
-	document.cookie = escape(cookieName) + '=' + escape(cookieValue)
-	+ (expires ? '; expires=' + expires.toGMTString() : '')
-	+ (path ? '; path=' + path : '/')
-	+ (domain ? '; domain=' + domain : '')
-	+ (secure ? '; secure' : '');
-}
 </script></div>
 
 <!-- 底部导航  -->

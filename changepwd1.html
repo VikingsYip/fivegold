@@ -28,7 +28,7 @@ function changepwd() {
 	var xhr = new XMLHttpRequest();
 	var new_pwd=$('#passwd').val();	
 	var old_pwd=$('#old_pwd').val();		
-	xhr.open("GET", "http://120.24.209.210/api/mobile.php?act=changepwd&mode=test&user_id="+userid+"&new_pwd="+new_pwd+"&old_pwd="+old_pwd, true);
+	xhr.open("GET", "http://www.zgltong.com/api/mobile.php?act=changepwd&mode=test&user_id="+userid+"&new_pwd="+new_pwd+"&old_pwd="+old_pwd, true);
 	xhr.onreadystatechange = function() {
   		 if (xhr.readyState==4 && xhr.status==200){
     		var resultfromphp = xhr.responseText;			

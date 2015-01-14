@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>app</title>
+	<meta name="keywords" content="#">
+	<meta name="description" content="#">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<meta content="telephone=no" name="format-detection" />
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<script src="css/jquery-1.10.2.min.js"></script>
+	<script src="css/jquery.cookie.js"></script>
+	<script src="css/bootstrap.min.js"></script>
+	<link href="css/base.mobile.css" rel="stylesheet" type="text/css" media="screen, projection" />
+	<script type="text/javascript" src="fivegold.js"></script>
+	<link href="fivegold.css" rel="stylesheet" type="text/css"/>
+	<script type="text/javascript" src="fivegold.js"></script>
+	<script src="json2.js"></script>
+	<script src="jstorage.js"></script>
+<style>
+.mytopat{
+padding-top:50px;}
+</style>
+<script>  
+var shopid = request('goodsid') ;
+function makeList() {
+	 // alert(shopid+specval.label+);
+	var xhr = new XMLHttpRequest();
+	xhr.open("POST", "http://www.zgltong.com/api/mobile.php?act=goodsdesc&goods_id="+shopid, true);
+	xhr.onreadystatechange = function() {
+  		 if (xhr.readyState==4 && xhr.status==200){
+    		var resultfromphp = xhr.responseText;
+      		var objData = jQuery.parseJSON(resultfromphp);
+			var html ='';
+			$.each(objData.listallcat, function (index, term) {	
+
+				document.getElementById('goods_name').innerHTML=term.goods_name;
+				document.getElementById('goods_sn').innerHTML=term.goods_sn;
+				document.getElementById('goods_brief').innerHTML=term.goods_brief;
+				document.getElementById('goods_details1').innerHTML=term.goods_desc;
+
+			document.getElementById('specification').innerHTML=html;
+			document.getElementById('shop_price').innerHTML='￥'+term.shop_price;
+			});
+  		}
+	};
+	xhr.send();
+}
+
+$(document).ready(function() {
+	makeList();
+	var imgs = $('#goods_details1 img');
+	imgs.attr('width','100%');
+});
+</script>  
+</head>
+
+<body scrolling="no">
+<div class="user-ui-page"  id="5gshoplist">
+	<!-- header -->
+    <div class="user-ui-header clearfix" id="header">
+	     <a class="left-bar" href="javascript:history.go(-1);">
+	     	<span class="navbar-brand glyphicon glyphicon-chevron-left"></span>
+	     </a>
+	     <span>商品详情</span>
+	     <a class="right-bar" href="gencart.html">
+	     	<span class="glyphicon glyphicon-shopping-cart"></span>
+	     </a>
+    </div>
+    <!-- /header -->
+	
+<div class="user-ui-info mytopat">
+	<table class="table">
+		<tr><td width="90px"><label>商品名称：</label></td><td><span id="goods_name"></span></td></tr>
+		<tr><td><label>简单说明：</label></td><td><span id="goods_brief"></span></td></tr>
+		<tr><td>商品编码：</td><td><span id="goods_sn"></span></td></tr>
+		<tr><td>数量说明:</td><td><span id="shop_desc" style="color:#b10000;"></span></td></tr>
+		<tr><td>尺寸：</td><td class="spec_list"><span id="specification"></span></td></tr>
+		<tr><td>销售价：</td><td><span id="shop_price" style="color:#b10000;"></span></td></tr>
+	</table>
+</div>
+
+<div class="container" id="goods_details1">
+    
+</div>
+<!-- /content -->
+</body>
+</html>

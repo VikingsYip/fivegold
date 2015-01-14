@@ -26,7 +26,7 @@ function genOrder(){
 	var orderid = request('orderid');
     //document.location.href="addressMange.html";
 	var xhr = new XMLHttpRequest();
-	xhr.open("GET", "http://120.24.209.210/api/mobile.php?act=mysaledesc&user_id="+userid+"&order_id="+orderid, true);
+	xhr.open("GET", "http://www.zgltong.com/api/mobile.php?act=mysaledesc&user_id="+userid+"&order_id="+orderid, true);
 	xhr.onreadystatechange = function() {
   		 if (xhr.readyState==4 && xhr.status==200){
     		var resultfromphp = xhr.responseText;
@@ -76,9 +76,9 @@ function genOrder(){
 				html+='	<p>数量：'+term.goods_number+'</p></td>';
 		  		html+=' </tr>';
 			 	});
-			 		html+='</table>';
+				html+='</table>';
 					//alert(html);
-					document.getElementById('goodsHtml').innerHTML=html; 
+				document.getElementById('goodsHtml').innerHTML=html; 
 			 }
 			   
   		}
@@ -110,12 +110,17 @@ $(document).ready(function() {
 		<!-- content -->
 		<div class="user-ui-content">
 		<div class="panel panel-default">
+			<div class="panel-heading">
+				<h3 class="panel-title">商品列表</h3>
+			</div>
+			<div id="goodsHtml"></div>
+		</div>
+		
+		<div class="panel panel-default">
 		  <div class="panel-heading">
 		    <h3 class="panel-title">基本信息</h3>
 		  </div>
-		  <div class="panel-body" id="orderHtml">
-		    
-		  </div>
+		  <div class="panel-body" id="orderHtml"></div>
 		</div>
 		<div class="panel panel-default">
 		  <div class="panel-heading">
@@ -156,14 +161,7 @@ $(document).ready(function() {
 			</tr>
 		</table>
 </div-->
-		<div class="panel panel-default">
-		  <div class="panel-heading">
-		    <h3 class="panel-title">商品列表</h3>
-		  </div>
-		  <div id="goodsHtml">
-		
-		  	</div>
-		</div>
+
 		</div>
 		<!-- /content -->
 		<!-- footer -->

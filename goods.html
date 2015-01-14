@@ -28,12 +28,11 @@ function makecartNum() {
 	if (userid==null)
         document.location.href="login.html"
 	var xhr = new XMLHttpRequest();
-	xhr.open("POST", "http://120.24.209.210/api/mobile.php?act=buylistcart&user_id="+userid, true);
+	xhr.open("POST", "http://www.zgltong.com/api/mobile.php?act=buylistcart&user_id="+userid, true);
 	xhr.onreadystatechange = function() {
   		 if (xhr.readyState==4 && xhr.status==200){
 			var resultfromphp = xhr.responseText;
 			var objData = jQuery.parseJSON(resultfromphp);      		  
-			//document.getElementById('cartnum').value="购物车("+objData.total.real_goods_count+")";
 			document.getElementById('cartnum').innerHTML="("+objData.total.real_goods_count+")";
 		}
 	};
@@ -43,53 +42,46 @@ function makecartNum() {
 function makeList() {
 	 // alert(shopid+specval.label+);
 	var xhr = new XMLHttpRequest();
-	xhr.open("POST", "http://120.24.209.210/api/mobile.php?act=goodsdesc&goods_id="+shopid, true);
+	xhr.open("POST", "http://www.zgltong.com/api/mobile.php?act=goodsdesc&goods_id="+shopid, true);
 	xhr.onreadystatechange = function() {
   		 if (xhr.readyState==4 && xhr.status==200){
     		var resultfromphp = xhr.responseText;
-			//alert(resultfromphp);
-      		  var objData = jQuery.parseJSON(resultfromphp);
-			 
+      		var objData = jQuery.parseJSON(resultfromphp);
 			var html ='';
-	  		
-			 $.each(objData.listallcat, function (index, term) {	
-			  imagecount = term.bought_goods.length;
-			  if (imagecount>0)
-			  {//初始化显示第一个图片
-			   document.getElementById('shopimg').src=term.bought_goods[currentimage].img_url;			 
-			  }
-			   document.getElementById('goods_name').innerHTML=term.goods_name;
-			   document.getElementById('goods_sn').innerHTML=term.goods_sn;
-			   document.getElementById('goods_brief').innerHTML=term.goods_brief;
-			   var html = "";
-			   $.each(term.specification, function (index, spec) {
-				$.each(spec.values, function (index, specval) {
-			   html+="<span style=\"display:inline-block;margin:2px 2px;\" class=\"label label-default\"  onclick=\"selectGoods(this,"+specval.price+")\" id=\""+specval.id+"\">"+specval.label+"</span>";
-			     });
+			$.each(objData.listallcat, function (index, term) {	
+				imagecount = term.bought_goods.length;
+				if (imagecount>0)
+				{//初始化显示第一个图片
+					document.getElementById('shopimg').src=term.bought_goods[currentimage].img_url;			 
+				}
+				document.getElementById('goods_name').innerHTML=term.goods_name;
+				document.getElementById('goods_sn').innerHTML=term.goods_sn;
+				document.getElementById('goods_brief').innerHTML=term.goods_brief;
+				var html = "";
+				$.each(term.specification, function (index, spec) {
+					$.each(spec.values, function (index, specval) {
+						html+="<span style=\"display:inline-block;margin:2px 2px;\" class=\"label label-default\"  onclick=\"selectGoods(this,"+specval.price+")\" id=\""+specval.id+"\">"+specval.label+"</span>";
+					});
 				});
-			   document.getElementById('specification').innerHTML=html;
-			   //document.getElementById('market_price').innerHTML='<s>￥'+term.market_price+'</s>';
-			   document.getElementById('shop_price').innerHTML='￥'+term.shop_price;
-			   
-			 makecartNum();
-			 /*html+='<li><h1>商品名称</h1><p>'+term.goods_name+'</p></li>';
-			   html+='<li><h1>商品货号</h1><p>'+term.goods_sn+'</p></li>';
-			   html+='<li><h1>商品简单说明</h1><p>'+term.goods_brief+'</p></li>';
-			   html+='<li><h1>详细描述</h1><p>'+term.goods_desc+'</p></li>';
-			   html+='<li><h1>市场价格</h1><p>¥'+term.market_price+'</p></li>';
-			   html+='<li><h1>商店售价</h1><p>¥'+term.shop_price+'</p></li>';
+			document.getElementById('specification').innerHTML=html;
+			document.getElementById('shop_price').innerHTML='￥'+term.shop_price;
+			makecartNum();
+			/*html+='<li><h1>商品名称</h1><p>'+term.goods_name+'</p></li>';
+			html+='<li><h1>商品货号</h1><p>'+term.goods_sn+'</p></li>';
+			html+='<li><h1>商品简单说明</h1><p>'+term.goods_brief+'</p></li>';
+			html+='<li><h1>详细描述</h1><p>'+term.goods_desc+'</p></li>';
+			html+='<li><h1>市场价格</h1><p>¥'+term.market_price+'</p></li>';
+			html+='<li><h1>商店售价</h1><p>¥'+term.shop_price+'</p></li>';
 			*/
-			   });
+			});
   		}
 	};
 	xhr.send();
-	
 }
 
 var cartprice = 0;
 function selectGoods(that,price){
 	document.getElementById('shop_price').innerHTML='￥'+price;
-	//alert(that.id);
 	spec=that.id;
 	cartprice = price;		   
 }
@@ -106,9 +98,9 @@ function addtocart(){
 	var xhr = new XMLHttpRequest();
      var goods_num = document.getElementById('goods_num').value;
 	if (cartprice!=0)
-	 var posturl = "http://120.24.209.210/api/mobile.php?act=addbuycart&goods_id="+shopid+"&number="+goods_num+"&userid="+userid+"&spec="+spec+"&price="+cartprice;	 
+	 var posturl = "http://www.zgltong.com/api/mobile.php?act=addbuycart&goods_id="+shopid+"&number="+goods_num+"&userid="+userid+"&spec="+spec+"&price="+cartprice;	 
 	else
-     var posturl = "http://120.24.209.210/api/mobile.php?act=addbuycart&goods_id="+shopid+"&number="+goods_num+"&userid="+userid+"&spec="+spec;
+     var posturl = "http://www.zgltong.com/api/mobile.php?act=addbuycart&goods_id="+shopid+"&number="+goods_num+"&userid="+userid+"&spec="+spec;
 
 	xhr.open("POST", posturl, true);
 	xhr.onreadystatechange = function() {
@@ -118,7 +110,8 @@ function addtocart(){
 		}
 	};
 	xhr.send();
-	window.setTimeout(function(){ makecartNum();},100);
+	window.setTimeout(function(){makecartNum();},100);
+	//$("#example").popover();
 	return true;
 
 }
@@ -126,7 +119,7 @@ function addtocart(){
 function showNextImage(){
 	var shopid=request('goodsid');
 	var xhr = new XMLHttpRequest();
-	xhr.open("GET", "http://120.24.209.210/api/mobile.php?act=goodsdesc&goods_id="+shopid, true);
+	xhr.open("GET", "http://www.zgltong.com/api/mobile.php?act=goodsdesc&goods_id="+shopid, true);
 	xhr.onreadystatechange = function() {
   		 if (xhr.readyState==4 && xhr.status==200){
 			var resultfromphp = xhr.responseText;
@@ -134,7 +127,6 @@ function showNextImage(){
 			$.each(objData.listallcat, function (index, term) {	
 			  //alert(imagecount);
 			  //alert(currentimage);
-			  
 			  if (imagecount>0 && currentimage<imagecount-1)
 			  {
 				  //alert(document.getElementById('shopimg').src);
@@ -157,19 +149,17 @@ function collect(){
 	if (userid==null)
         document.location.href="login.html";
 	var xhr = new XMLHttpRequest();
-	var posturl = "http://120.24.209.210/api/mobile.php?act=collect&goods_id="+shopid+"&user_id="+userid;
+	var posturl = "http://www.zgltong.com/api/mobile.php?act=collect&goods_id="+shopid+"&user_id="+userid;
 	//alert(posturl);  	
 	xhr.open("GET", posturl, true);
 	xhr.onreadystatechange = function() {
   		 if (xhr.readyState==4 && xhr.status==200){
 			var resultfromphp = xhr.responseText;
-			//alert(resultfromphp);
-			//alert("添加成功");
 			var objData = jQuery.parseJSON(resultfromphp);
 			// alert(objData.rsgmsg);
-			//document.getElementById('alertmsg2').innerHTML=objData.rsgmsg;
-			//alert(document.getElementById('alertmsg2'));
-			//$('#collect_dialog').show(); 
+			document.getElementById('alertmsg2').innerHTML=objData.rsgmsg;
+			alert(document.getElementById('alertmsg2'));
+			$('#collect_dialog').show(); 
 		}
 	};
 	xhr.send();
@@ -184,6 +174,13 @@ function update_minus(){
 	if (document.getElementById('goods_num').value > 1)
 	document.getElementById('goods_num').value = parseInt(document.getElementById('goods_num').value)-1;
 }
+
+function gooddesc(){
+	var myherf="goods-desc.html?goodsid="+shopid;
+	document.location.href=myherf;
+}
+
+
 </script>  
 </head>
 
@@ -206,13 +203,13 @@ function update_minus(){
 <div class="container"style="padding-top:70px">
 <style>
 .swiper-container, .swiper-slide {
-  width:80%;
+  width:100%;
   height:auto;
 }
 .swiper-container .previous{
 	position: absolute;
-	top: 40%;
-	left: 25px;
+	top: 20%;
+	left: 10px;
 	cursor: pointer;
 	background: url(img/bg101.png) no-repeat top left;
 	width: 24px;
@@ -223,8 +220,8 @@ function update_minus(){
 }
 .swiper-container .next{
     position: absolute;
-	top: 40%;
-	right: 25px;
+	top: 20%;
+	right: 10px;
 	cursor: pointer;
 	background: url(img/bg101.png) no-repeat top right;
 	width: 24px;
@@ -237,7 +234,7 @@ function update_minus(){
 <div class="swiper-container">
 	<div class="swiper-wrapper">
 		<div class="swiper-slide" align="center">
-			<img id="shopimg"  width="80%" src="img/logo.png" border="0">
+			<img id="shopimg"  width="100%" src="img/logo.png" border="0">
 	    </div>
 	</div>
 	<a href="javascript:showNextImage();"><div class="previous">Previous</div></a>
@@ -261,9 +258,7 @@ function update_minus(){
 
 		<tr>
 			<td><label>商品编码：</label></td>
-		    <td>
-		    	<span id="goods_sn"></span>
-		    </td>
+		    <td><span id="goods_sn"></span></td>
 		</tr>
 
 		   <!--tr>
@@ -285,7 +280,7 @@ function update_minus(){
 		 <tr>
 		    <td><label>尺寸：</label></td>
 		    <td class="spec_list">
-		     	<span id="specification" ></span>
+		     	<span id="specification"></span>
 			</td>
 		 </tr>
 		 <tr>
@@ -300,7 +295,7 @@ function update_minus(){
 		</table>
 	    <div class="m_10_0" style="padding:0 10px;">
            	   <div class="form-group">
-           	       <input class="btn btn-default" id="minus_product" type="button" onClick="update_minus()" value="-">
+           	       <input class="btn btn-default" id="minus_product" type="button" onClick="update_minus()" value="-" style="width:20px;">
 		           <input class="form-control" name="goods[num]" data-role="none" style="width:50px;display:inline-block;" type="text" id="goods_num" min="1" max="10" value="1">
 		       	   <input class="btn btn-default" id="plus_product"  type="button" onClick="update_plus()" value="+">
 		       </div>
@@ -309,21 +304,33 @@ function update_minus(){
 			   </div> 
 		</div>
 		</div>
-	</div>
+
+<div class="m_10_0" style="padding:0 10px;">
+	<ul class="list-group">
+		<li class="list-group-item">
+			<a style="display:block;text-decoration: none;" class="product_bar_a"  href="javascript:gooddesc();">商品介绍
+		    <span class="glyphicon glyphicon-chevron-right pull-right"></span>
+			</a>
+		</li>
+	</ul>
+</div>
+</div>
 	<!-- /content -->
 		
 		
-<div id="dp_footer" class="dp-footer	">
-		<nav class="navbar navbar-default navbar-fixed-bottom" role="navigation">
-		  <div class="container dp-menu-box">
-					<a class="btn btn-warning" style="width:80px"  href="javascript:collect();">关注</a>
-					<a class="btn btn-danger" style="width:100px"  href="javascript:addtocart();">加入购物车</a>
-					<a class="right-bar" href="gencart.html">
-						<span class="glyphicon glyphicon-shopping-cart btn-lg"><span id="cartnum" style="font-size:small" ></span></span>
-					</a>
-	
+<div id="dp_footer" class="dp-footer">
+	<nav class="navbar navbar-default navbar-fixed-bottom" role="navigation">
+		<div class="container dp-menu-box">
+			<a class="btn btn-warning" style="width:80px"  href="javascript:collect();">关注</a>
+			<a class="btn btn-danger" style="width:200px"  href="javascript:addtocart();">加入购物车</a>
+			<!--<a class="right-bar" href="gencart.html">
+				<span class="glyphicon glyphicon-shopping-cart btn-lg"><span id="cartnum" style="font-size:small" ></span></span>
+			</a>-->
+			<div class="btn-group">
+				<a class="btn btn-success glyphicon glyphicon-shopping-cart" href="gencart.html"><span id="cartnum">(0)</span></a>
+			</div>
 		  </div>
-		</nav>
+	</nav>
 </div>
 <!-- /page -->
 <!-- 底部导航  -->
@@ -362,6 +369,10 @@ function update_minus(){
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
+<!--<div class="well">
+<a href="#" id="example" class="btn btn-success" rel="popover" data-content="成功加入购物车!" data-original-title="成功加入购物车!"></a>
+</div>
+-->
 
 </body>
 </html>
