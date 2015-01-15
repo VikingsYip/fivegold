@@ -17,7 +17,7 @@
 <script src="json2.js"></script>
 <script src="jstorage.js"></script>
 
-    <script>	
+<script>	
 function makeList() {
 	var userid = $.jStorage.get('userid');
      if (userid==null)
@@ -31,11 +31,11 @@ function makeList() {
 			var html ='';
       		  var objData = jQuery.parseJSON(resultfromphp);
 			   $.each(objData.goods_list, function (index, term) {
-			html+="<table class=\"table\"><tr><td valign=\"top\" width=\"50px\"><a href=\"goods.html?goodsid="+term.goods_id+"\"><img class=\"img-rounded\" width=\"50\" height=\"50\" src=\""+term.original_img+"\"></a></td><td><p>"+term.goods_name+"（";
+			html+="<table class=\"table\"><tr><td valign=\"top\" width=\"50px\"><a href=\"goods.html?goodsid="+term.goods_id+"\"><img class=\"img-rounded\" width=\"100\" height=\"100\" src=\""+term.original_img+"\"></a></td><td><p>"+term.goods_name+"（";
 			$.each(term.goods_attr, function (index, att) 							{
 			html+=att.name+"："+att.value;
 			});
-			html+="）</p>单价："+term.goods_price+"\<br/><div class=\"form-group\"><a class=\"btn btn-info\" id=\"minus_product\"   onClick=\"update_minus('"+term.rec_id+"')\">-</a><input class=\"form-control\" style=\"width:40px;display:inline-block;\" type=\"text\" id=\""+term.rec_id+"\" min=\"1\" max=\"10\" value=\""+term.goods_number+"\"><a class=\"btn btn-info\" id=\"plus_product\"   onClick=\"update_plus('"+term.rec_id+"')\">+</a></div><section><a href=\"javascript:delcart("+term.rec_id+")\" data-ajax=\"false\" data-rel=\"popup\" data-position-to=\"window\" data-transition=\"pop\" data-icon=\"delete\" data-theme=\"d\">删除</a>     </section></td></tr></table>";
+			html+="）</p>单价："+term.goods_price+"\<br/><div class=\"form-group\"><a class=\"btn btn-info mybtn\" id=\"minus_product\"   onClick=\"update_minus('"+term.rec_id+"')\">-</a><input class=\"form-control\" style=\"width:60px;display:inline-block;\" type=\"text\" id=\""+term.rec_id+"\" min=\"1\"  value=\""+term.goods_number+"\"><a class=\"btn btn-info mybtn\" id=\"plus_product\"   onClick=\"update_plus('"+term.rec_id+"')\">+</a></div><section><a href=\"javascript:delcart("+term.rec_id+")\" data-ajax=\"false\" data-rel=\"popup\" data-position-to=\"window\" data-transition=\"pop\" data-icon=\"delete\" data-theme=\"d\">删除</a></section></td></tr></table>";
 			});
 			//alert(html);
 			document.getElementById('catHtml').innerHTML=html;
@@ -102,12 +102,12 @@ function delcart(recid){
 	    	$num--;
 	    	if($num<=1){
 	    		$('#'+e).val(1);
-	    			updatecart(1,e);
+	    		updatecart(1,e);
 	    		 //update_cart(e,1);  //
 	    	}else{
 	    		$('#'+e).val($num);
 	    		updatecart($num,e);
-	    			//update_cart(e,$num);
+	    		//update_cart(e,$num);
 	    	}
 	    
 	    }
@@ -115,13 +115,13 @@ function delcart(recid){
 	    function update_plus(e){
 	    	$num = $('#'+e).val();
 	    	$num++;
-	    	if($num>=10){
-	    		$('#'+e).val(10);
-	    		updatecart(10,e);
+	    	if($num>=1000){
+	    		$('#'+e).val(1000);
+	    		updatecart(1000,e);
 	    		//update_cart(e,10);
 	    	}else{
 	    		$('#'+e).val($num);
-	    			updatecart($num,e);
+	    		updatecart($num,e);
 	  	 }
 	   
 	    }
@@ -158,36 +158,33 @@ function delcart(recid){
 	      </a>
 	</div>
 <!-- /header -->
-
+    <div id="wrapper">
+	<div id="scroller">
 <!-- content -->
 <div class="user-ui-content">
 	<div class="panel panel-default">
 		<div class="panel-heading">
 			<h3 class="panel-title">商品列表</h3>
 		</div>
-		<div class="panel-body" id="catHtml">
-		</div>
+		<div class="panel-body mypanel-body" id="catHtml"></div>
 	</div>
 </div>
 	<!-- /content -->
 <!-- footer -->
-
+    </div>
+	</div>
 
 <div id="dp_footer" class="dp-footer">
 	<nav class="navbar navbar-default navbar-fixed-bottom" role="navigation">
 		<form class="form-inline" action="checkcart.html" method="post" data-ajax="false">
-		<div class="panel panel-default">
-         	  <div class="panel-heading">
-                <h4>结算信息</h4>
-                </div>
-		    <div class="alert alert-info" id="total">
-		  </div>
-            </div>
-            <a class="btn btn-default" href="javascript:emptycart();">清除购物车</a>  <!--回到最初的购物界面-->
+		<div class="panel panel-default mypanel">
+		    <div class="myalert alert-info " id="total"></div>
+        </div>
+            <div class="myleft"><a class="btn btn-default" href="javascript:emptycart();">清除购物车</a> 
 			
             <input class="btn btn-danger" type="submit" value="去结算" readonly>
 			
-			<input type="buttom" id="cartnum" onclick="javascript:document.location.href='listcat.html';" value="继续购物" class="btn btn-danger aa" style="width:100px" readonly >
+			<input type="buttom" id="cartnum" onclick="javascript:document.location.href='listcat.html';" value="继续购物" class="btn btn-danger aa" style="width:100px" readonly ></div>
 	    </div>
 		</form>
 	</nav>
@@ -204,6 +201,30 @@ function delcart(recid){
 {
 	margin-left:30px;
 }
+.myalert {
+padding-top: 4px;
+padding-left:4px;
+
+border: 1px solid transparent;
+border-radius: 4px;
+}
+.mypanel{
+margin-bottom:8px;
+padding-bottom: 2px;
+}
+.myleft{
+padding-left:8px;
+}
+
+.mypanel-body {
+padding-left: 15px;
+padding-top: 5px;
+height:150px;
+}
+.mybtn{
+width:60px;
+}
+
 </style>
 </body>
 </html>

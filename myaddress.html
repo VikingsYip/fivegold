@@ -34,7 +34,7 @@ function deladdress(id){
   		 if (xhr.readyState==4 && xhr.status==200){
 			var resultfromphp = xhr.responseText;
 			var objData = jQuery.parseJSON(resultfromphp);
-			document.location.href="checkout_myaddress.html";
+			document.location.href="myaddress.html";
   		}
 	};
 	xhr.send();
@@ -55,18 +55,18 @@ function makeList() {
 			 $.each(objData.listallcat, function (index, term) {
 				if ( term.default == '1')
 				{
-					html+='<section onclick=\"clickaddress(this)\"  class=\"receiver checkout_section address_section address_section_on\">';
+					html+='<section class=\"receiver checkout_section address_section address_section_on\">';
 				}
 				else 
 				 {
-					html+='<section  onclick=\"clickaddress(this)\"  class=\"receiver checkout_section address_section\">';
+					html+='<section class=\"receiver checkout_section address_section\">';
 				 }
 		        html+='<section class=\"address_info\">';
 			    html+='<section class=\"address_name\">'+term.consignee+'&nbsp;'+term.mobile+'&nbsp;'+term.address_id+'(<a href="javascript:deladdress('+term.address_id+')">删除</a>)</section>';
 			    html+='<section class=\"address_content\">'+term.address+'</section>';
 		        html+='</section>';
 		        html+='<section class=\"check_address\">';
-				html+='<form id=\"check_address_form\" method=\"post\" data-ajax=\"false\" action=\"checkcart.html?address_id='+term.address_id+'\">';
+				html+='<form class=\"check_address_form\" method=\"post\" data-ajax=\"false\" action=\"checkcart.html?address_id='+term.address_id+'\">';
 				html+='<input type=\"hidden\" name=\"addr_id\" value='+term.address_id+'>';
 			    html+='</form>';
 				html+='</section>';
@@ -130,13 +130,7 @@ $(document).ready(function() {
 	
 	<!-- content -->
 	<div data-role="content">
-
-		<div  id="addressman">
-		
-		</div>
-		<div>
-		
-		</div>
+		<div  id="addressman"></div>
 
 	</div>
 	<!-- /content -->
@@ -148,13 +142,6 @@ $(document).ready(function() {
     </div>
 
 <script type="text/javascript">
-	function clickaddress(it){
-		//alert("我来了");
-		//it.siblings().removeClass('address_section_on');
-		//it.addClass('address_section_on');
-		document.getElementById('check_address_form').submit();
-	};
-
 	$('#new_address_btn').click(function(){
 		location.href="newaddress.html";
 	});

@@ -18,6 +18,12 @@
 	<script type="text/javascript" src="fivegold.js"></script>
 	<script src="json2.js"></script>
 	<script src="jstorage.js"></script>
+	<style>
+	body{
+    background-image:url(about:blank); /* for IE6 */ 
+    background-attachment:fixed; /*必须*/
+}
+	</style>
 <script>  
 var shopid = request('goodsid') ;
 var imagecount = 0;
@@ -66,13 +72,6 @@ function makeList() {
 			document.getElementById('specification').innerHTML=html;
 			document.getElementById('shop_price').innerHTML='￥'+term.shop_price;
 			makecartNum();
-			/*html+='<li><h1>商品名称</h1><p>'+term.goods_name+'</p></li>';
-			html+='<li><h1>商品货号</h1><p>'+term.goods_sn+'</p></li>';
-			html+='<li><h1>商品简单说明</h1><p>'+term.goods_brief+'</p></li>';
-			html+='<li><h1>详细描述</h1><p>'+term.goods_desc+'</p></li>';
-			html+='<li><h1>市场价格</h1><p>¥'+term.market_price+'</p></li>';
-			html+='<li><h1>商店售价</h1><p>¥'+term.shop_price+'</p></li>';
-			*/
 			});
   		}
 	};
@@ -87,6 +86,9 @@ function selectGoods(that,price){
 }
 $(document).ready(function() {
 	 makeList();
+	 document.getElementById('collect_dialog').style.display ='none';
+	 document.getElementById('addtocart_dialog').style.display ='none';
+	 
 });
 
 var spec = 0;
@@ -107,10 +109,16 @@ function addtocart(){
   		 if (xhr.readyState==4 && xhr.status==200){
     	       	var resultfromphp = xhr.responseText;
       		    var objData = jQuery.parseJSON(resultfromphp);
+      		    
+      		    	document.getElementById('alertmsg').innerHTML=objData.rsgmsg;
+      		    	document.getElementById('addtocart_dialog').style.display ='block';
+			
+			setTimeout("document.getElementById('addtocart_dialog').style.display ='none'",2000)
 		}
 	};
 	xhr.send();
 	window.setTimeout(function(){makecartNum();},100);
+	
 	//$("#example").popover();
 	return true;
 
@@ -158,8 +166,11 @@ function collect(){
 			var objData = jQuery.parseJSON(resultfromphp);
 			// alert(objData.rsgmsg);
 			document.getElementById('alertmsg2').innerHTML=objData.rsgmsg;
-			alert(document.getElementById('alertmsg2'));
-			$('#collect_dialog').show(); 
+			//alert(document.getElementById('alertmsg2'));
+			//$('#collect_dialog').show(); 
+			document.getElementById('collect_dialog').style.display ='block';
+			
+			setTimeout("document.getElementById('collect_dialog').style.display ='none'",2000)
 		}
 	};
 	xhr.send();
@@ -200,7 +211,7 @@ function gooddesc(){
     <div id="wrapper">
 	<div id="scroller">
 	
-<div class="container"style="padding-top:70px">
+<div class="container" style="padding-top:70px">
 <style>
 .swiper-container, .swiper-slide {
   width:100%;
@@ -230,11 +241,15 @@ function gooddesc(){
 	text-indent: -9999px;
 	display: block;
 }
+.mybtn{
+width:60px;
+background:#5BC0DE;
+}
 </style>
 <div class="swiper-container">
 	<div class="swiper-wrapper">
 		<div class="swiper-slide" align="center">
-			<img id="shopimg"  width="100%" src="img/logo.png" border="0">
+			<img id="shopimg"  width="80%" src="img/logo.png" border="0">
 	    </div>
 	</div>
 	<a href="javascript:showNextImage();"><div class="previous">Previous</div></a>
@@ -260,15 +275,6 @@ function gooddesc(){
 			<td><label>商品编码：</label></td>
 		    <td><span id="goods_sn"></span></td>
 		</tr>
-
-		   <!--tr>
-		     <td>
-		     <label>市场价：</label>
-		     </td>
-		     <td>
-		     	<span id="market_price" style="color:#b10000;"></span>
-		     </td>
-		   </tr-->
 		 <tr>
 		     <td>
 		     <label>数量说明:</label>
@@ -295,13 +301,12 @@ function gooddesc(){
 		</table>
 	    <div class="m_10_0" style="padding:0 10px;">
            	   <div class="form-group">
-           	       <input class="btn btn-default" id="minus_product" type="button" onClick="update_minus()" value="-" style="width:20px;">
+           	       <input class="btn btn-default mybtn" id="minus_product" type="button" onClick="update_minus()" value="-">
 		           <input class="form-control" name="goods[num]" data-role="none" style="width:50px;display:inline-block;" type="text" id="goods_num" min="1" max="10" value="1">
-		       	   <input class="btn btn-default" id="plus_product"  type="button" onClick="update_plus()" value="+">
+		       	   <input class="btn btn-default mybtn" id="plus_product"  type="button" onClick="update_plus()" value="+">
 		       </div>
         	   <div class="alert alert-danger m_5_0" id="tishi" style="display:none;"></div>
-        	   <div class="m_5_0">
-			   </div> 
+        	   <div class="m_5_0"></div> 
 		</div>
 		</div>
 
@@ -335,15 +340,15 @@ function gooddesc(){
 <!-- /page -->
 <!-- 底部导航  -->
 		   
-<div class="modal fade" style="padding-left:100px;padding-top:50px" id="addtocart_dialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div id="addtocart_dialog" style=" z-index:9999;position:fixed;left:100px;top:150px">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title" id="myModalLabel">购物车添加成功</h4>
+        <h4 class="modal-title" id="myModalLabel">提示</h4>
       </div>
       <div class="modal-body" id="alertmsg">
-           
+            
       </div>
       <div class="modal-footer">
         <button id="login" type="button" class="btn btn-info" onclick="javascript:void(0)" data-dismiss="modal">确认</button>
@@ -352,12 +357,12 @@ function gooddesc(){
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
 
-<div class="modal fade" style="padding-left:100px;padding-top:50px" id="collect_dialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div id="collect_dialog" style="z-index:9999;position:fixed;left:100px;top:150px">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title" id="myModalLabel">关注成功</h4>
+        <h4 class="modal-title" id="myModalLabel">提示</h4>
       </div>
       <div class="modal-body" id="alertmsg2">
           

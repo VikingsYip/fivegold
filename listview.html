@@ -42,7 +42,7 @@ function makeList(ordertype) {
 			var html ='';
       		var objData = jQuery.parseJSON(resultfromphp);
 			$.each(objData.listallcat, function (index, term) {
-			html+="<div class=\"center-block goods-item\"><a class=\"href_info\" href=\"goods.html?goodsid="+term.goods_id+"\"><img style=\"margin-right:5px;\" class=\"img-rounded pull-left\" src=\""+term.goods_img+"\" alt=\""+term.goods_name+"\" width=\"80\" height=\"80\"/><div class=\"clearfix\"><p class=\"product_name\">"+term.goods_name+"</p><p class=\"product_name\">所有的参数</p><div class=\"product_price clearfix\" style=\"line-height:30px;\"><p style=\"font-size:16px;float:left;color:red\">￥"+term.shop_price+"</p></div></div></a></div>";
+			html+="<div class=\"center-block goods-item\"><a class=\"href_info\" href=\"goods.html?goodsid="+term.goods_id+"\"><img style=\"margin-right:5px;\" class=\"img-rounded pull-left\" src=\""+term.goods_img+"\" alt=\""+term.goods_name+"\" width=\"100\" height=\"100\"/><div class=\"clearfix\"><p class=\"product_name\">"+term.goods_name+"</p><p class=\"product_name\">所有的参数</p><div class=\"product_price clearfix\" style=\"line-height:30px;\"><p style=\"font-size:16px;float:left;color:red\">￥"+term.shop_price+"</p></div></div></a></div>";
 			});
 			
 			if (html=='')
@@ -86,30 +86,28 @@ document.location.href="findgoods.html?goodsname="+encodeURIComponent(goodsname)
 	<div class="dp-main" style="padding-top:70px">
 	<div class="container">
 <style>
-#mytop1 th {text-align:center;border: 1px solid blue; }
+#mytop1 th {text-align:center;border: 1px solid #ffffff; }
 </style>
 		<div id="mytop1">
 		<table id="order_list" class="table table-striped">
 		<tbody>
 			<tr>
-				<th><a href="mmember-orders.html">全部</a></th>
-				<th><a href="mmember-orders-1.html" >待支付</a></th>
-				<th><a href="mmember-orders-2.html">已取消</a></th>
-				<th><a href="mmember-orders-3.html" style="color:red">已支付</a></th>
+				<th> <a href="javascript:reorder('sales');">销量</a></th>
+				<th><a href="javascript:reorder('price');">价格</a></th>
+				<th><a href="javascript:reorder('colligate');">最新</a></th>
 			</tr>
 		</tbody>
 		</table>
         </div>
  <!--产品 begin-->
  <div id ="catHtml"></div>
-		<!--产品 end-->
+<!--产品 end-->
 
 		
 
 	</div>
 </div>
 <!-- /content -->
-
 
 <div id="dp_footer" class="dp-footer	">
 		<nav class="navbar navbar-default navbar-fixed-bottom" role="navigation">
@@ -137,7 +135,5 @@ document.location.href="findgoods.html?goodsname="+encodeURIComponent(goodsname)
 		  </div>
 		</nav>
 </div>
-
-
 </body>
 </html>
