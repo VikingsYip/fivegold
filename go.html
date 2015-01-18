@@ -75,13 +75,12 @@ function makehomegoods(){
     		       //alert(term.ad_code);
     		      if (i%2==0) html+="<tr>";
     		       html+="<td align=\"center\" width=\"50%\"><div class=\"p_box\"><div class=\"p_img\"><a href=\"goods.html?goodsid="+term.id+"\" target=\"_blank\"><img class=\"img-rounded\" src=\""+term.img+"\" alt=\"\"></a>";
-				   html+="</div><div class=\"p-name\"><a href=\"goods.html?goodsid="+term.id+" \" target=\"_blank\">"+term.name+"</a></div><div class=\"p_price\"><p><span class=\"sale_price\">销售价：￥"+term.shop_price+"</span>";
+				   html+="</div><div class=\"p-name\"><a href=\"goods.html?goodsid="+term.id+" \" target=\"_blank\">"+term.name+"</a></div><div class=\"p_price\"><p><span class=\"sale_price\">￥"+term.shop_price+"</span>";
 				   html+="</p></div><a href=\"javascript:addtocart("+term.id+")\" class=\"btn btn-default\">&nbsp;购 &nbsp;&nbsp;买&nbsp;</a></div></td>";
 			      if (i%2==1) html+="</tr>";
 			      i++;
 			   });
 		   html+="</table>";
-		   //alert(html);
 		     document.getElementById('homegoods').innerHTML+=html;
 		 }
 	};
@@ -98,9 +97,9 @@ function addtocart(shopid){
 	xhr.open("GET", posturl, true);
 	xhr.onreadystatechange = function() {
   		 if (xhr.readyState==4 && xhr.status==200){
-    	       	var resultfromphp = xhr.responseText;
+    	    var resultfromphp = xhr.responseText;
 			//alert("添加成功");
-      		      var objData = jQuery.parseJSON(resultfromphp);
+      		var objData = jQuery.parseJSON(resultfromphp);
 		     //document.location.href="gencart.html";
 			 //alert (objData.rsgmsg);
 			 //document.getElementById('alertmsg').innerHTML=objData.rsgmsg;
@@ -158,7 +157,7 @@ document.location.href="findgoods.html?goodsname="+encodeURIComponent(goodsname)
 	min-width: 320px;
 	margin:0px auto;
 	position: relative;
-	padding-top:58px;
+	padding-top:55px;
 }
 .total_img .swiper-container,.total_img .swiper-slide {
 	width: 640px;
@@ -192,7 +191,7 @@ document.location.href="findgoods.html?goodsname="+encodeURIComponent(goodsname)
 	text-indent: -9999px;
 	display: block;
 	opacity:0.3;
-	filter:alpha(opacity=30)
+	filter:alpha(opacity=30);
 }
 </style>
 <!-- E 轮播 -->
@@ -236,7 +235,7 @@ $(function(){
 	width:120px;
 	overflow: hidden;
 	white-space: nowrap;
-	text-overflow: ellipsis;
+	text-overflow: clip;
 }
 .single-goods {
 	width: 100%;
@@ -321,6 +320,7 @@ $(function(){
 		</div>
 	</div>
 </div>
+
 <div class="next-page"></div>
 <script type="text/javascript">
 $(function(){
@@ -354,7 +354,7 @@ $(function(){
 <div id="dp_footer" class="dp-footer hide">
 		<nav class="navbar navbar-default navbar-fixed-bottom" role="navigation">
 		  <div class="container dp-menu-box">
-		    <a class="pull-left menu-btn" href="go.html">
+		    <a class="pull-left menu-btn" style="color:red" href="go.html">
 		    	<div class="menu-img glyphicon glyphicon-home"></div>
 		    	<div>首页</div>
 		    </a>

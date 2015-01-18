@@ -70,17 +70,67 @@ function makeseList(mycatid) {
 			});
 			//alert(shtml);
 			document.getElementById('category2').innerHTML=shtml;
+
+
   		}
 	};
 	xhr.send();
 }
 
+function postfind(){
+	var goodsname=document.getElementById('goodsname').value;
+	document.location.href="findgoods.html?goodsname="+encodeURIComponent(goodsname);
+}
 
 $(document).ready(function() {
 	 makeList();
 	 makeseList("1");
+
+
+setTimeout(function(){
+	var left = $('.category1');
+	var category2 = $('#category2');
+	alter(left.height());
+	alter(category2.height());
+	if (left.height() < category2.height()) {
+		window._floatAd = activeFloatAd($('#category2'),'bottom');
+	}
+},500);
+
 });
 </script>
+
+<script type="text/javascript">
+
+$(document).ready(function(){ 
+
+  //得到LI
+  $('#category1 li').click(function(){
+    //是否就是cur
+    
+	alter("我来了");
+	
+	var qwerty  = $(this).attr("class");
+
+	alert(qwerty);
+
+	if(qwerty.indexOf("cur") > 0 )
+	{
+		return;
+	}
+	else 
+    {
+		//去掉选择的Li    
+		$('#category1 li').removeClass('cur');
+		//重新指定要显示的Li
+		$(this).addClass('cur');
+		
+    }
+  })
+  
+});
+</script>
+
 </head>
 
 <body>
@@ -113,16 +163,17 @@ $(document).ready(function() {
 	dt,dd{float:left;}
 </style>
 
-<div class="dp-main"><!-- /dp-main -->
-	<div class="wx_wrap"><!-- /wx_wrap -->
-		<div id="yScroll1" class="yScroll1"  style="padding-top:10px;"><!--yScroll-1-->
+	<div id="yScroll1" class="yScroll1"  style="padding-top:10px;z-index:200;overflow:hidden;position: fixed "><!--yScroll-1-->
 			<ul class="category1" id="category1">
-				<li id="" class="cur">家用电器</li>
+				<!--<li id="" class="cur">家用电器</li>--> 
 			</ul>
 		</div><!--yScroll-1-->
+<div class="dp-main"><!-- /dp-main -->
+	<div class="wx_wrap"><!-- /wx_wrap -->
+	
 
 		<div id="yScroll2" style="overflow: hidden; top: 45px; left: 76px; "><!--yScroll-2-->
-			<div style="padding-top:10px;">
+			<div style="padding-top:10px;padding-left:100px">
 				<dl class="category2" id="category2"> <!--category2--beign-->
 					<!--<dt>第一个分类</dt><dd><a target="#"><img src="img/logo.png"><span class="tit">彩电</span></a></dd>-->
 				</dl><!--category2--end>
@@ -139,7 +190,7 @@ $(document).ready(function() {
 		    	<div class="menu-img glyphicon glyphicon-home"></div>
 		    	<div>首页</div>
 		    </a>
-		    <a class="pull-left menu-btn" href="listcat.html">
+		    <a class="pull-left menu-btn" style="color:red" href="listcat.html">
 		    	<div class="menu-img glyphicon glyphicon-th-large"></div>
 		    	<div>分类</div>
 		    </a>

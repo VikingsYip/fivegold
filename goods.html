@@ -18,12 +18,6 @@
 	<script type="text/javascript" src="fivegold.js"></script>
 	<script src="json2.js"></script>
 	<script src="jstorage.js"></script>
-	<style>
-	body{
-    background-image:url(about:blank); /* for IE6 */ 
-    background-attachment:fixed; /*必须*/
-}
-	</style>
 <script>  
 var shopid = request('goodsid') ;
 var imagecount = 0;
@@ -46,7 +40,6 @@ function makecartNum() {
 }
 
 function makeList() {
-	 // alert(shopid+specval.label+);
 	var xhr = new XMLHttpRequest();
 	xhr.open("POST", "http://www.zgltong.com/api/mobile.php?act=goodsdesc&goods_id="+shopid, true);
 	xhr.onreadystatechange = function() {
@@ -61,8 +54,8 @@ function makeList() {
 					document.getElementById('shopimg').src=term.bought_goods[currentimage].img_url;			 
 				}
 				document.getElementById('goods_name').innerHTML=term.goods_name;
-				document.getElementById('goods_sn').innerHTML=term.goods_sn;
-				document.getElementById('goods_brief').innerHTML=term.goods_brief;
+				//document.getElementById('goods_sn').innerHTML=term.goods_sn;
+				//document.getElementById('goods_brief').innerHTML=term.goods_brief;
 				var html = "";
 				$.each(term.specification, function (index, spec) {
 					$.each(spec.values, function (index, specval) {
@@ -70,6 +63,7 @@ function makeList() {
 					});
 				});
 			document.getElementById('specification').innerHTML=html;
+			//alert(shop_price);
 			document.getElementById('shop_price').innerHTML='￥'+term.shop_price;
 			makecartNum();
 			});
@@ -88,40 +82,32 @@ $(document).ready(function() {
 	 makeList();
 	 document.getElementById('collect_dialog').style.display ='none';
 	 document.getElementById('addtocart_dialog').style.display ='none';
-	 
 });
 
 var spec = 0;
 
 function addtocart(){
 	var userid = $.jStorage.get('userid');
-     if (userid==null)
-        document.location.href="login.html";
+	if (userid==null) { document.location.href="login.html"; }
 	var xhr = new XMLHttpRequest();
-     var goods_num = document.getElementById('goods_num').value;
+	var goods_num = document.getElementById('goods_num').value;
 	if (cartprice!=0)
-	 var posturl = "http://www.zgltong.com/api/mobile.php?act=addbuycart&goods_id="+shopid+"&number="+goods_num+"&userid="+userid+"&spec="+spec+"&price="+cartprice;	 
+		var posturl = "http://www.zgltong.com/api/mobile.php?act=addbuycart&goods_id="+shopid+"&number="+goods_num+"&userid="+userid+"&spec="+spec+"&price="+cartprice;	 
 	else
-     var posturl = "http://www.zgltong.com/api/mobile.php?act=addbuycart&goods_id="+shopid+"&number="+goods_num+"&userid="+userid+"&spec="+spec;
-
+		var posturl = "http://www.zgltong.com/api/mobile.php?act=addbuycart&goods_id="+shopid+"&number="+goods_num+"&userid="+userid+"&spec="+spec;
 	xhr.open("POST", posturl, true);
 	xhr.onreadystatechange = function() {
   		 if (xhr.readyState==4 && xhr.status==200){
-    	       	var resultfromphp = xhr.responseText;
-      		    var objData = jQuery.parseJSON(resultfromphp);
-      		    
-      		    	document.getElementById('alertmsg').innerHTML=objData.rsgmsg;
-      		    	document.getElementById('addtocart_dialog').style.display ='block';
-			
-			setTimeout("document.getElementById('addtocart_dialog').style.display ='none'",2000)
+			var resultfromphp = xhr.responseText;
+			var objData = jQuery.parseJSON(resultfromphp);
+			document.getElementById('alertmsg').innerHTML=objData.rsgmsg;
+			document.getElementById('addtocart_dialog').style.display ='block';
+			setTimeout("document.getElementById('addtocart_dialog').style.display ='none'",800)
 		}
 	};
 	xhr.send();
-	window.setTimeout(function(){makecartNum();},100);
-	
-	//$("#example").popover();
+	window.setTimeout(function(){makecartNum();},800);
 	return true;
-
 }
 
 function showNextImage(){
@@ -129,33 +115,27 @@ function showNextImage(){
 	var xhr = new XMLHttpRequest();
 	xhr.open("GET", "http://www.zgltong.com/api/mobile.php?act=goodsdesc&goods_id="+shopid, true);
 	xhr.onreadystatechange = function() {
-  		 if (xhr.readyState==4 && xhr.status==200){
+		if (xhr.readyState==4 && xhr.status==200){
 			var resultfromphp = xhr.responseText;
 			var objData = jQuery.parseJSON(resultfromphp);
 			$.each(objData.listallcat, function (index, term) {	
-			  //alert(imagecount);
-			  //alert(currentimage);
-			  if (imagecount>0 && currentimage<imagecount-1)
-			  {
-				  //alert(document.getElementById('shopimg').src);
-				  //alert(term.bought_goods[++currentimage].img_url);
-				  //显示下一张图片
-				  document.getElementById('shopimg').src=term.bought_goods[++currentimage].img_url;
-			  }
-			  else{
-				 currentimage=0;
-				 document.getElementById('shopimg').src=term.bought_goods[currentimage].img_url;
-			  }
+				if (imagecount>0 && currentimage<imagecount-1){
+					document.getElementById('shopimg').src=term.bought_goods[++currentimage].img_url;
+				}
+				else{
+					currentimage=0;
+					document.getElementById('shopimg').src=term.bought_goods[currentimage].img_url;
+				}
 			});
-  		}
+		}
 	};
 	xhr.send();	
 	return true;
 }
+
 function collect(){
 	var userid = $.jStorage.get('userid');
-	if (userid==null)
-        document.location.href="login.html";
+	if (userid==null) {  document.location.href="login.html";}
 	var xhr = new XMLHttpRequest();
 	var posturl = "http://www.zgltong.com/api/mobile.php?act=collect&goods_id="+shopid+"&user_id="+userid;
 	//alert(posturl);  	
@@ -164,13 +144,9 @@ function collect(){
   		 if (xhr.readyState==4 && xhr.status==200){
 			var resultfromphp = xhr.responseText;
 			var objData = jQuery.parseJSON(resultfromphp);
-			// alert(objData.rsgmsg);
 			document.getElementById('alertmsg2').innerHTML=objData.rsgmsg;
-			//alert(document.getElementById('alertmsg2'));
-			//$('#collect_dialog').show(); 
 			document.getElementById('collect_dialog').style.display ='block';
-			
-			setTimeout("document.getElementById('collect_dialog').style.display ='none'",2000)
+			setTimeout("document.getElementById('collect_dialog').style.display ='none'",800)
 		}
 	};
 	xhr.send();
@@ -202,10 +178,10 @@ function gooddesc(){
 	     <a class="left-bar" href="javascript:history.go(-1);">
 	     	<span class="navbar-brand glyphicon glyphicon-chevron-left"></span>
 	     </a>
-	     <span>商品详情</span>
-	     <a class="right-bar" href="gencart.html">
+	     <!--<span>商品详情</span>--><span></span>
+	     <!--<a class="right-bar" href="gencart.html">
 	     	<span class="glyphicon glyphicon-shopping-cart"></span>
-	     </a>
+	     </a>-->
     </div>
     <!-- /header -->
     <div id="wrapper">
@@ -242,9 +218,19 @@ function gooddesc(){
 	display: block;
 }
 .mybtn{
-width:60px;
-background:#5BC0DE;
+	width:60px;
+	background:#5BC0DE;
 }
+#goods_name{
+	font-size:20px;
+}
+#shop_price{
+	font-size:25px;
+}
+.m_10_my{
+	margin: 5px 0;
+}
+
 </style>
 <div class="swiper-container">
 	<div class="swiper-wrapper">
@@ -261,54 +247,21 @@ background:#5BC0DE;
 <script src="css/idangerous.swiper.min.js"></script>
 	
 <div class="user-ui-info">
-	<table class="table">
-		<tr>
-			<td width="120px">商品名称：</td>
-			<td><span id="goods_name"></span></td>
-		   </tr>
-		<tr>
-		   	<td>简单说明：</td>
-		   	<td><span id="goods_brief"></span></td>
-		</tr>
-
-		<tr>
-			<td><label>商品编码：</label></td>
-		    <td><span id="goods_sn"></span></td>
-		</tr>
-		 <tr>
-		     <td>
-		     <label>数量说明:</label>
-		     </td>
-		     <td>
-		     	<span id="shop_desc" style="color:#b10000;"></span>
-		     </td>
-		   </tr>
-		 <tr>
-		    <td><label>尺寸：</label></td>
-		    <td class="spec_list">
-		     	<span id="specification"></span>
-			</td>
-		 </tr>
-		 <tr>
-		     <td>
-		     <label>销售价：</label>
-		     </td>
-		     <td>
-		     	<span id="shop_price" style="color:#b10000;"></span>
-		     </td>
-		   </tr>
-
-		</table>
-	    <div class="m_10_0" style="padding:0 10px;">
-           	   <div class="form-group">
-           	       <input class="btn btn-default mybtn" id="minus_product" type="button" onClick="update_minus()" value="-">
-		           <input class="form-control" name="goods[num]" data-role="none" style="width:50px;display:inline-block;" type="text" id="goods_num" min="1" max="10" value="1">
-		       	   <input class="btn btn-default mybtn" id="plus_product"  type="button" onClick="update_plus()" value="+">
-		       </div>
-        	   <div class="alert alert-danger m_5_0" id="tishi" style="display:none;"></div>
-        	   <div class="m_5_0"></div> 
+	<table>
+		<tr><td><span id="goods_name"></span></td></tr>
+		<tr><td class="spec_list"><span id="specification"></span></td></tr>
+		<tr><td><span id="shop_price" style="color:#b10000;"></span></td></tr>
+	</table>
+	<div class="m_10_my" style="padding:0 0px;">
+		<div class="form-group">
+			<input class="btn btn-default mybtn" id="minus_product" type="button" onClick="update_minus()" value="-">
+			<input class="form-control" name="goods[num]" data-role="none" style="width:50px;display:inline-block;" type="text" id="goods_num" min="1" max="10" value="1">
+			<input class="btn btn-default mybtn" id="plus_product"  type="button" onClick="update_plus()" value="+">
 		</div>
-		</div>
+		<div class="alert alert-danger m_5_0" id="tishi" style="display:none;"></div>
+		<div class="m_5_0"></div> 
+	</div>
+</div>
 
 <div class="m_10_0" style="padding:0 10px;">
 	<ul class="list-group">
@@ -320,17 +273,14 @@ background:#5BC0DE;
 	</ul>
 </div>
 </div>
-	<!-- /content -->
+<!-- /content -->
 		
 		
 <div id="dp_footer" class="dp-footer">
 	<nav class="navbar navbar-default navbar-fixed-bottom" role="navigation">
 		<div class="container dp-menu-box">
 			<a class="btn btn-warning" style="width:80px"  href="javascript:collect();">关注</a>
-			<a class="btn btn-danger" style="width:200px"  href="javascript:addtocart();">加入购物车</a>
-			<!--<a class="right-bar" href="gencart.html">
-				<span class="glyphicon glyphicon-shopping-cart btn-lg"><span id="cartnum" style="font-size:small" ></span></span>
-			</a>-->
+			<a class="btn btn-danger" style="width:180px"  href="javascript:addtocart();">加入购物车</a>
 			<div class="btn-group">
 				<a class="btn btn-success glyphicon glyphicon-shopping-cart" href="gencart.html"><span id="cartnum">(0)</span></a>
 			</div>
@@ -340,19 +290,17 @@ background:#5BC0DE;
 <!-- /page -->
 <!-- 底部导航  -->
 		   
-<div id="addtocart_dialog" style=" z-index:9999;position:fixed;left:100px;top:150px">
+<div id="addtocart_dialog" style="z-index:9999;position:fixed;left:100px;top:150px;width:150px;">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         <h4 class="modal-title" id="myModalLabel">提示</h4>
       </div>
-      <div class="modal-body" id="alertmsg">
-            
-      </div>
-      <div class="modal-footer">
+      <div class="modal-body" id="alertmsg"></div>
+      <!--<div class="modal-footer">
         <button id="login" type="button" class="btn btn-info" onclick="javascript:void(0)" data-dismiss="modal">确认</button>
-      </div>
+      </div>-->
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
@@ -364,20 +312,12 @@ background:#5BC0DE;
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         <h4 class="modal-title" id="myModalLabel">提示</h4>
       </div>
-      <div class="modal-body" id="alertmsg2">
-          
-      </div>
-      <div class="modal-footer">
+      <div class="modal-body" id="alertmsg2"></div>
+      <!--<div class="modal-footer">
         <button id="login" type="button" class="btn btn-info" onclick="javascript:void(0)" data-dismiss="modal">确认</button>
-      </div>
+      </div>-->
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
-
-<!--<div class="well">
-<a href="#" id="example" class="btn btn-success" rel="popover" data-content="成功加入购物车!" data-original-title="成功加入购物车!"></a>
-</div>
--->
-
 </body>
 </html>

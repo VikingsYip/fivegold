@@ -27,10 +27,7 @@
 var sorting = 1;
 function makeList(ordertype) {
     var goodsname = request('goodsname');
-    //goodsname=encodeURIComponent(goodsname);
-	//alert(goodsname);
-	if (ordertype==null)
-	  ordertype="colligate";
+	if (ordertype==null) {  ordertype="colligate"; }
 	var xhr = new XMLHttpRequest();
 	xhr.open("GET", "http://www.zgltong.com/api/mobile.php?act=findgoods&goodsname="+goodsname+"&intro="+ordertype+"&sorting="+sorting+"&mode=test", true);
 	if (sorting == 1)
@@ -92,9 +89,20 @@ function postfind(){
 <!-- search end -->
     <div class="dp-main">
 	<div class="container">
-		<ol class="breadcrumb" style="white-space:nowrap;">
-		  <a href="javascript:reorder('sales');">销量</a>/<a href="javascript:reorder('price');">价格</a>/<a href="javascript:reorder('colligate');">最新</a>
-		</ol>
+<style>
+#mytop1 th {text-align:center;border: 1px solid #ffffff; }
+</style>
+		<div id="mytop1">
+		<table id="order_list" class="table table-striped">
+		<tbody>
+			<tr>
+				<th> <a href="javascript:reorder('sales');">销量</a></th>
+				<th><a href="javascript:reorder('price');">价格</a></th>
+				<th><a href="javascript:reorder('colligate');">最新</a></th>
+			</tr>
+		</tbody>
+		</table>
+        </div>
 		
 <!--产品 begin-->
  <div id ="catHtml"></div>
@@ -113,7 +121,7 @@ function postfind(){
 		    	<div class="menu-img glyphicon glyphicon-home"></div>
 		    	<div>首页</div>
 		    </a>
-		    <a class="pull-left menu-btn" href="listcat.html">
+		    <a class="pull-left menu-btn" style="color:red"  href="listcat.html">
 		    	<div class="menu-img glyphicon glyphicon-th-large"></div>
 		    	<div>分类</div>
 		    </a>
