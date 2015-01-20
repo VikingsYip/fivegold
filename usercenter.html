@@ -76,7 +76,7 @@ function makelist(){
 	    			</td>
 	    		</tr>-->
 	    		<tr>
-	    			<th>用户名：</th>
+	    			<th style="width:40%">用户名：</th>
 	    			<td><div id="username"></div></td>
 	    		</tr>
 	    		<tr>
@@ -84,16 +84,18 @@ function makelist(){
 	    			<td><div id="rankname"></div></td>
 	    		</tr>
 	    		<tr>
-	    			<th>手机号：</th>
-	    			<td><div id="mobilephone"></div></td>
+	    			<th>手机号：<a class="btn btn-danger" href="javascript:void(0)" id="valid_mobile_btn" mobile="137*****140" data-toggle="modal" data-target="#mb_verify_modal">验证手机</a></th>
+	    			<td><div id="mobilephone">13725275140</div></td>
 	    		</tr>
 			</table>
 		    <div class="list-group public_section">
-		      <!--a href="#" class="list-group-item href_info">个人资料</a-->
+		      <a href="modify-user.html" class="list-group-item href_info">修改手机号</a>
+			  <a href="changepwd1.html"  rel="external"  class="list-group-item href_info">修改密码</a>
+			  <br>
 			  <a href="mmember-orders.html"  rel="external"  class="list-group-item href_info">我的订单</a>
 			  <a href="listcollection.html"  rel="external"  class="list-group-item href_info">我的收藏</a>
               <a href="myaddress.html"  rel="external"  class="list-group-item href_info">我的地址</a>
-              <a href="changepwd1.html"  rel="external"  class="list-group-item href_info">修改密码</a>
+              
 			</div>
 			<p>
 		    	<a class="btn btn-danger btn-block" href="javascript:void(0)" data-toggle="modal" data-target="#logout_dialog">注销当前账户</a>
@@ -118,7 +120,7 @@ function makelist(){
 		    	<div class="menu-img glyphicon glyphicon-user"></div>
 		    	<div>我的</div>
 		    </a>
-		    <a class="pull-left menu-btn" href="gencart.html" rel="external">
+		    <a class="pull-left menu-btn" href="gencart1.html" rel="external">
 		    	<div class="menu-img glyphicon glyphicon-shopping-cart"></div>
 		    	<div>购物车</div>
 		    </a>
@@ -131,8 +133,8 @@ function makelist(){
 </div>
 	
 <!-- /footer -->
-
 </div>
+
 <div class="modal fade" id="logout_dialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">

@@ -161,7 +161,7 @@ function delcart(recid){
 
 
 <div id="dp_footer" class="dp-footer">
-	<nav class="navbar navbar-default navbar-fixed-bottom" role="navigation">
+	<nav class="navbar navbar-default navbar-fixed-bottom" style="height:140px" role="navigation">
 		<form class="form-inline" action="checkcart.html" method="post" data-ajax="false">
 		<div class="panel panel-default mypanel">
 		    <div class="myalert alert-info " id="total"></div>
@@ -173,11 +173,38 @@ function delcart(recid){
             <input class="btn btn-danger" type="submit" value="去结算" readonly>
 			
 			<input type="buttom" id="cartnum" onclick="javascript:document.location.href='listcat.html';" value="继续购物" class="btn btn-danger aa" style="width:100px" readonly ></div>
+
+			<div class="container dp-menu-box">
+		    <a class="pull-left menu-btn" href="go.html">
+		    	<div class="menu-img glyphicon glyphicon-home"></div>
+		    	<div>首页</div>
+		    </a>
+		    <a class="pull-left menu-btn" href="listcat.html">
+		    	<div class="menu-img glyphicon glyphicon-th-large"></div>
+		    	<div>分类</div>
+		    </a>
+		    <a class="pull-left menu-btn" href="usercenter.html">
+		    	<div class="menu-img glyphicon glyphicon-user"></div>
+		    	<div>我的</div>
+		    </a>
+		    <a class="pull-left menu-btn" href="gencart.html"  style="color:red" >
+		    	<div class="menu-img glyphicon glyphicon-shopping-cart"></div>
+		    	<div>购物车</div>
+		    </a>
+		    <a class="pull-left menu-btn" href="mmember-orders.html">
+		    	<div class="menu-img glyphicon glyphicon-th-list"></div>
+		    	<div>订单</div>
+		    </a>
+		  </div>
 	    </div>
 		</form>
+		
 	</nav>
 </div>
+
+
 <!-- /footer -->
+
 </div>
 <!-- /page -->
 

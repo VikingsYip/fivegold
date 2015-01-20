@@ -14,6 +14,7 @@
 	<script src="css/jquery.cookie.js"></script>
 	<script src="css/bootstrap.min.js"></script>
 	<link href="css/base.mobile.css" rel="stylesheet" type="text/css" media="screen, projection" />	
+	<script src="jstorage.js"></script>
 <script>	
 function makeList() {
 	var xhr = new XMLHttpRequest();
@@ -70,6 +71,7 @@ function makeseList(mycatid) {
 			});
 			//alert(shtml);
 			document.getElementById('category2').innerHTML=shtml;
+			$.jStorage.set('finggoodsname', "", {TTL: 28800000}); 
 
 
   		}
@@ -79,24 +81,13 @@ function makeseList(mycatid) {
 
 function postfind(){
 	var goodsname=document.getElementById('goodsname').value;
+	$.jStorage.set('finggoodsname', goodsname, {TTL: 28800000}); 
 	document.location.href="findgoods.html?goodsname="+encodeURIComponent(goodsname);
 }
 
 $(document).ready(function() {
 	 makeList();
 	 makeseList("1");
-
-
-setTimeout(function(){
-	var left = $('.category1');
-	var category2 = $('#category2');
-	alter(left.height());
-	alter(category2.height());
-	if (left.height() < category2.height()) {
-		window._floatAd = activeFloatAd($('#category2'),'bottom');
-	}
-},500);
-
 });
 </script>
 

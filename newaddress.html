@@ -48,12 +48,11 @@
 </style>
 
 <script>
-
 function newaddress(){
 	var address=encodeURIComponent(document.getElementById('delivery_address').value);
 	var consignee=encodeURIComponent(document.getElementById('delivery_name').value);
 	var email=0;
-	var tel=0;//encodeURIComponent(document.getElementById('tel').value);	
+	var tel=0;
 	var mobile=encodeURIComponent(document.getElementById('delivery_mobile').value);	
 	var defaultval = encodeURIComponent(document.getElementById("delivery_default").value);
 	var zipcode=encodeURIComponent(document.getElementById('delivery_zip').value);						
@@ -77,6 +76,70 @@ function newaddress(){
 	xhr.send();
 }
 
+function makeselect1List() {
+	var xhr = new XMLHttpRequest();
+	xhr.open("POST", "http://www.zgltong.com/api/mobile.php?act=regions", true);
+	xhr.onreadystatechange = function() {
+  		 if (xhr.readyState==4 && xhr.status==200){
+    		var resultfromphp = xhr.responseText;
+      		var objData = jQuery.parseJSON(resultfromphp);
+			var html ="<option value='_NULL_'>请选择...</option>"; 
+			$.each(objData, function (index, term) {
+				html+="<option value='"+term.region_id+"'>"+term.region_name+"</option>"
+			});
+			//alert(html);
+			document.getElementById('select1').innerHTML=html;
+  		}
+	};
+	xhr.send();
+}
+
+function makeselect2List(sid) {
+	var xhr = new XMLHttpRequest();
+	xhr.open("POST", "http://www.zgltong.com/api/mobile.php?act=regions&region_id="+sid, true);
+	xhr.onreadystatechange = function() {
+  		 if (xhr.readyState==4 && xhr.status==200){
+    		var resultfromphp = xhr.responseText;
+      		var objData = jQuery.parseJSON(resultfromphp);
+			var html ="<option value='_NULL_'>请选择...</option>"; 
+			$.each(objData, function (index, term) {
+				html+="<option value='"+term.region_id+"'>"+term.region_name+"</option>"
+			});
+			//alert(html);
+			document.getElementById('select2').innerHTML=html;
+  		}
+	};
+	xhr.send();
+	return true;
+}
+
+
+function makeselect3List(sid) {
+	var xhr = new XMLHttpRequest();
+	xhr.open("POST", "http://www.zgltong.com/api/mobile.php?act=regions&region_id="+sid, true);
+	xhr.onreadystatechange = function() {
+  		 if (xhr.readyState==4 && xhr.status==200){
+    		var resultfromphp = xhr.responseText;
+      		var objData = jQuery.parseJSON(resultfromphp);
+			var html ="<option value='_NULL_'>请选择...</option>"; 
+			$.each(objData, function (index, term) {
+				html+="<option value='"+term.region_id+"'>"+term.region_name+"</option>"
+			});
+			//alert(html);
+			document.getElementById('select3').innerHTML=html;
+  		}
+	};
+	xhr.send();
+	return true;
+}
+
+$(document).ready(function() {
+	 makeselect1List();
+	 makeselect2List("6");
+	 makeselect3List("78");
+
+});
+
 </script>
 </head>
 <body>
@@ -87,14 +150,11 @@ function newaddress(){
 	     	<span class="navbar-brand glyphicon glyphicon-chevron-left"></span>
 	     </a>
 	     <span>新增收货地址</span>
-	     <a class="right-bar" href="/gencart.html">
-	     	<span class="glyphicon glyphicon-shopping-cart"></span>
-	     </a>
     </div>
     <!-- /header -->
 
-	<!-- content -->
-	<div data-role="content">
+<!-- content -->
+<div data-role="content">
 		<form id="new_address_form" action="javascript:newaddress();" method="post">
 		<section class="checkout_section address_section">
 	         <section>
@@ -102,101 +162,30 @@ function newaddress(){
 	             <input type="text" name="delivery[ship_name]" id="delivery_name"  maxlength="5" placeholder="请输入收货人">
 			     <label for="delivery_mobile"><span style="color:red">*</span>手机：</label>
 			     <input type="number" data-clear-btn="true" name="delivery[ship_mobile]" id="delivery_mobile"  maxlength="11" placeholder="请输入手机号码">
-<!--			     <input id="shipping_area" type="hidden" name="delivery[ship_area]">
+			     <input id="shipping_area" type="hidden" name="delivery[ship_area]">
 <fieldset data-role="controlgroup" data-mini="true">
     <legend><span style="color:red">*</span>收货地区：</legend>
     <label for="select1">省</label>
     <select name="select1" id="select1" onchange="selectArea(this,2)">
-		<option value='_NULL_'>请选择...</option>
-				<option value='1'>北京</option>
-				<option value='21'>上海</option>
-				<option value='42'>天津</option>
-				<option value='62'>重庆</option>
-				<option value='104'>安徽</option>
-				<option value='227'>福建</option>
-				<option value='322'>甘肃</option>
-				<option value='423'>广东</option>
-				<option value='566'>广西</option>
-				<option value='690'>贵州</option>
-				<option value='788'>海南</option>
-				<option value='814'>河北</option>
-				<option value='998'>河南</option>
-				<option value='1176'>黑龙江</option>
-				<option value='1320'>湖北</option>
-				<option value='1436'>湖南</option>
-				<option value='1573'>吉林</option>
-				<option value='1643'>江苏</option>
-				<option value='1763'>江西</option>
-				<option value='1874'>辽宁</option>
-				<option value='1989'>内蒙古</option>
-				<option value='2103'>宁夏</option>
-				<option value='2130'>青海</option>
-				<option value='2182'>山东</option>
-				<option value='2340'>山西</option>
-				<option value='2471'>陕西</option>
-				<option value='2589'>四川</option>
-				<option value='2792'>西藏</option>
-				<option value='2873'>新疆</option>
-				<option value='2987'>云南</option>
-				<option value='3133'>浙江</option>
-				<option value='3235'>香港</option>
-				<option value='3239'>澳门</option>
-				<option value='3242'>台湾</option>
-			</select>
+		<option value="_NULL_">请选择...</option><option value="2">北京</option><option value="3">安徽</option><option value="4">福建</option><option value="5">甘肃</option><option value="6">广东</option><option value="7">广西</option><option value="8">贵州</option><option value="9">海南</option><option value="10">河北</option><option value="11">河南</option><option value="12">黑龙江</option><option value="13">湖北</option><option value="14">湖南</option><option value="15">吉林</option><option value="16">江苏</option><option value="17">江西</option><option value="18">辽宁</option><option value="19">内蒙古</option><option value="20">宁夏</option><option value="21">青海</option><option value="22">山东</option><option value="23">山西</option><option value="24">陕西</option><option value="25">上海</option><option value="26">四川</option><option value="27">天津</option><option value="28">西藏</option><option value="29">新疆</option><option value="30">云南</option><option value="31">浙江</option><option value="32">重庆</option><option value="33">香港</option><option value="34">澳门</option><option value="35">台湾</option>
+	
+	</select>
     <label for="select2">市</label>
     <select name="select2" id="select2" onchange="selectArea(this,3)">
         <option value='_NULL_'>请选择...</option>
     </select>
     <label for="select3">区</label>
-    <select name="select3" id="select3" onchange="saveArea()">
+    <select name="select3" id="select3">
         <option value='_NULL_'>请选择...</option>
     </select>
 </fieldset>
--->
+
 <script type="text/javascript">
 function selectArea(e,n){
-	if('_NULL_' == $(e).val()){
-		// 如果是空的话，将下一级清空
-		$('#select'+n).text('');
-		$html = "<option value='_NULL_'>请选择...</option>";
-		$('#select'+n).append($html);
-		$('#select'+n).selectmenu('refresh', true);
-		n++;
-		if($('#select'+n)){
-			$('#select'+n).text('');
-			$html = "<option value='_NULL_'>请选择...</option>";
-			$('#select'+n).append($html);
-			$('#select'+n).selectmenu('refresh', true);
-		}
-	}else{
-		$.ajax({
-			  url: "/mcart-ajax_getregions.html",
-			  cache: false,
-			  type: "POST",
-			  data:{'parent_id':$(e).val(),'num':n},
-			  success: function(html){
-				  $('#select'+n).text('');
-				  $('#select'+n).append(html);
-				  $('#select'+n).selectmenu('refresh', true);
-				  n++;
-				  if($('#select'+n)){
-					  $('#select'+n).text('');
-					  $html = "<option value='_NULL_'>请选择...</option>";
-					  $('#select'+n).append($html);
-					  $('#select'+n).selectmenu('refresh', true);
-				  }
+	var 
+	alter("我来了");
+}
 
-			  }
-	    });
-	}
-}
-function saveArea(){
-	var _select1 = $('#select1 option:selected').text();
-	var _select2 = $('#select2 option:selected').text();
-	var _select3 = $('#select3 option:selected').text();
-	var $str = "mainland:"+_select1+"/"+_select2+"/"+_select3+":"+$('#select3 option:selected').val();
-	$('#shipping_area').val($str);
-}
 </script>
 
 

@@ -100,11 +100,6 @@ function addtocart(shopid){
     	    var resultfromphp = xhr.responseText;
 			//alert("添加成功");
       		var objData = jQuery.parseJSON(resultfromphp);
-		     //document.location.href="gencart.html";
-			 //alert (objData.rsgmsg);
-			 //document.getElementById('alertmsg').innerHTML=objData.rsgmsg;
-			  // alert(document.getElementById('alertmsg'));
-			//$('#addtocart_dialog').show();
 			document.location.href="gencart.html";
 		}
 	};
@@ -117,8 +112,9 @@ $(document).ready(function() {
 });
 
 function postfind(){
-var goodsname=document.getElementById('goodsname').value;
-document.location.href="findgoods.html?goodsname="+encodeURIComponent(goodsname);
+	var goodsname=document.getElementById('goodsname').value;
+	$.jStorage.set('finggoodsname', goodsname, {TTL: 28800000}); 
+	document.location.href="findgoods.html?goodsname="+encodeURIComponent(goodsname);
 }
 </script>
 	

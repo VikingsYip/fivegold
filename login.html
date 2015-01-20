@@ -56,11 +56,9 @@ function login(){
 	xhr.onreadystatechange = function() {
   		 if (xhr.readyState==4 && xhr.status==200){
     		var resultfromphp = xhr.responseText;
-    		//alert (resultfromphp);
     		var objData = jQuery.parseJSON(resultfromphp);
     		$('#logout_dialog').show();
-    		    document.getElementById('alertmsg').innerHTML=objData.rsgmsg;
-    		//alert (document.getElementById('alertmsg').innerHTML);
+			document.getElementById('alertmsg').innerHTML=objData.rsgmsg;
     		if (objData.rsgcode=='000'){
          	      $.jStorage.set('userid', objData.userid , {TTL: 28800000}); 
          	      $.jStorage.set('username', username , {TTL: 28800000});
@@ -99,9 +97,7 @@ function confirm(){
 		<!-- content -->
 		<div class="user-ui-content">
 		<div class="container">
-		<ul id="login_bar" class="nav nav-tabs">
-		  <li id="tab1" class="active"><a href="javascript:void(0);">普通登陆</a></li>
-		</ul>
+
 		<section id="tab_form_1" class="login_form" style="padding-top:20px;">
 			<form data-role="form" action="#" method="post">
 			<section class="form-group">
@@ -120,7 +116,6 @@ function confirm(){
         <section style="text-align: center;line-height:50px;">
 			 <a href="reguser.html" tabindex="5" data-ajax="false">注册</a>
 		</section>
-
 		</div>
 		</div>
 		<!-- /content -->
@@ -137,9 +132,9 @@ function confirm(){
       <div class="modal-footer">
         <button id="login" type="button" class="btn btn-info" onclick="confirm()" data-dismiss="modal">确认</button>
       </div>
-    </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
+    </div>
+  </div>
+</div>
 <!-- /page -->
 </body>
 </html>

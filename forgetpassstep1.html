@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>登陆/注册</title>
+<meta name="keywords" content="">
+<meta name="description" content="">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta content="telephone=no" name="format-detection" />
+<link rel="stylesheet" href="css/bootstrap.min.css">
+<script src="css/jquery-1.10.2.min.js"></script>
+<script src="css/bootstrap.min.js"></script>
+<link href="css/my.mobile-1.0.min.css" rel="stylesheet" type="text/css" media="screen, projection" /><style>
+.public_section .href_info {
+	position: relative;
+	padding-right: 30px;
+}
+
+.public_section .href_info:after {
+	-webkit-transform: rotate(-45deg);
+	-moz-transform: rotate(-45deg);
+	-ms-transform: rotate(-45deg);
+	-o-transform: rotate(-45deg);
+	margin-top: -5px;
+	right: 15px;
+	content: '';
+	position: absolute;
+	width: 6px;
+	height: 6px;
+	top: 50%;
+	border-color: #444;
+	border-style: solid;
+	border-width: 0 2px 2px 0;
+}
+.user-ui-header{
+	font-size:20px;
+	color:#ffffff;
+	background:#b3a99f;
+	line-height:50px;
+	text-align: center;
+}
+.user-ui-header .left-bar{
+	float:left;
+	padding-left:10px;
+	color:#ffffff;
+}
+
+.user-ui-header .right-bar{
+	float:right;
+	padding-right:10px;
+	color:#ffffff;
+}
+.user-ui-content{
+	padding:10px 10px;
+}
+.user-ui-footer {
+	font-size: 20px;
+	color: #ffffff;
+	background: #b3a99f;
+	line-height: 50px;
+	text-align: center;
+}
+</style>
+</head>
+<body><!-- page -->
+<div class="user-ui-page">
+<!-- header -->
+<div class="user-ui-header clearfix">
+	<a class="left-bar" href="go.html">
+		<span class="glyphicon glyphicon-home"></span>
+	</a>
+	<span >步骤2：填写手机验证码</span>
+	<a class="right-bar" href="gencart.html">
+		<span class="glyphicon glyphicon-shopping-cart"></span>
+	</a>
+</div>
+<!-- /header -->
+		<!-- content -->
+		<div class="user-ui-content">
+		<section class="login_form">
+			<section class="panel" id="send_mobile"  style="padding-top:20px;">
+				<form data-role="form" action="forgetpassstep2.html" method="post">
+			    	<input type="hidden" name="find_type" value="mobile">
+			    	<section class="form-group">
+				    <label><span>手机：137*****140&nbsp;&nbsp;</span><a class="btn btn-info btn-xs" href="javascript:void(0)" onclick="get_mb_code()">获取验证码</a></label>
+				    <input class="form-control" type="text" name="mobile_code" id="mobile_code" placeholder="请输入验证码">
+				    </section>
+				    <section class="form-group">
+				    <input class="btn btn-info btn-block" type="submit" value="下一步" data-icon="check" data-theme="f">
+				    </section>
+			    </form>
+			   </section>
+        </section>
+        <script type="text/javascript">
+
+        function get_mb_code(){
+			$num = '13725275140';
+			if($num.length==11){
+				jQuery.ajax({
+					url: '#',
+					type:'POST',
+					data:{'mobile_number':$num},
+					success: function(r){
+						if(r){
+							alert('验证码已发送');
+						}else{
+							alert('验证码发送失败');
+						}
+			        }
+				});
+			}else{
+				alert('请输入正确的手机号码');
+			}
+
+		}
+        </script>
+		</div>
+		<!-- /content -->
+</div>
+
+</body>
+</html>

@@ -13,32 +13,60 @@
 <link href="css/base.mobile.css" rel="stylesheet" type="text/css" media="screen, projection" />
 <link href="fivegold.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="fivegold.js"></script>
-    <!-- load the json2 library (required for jstorage use) -->
 <script src="json2.js"></script>
-<!-- load the jstorage library -->
 <script src="jstorage.js"></script>
 
-    <script>	
+<script type="text/javascript">
+$(document).ready(function() {
+	$('#submit_btn').click(function(){
+		$passwd = $('#passwd').val();
+		$passwd_re = $('#passwd_re').val();
+		if($passwd != $passwd_re){
+			myshow('两次输入的密码不一致');
+		}else{
+			$('#submit_form').submit();
+		}
+	});
+});
+
+$(document).ready(function() {
+	document.getElementById('chpwderror_dialog').style.display ='none';
+	document.getElementById('chpwd_dialog').style.display ='none';
+});
+
+
+function myshow(msg){
+	document.getElementById('alertmsg').innerHTML=msg;
+	document.getElementById('chpwderror_dialog').style.display ='block';
+	setTimeout("document.getElementById('chpwderror_dialog').style.display ='none'",1000)
+}
+</script>
+
+<script>	
 function changepwd() {
-    //var userid = request('catid');
- var userid = $.jStorage.get('userid');
-     if (userid==null)
-        document.location.href="login.html"
-	//alert(catid);
+	var userid = $.jStorage.get('userid');
+	if (userid==null) { document.location.href="login.html" ; }
 	var xhr = new XMLHttpRequest();
 	var new_pwd=$('#passwd').val();	
 	var old_pwd=$('#old_pwd').val();		
 	xhr.open("GET", "http://www.zgltong.com/api/mobile.php?act=changepwd&mode=test&user_id="+userid+"&new_pwd="+new_pwd+"&old_pwd="+old_pwd, true);
 	xhr.onreadystatechange = function() {
   		 if (xhr.readyState==4 && xhr.status==200){
-    		var resultfromphp = xhr.responseText;			
+			var resultfromphp = xhr.responseText;			
 			var html ='';
-      		  var objData = jQuery.parseJSON(resultfromphp);
-		 alert(objData.rsgmsg);
+			var objData = jQuery.parseJSON(resultfromphp);
+			document.getElementById('alertmsg').innerHTML=objData.rsgmsg;
+			if (objData.rsgcode=='000'){
+         	     document.getElementById('alertmsg2').innerHTML=objData.rsgmsg;
+				 document.getElementById('chpwd_dialog').style.display ='block';
+    		}
+			else {
+				document.getElementById('chpwderror_dialog').style.display ='block';
+				setTimeout("document.getElementById('chpwderror_dialog').style.display ='none'",1000);
+			}
   		}
 	};
 	xhr.send();
-	
 }
 </script>
 </head>
@@ -110,19 +138,35 @@ function changepwd() {
 		  </div>
 		</nav>
 </div>
-	<!-- /footer -->
+
+<div id="chpwderror_dialog" style="z-index:9999;position:fixed;left:100px;top:150px;width:150px;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">提示</h4>
+      </div>
+      <div class="modal-body" id="alertmsg"></div>
+    </div>
+  </div>
 </div>
-<script type="text/javascript">
-$(document).ready(function() {
-	$('#submit_btn').click(function(){
-		$passwd = $('#passwd').val();
-		$passwd_re = $('#passwd_re').val();
-		if($passwd != $passwd_re){
-			alert('2次输入的密码不一致');
-		}else{
-			$('#submit_form').submit();
-		}
-	});
-});
-</script></body>
+
+<div id="chpwd_dialog" style="z-index:9999;position:fixed;left:100px;top:150px;width:150px;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">提示</h4>
+      </div>
+      <div class="modal-body" id="alertmsg2"></div>
+	  <div class="modal-footer">
+        <button id="reg_btn" type="button" class="btn btn-info" onclick="location.href='usercenter.html'">确认</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- /footer -->
+</div>
+</body>
 </html>

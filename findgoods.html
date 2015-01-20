@@ -7,7 +7,7 @@
 	<meta name="keywords" content="">
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-	<meta content="telephone=no" name="format-detection" />
+	<meta content="telephone=no" name="format-detection"/>
 	<link rel="stylesheet" href="css/bootstrap.min.css">
 	<script src="css/jquery-1.10.2.min.js"></script>
 	<script src="css/jquery.cookie.js"></script>
@@ -15,16 +15,17 @@
 	<link href="css/base.mobile.css" rel="stylesheet" type="text/css" media="screen, projection" />
 	<link href="fivegold.css" rel="stylesheet" type="text/css"/>
 	<script type="text/javascript" src="iscroll-lite.js"></script>
-     <script type="text/javascript" src="iscroll.js"></script>
-<script type="text/javascript" src="fivegold.js"></script>
-<script src="json2.js"></script>
-<script src="jstorage.js"></script>
+	<script type="text/javascript" src="iscroll.js"></script>
+	<script type="text/javascript" src="fivegold.js"></script>
+	<script src="json2.js"></script>
+	<script src="jstorage.js"></script>
 <script>	
-    function reorder(ordertype){
-		makeList(ordertype);
+function reorder(ordertype){
+	makeList(ordertype);
  }
  
 var sorting = 1;
+
 function makeList(ordertype) {
     var goodsname = request('goodsname');
 	if (ordertype==null) {  ordertype="colligate"; }
@@ -41,7 +42,7 @@ function makeList(ordertype) {
 			var html ='';
       		var objData = jQuery.parseJSON(resultfromphp);
 			$.each(objData.listallcat, function (index, term) {
-			html+="<div class=\"center-block goods-item\"><a class=\"href_info\" href=\"goods.html?goodsid="+term.goods_id+"\"><img style=\"margin-right:5px;\" class=\"img-rounded pull-left\" src=\""+term.goods_img+"\" alt=\""+term.goods_name+"\" width=\"80\" height=\"80\"/><div class=\"clearfix\"><p class=\"product_name\">"+term.goods_name+"</p><p class=\"product_name\">所有的参数</p><div class=\"product_price clearfix\" style=\"line-height:30px;\"><p style=\"font-size:16px;float:left;color:red\">￥"+term.shop_price+"</p></div></div></a></div>";
+			html+="<div class=\"center-block goods-item\"><a class=\"href_info\" href=\"goods.html?goodsid="+term.goods_id+"\"><img style=\"margin-right:5px;\" class=\"img-rounded pull-left\" src=\""+term.goods_img+"\" alt=\""+term.goods_name+"\" width=\"80\" height=\"80\"/><div class=\"clearfix\"><p class=\"product_name\">"+term.goods_name+"</p><p class=\"product_name\"></p><div class=\"product_price clearfix\" style=\"line-height:30px;\"><p style=\"font-size:16px;float:left;color:red\">￥"+term.shop_price+"</p></div></div></a></div>";
 			});
 			//alert(html);
 			if (html=='')
@@ -52,15 +53,18 @@ function makeList(ordertype) {
   		}
 	};
 	xhr.send();
-	
 }
 
 $(document).ready(function() {
 	//alert('hi');
+	var finggoodsname = $.jStorage.get('finggoodsname');
+	document.getElementById('goodsname').value=finggoodsname;
 	makeList('colligate');
 });
+
 function postfind(){
 	var goodsname=document.getElementById('goodsname').value;
+	$.jStorage.set('finggoodsname', goodsname, {TTL: 28800000}); 
 	document.location.href="findgoods.html?goodsname="+encodeURIComponent(goodsname);
 }
 </script>

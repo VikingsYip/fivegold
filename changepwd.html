@@ -11,18 +11,30 @@
 <link rel="stylesheet" href="css/bootstrap.min.css">
 <script src="css/jquery-1.10.2.min.js"></script>
 <script src="css/bootstrap.min.js"></script>
-<link href="css/base.mobile.css" rel="stylesheet" type="text/css" media="screen, projection" /></head>
-<body><!-- page -->
+<link href="css/base.mobile.css" rel="stylesheet" type="text/css" media="screen, projection" />
+<script type="text/javascript">
+$(document).ready(function() {
+	$('#submit_btn').click(function(){
+		$passwd = $('#passwd').val();
+		$passwd_re = $('#passwd_re').val();
+		if($passwd != $passwd_re){
+			alert('2次输入的密码不一致');
+		}else{
+			$('#submit_form').submit();
+		}
+	});
+});
+</script>
+</head>
+<body>
+<!-- page -->
 <div class="user-ui-page">
 	<!-- header -->
     <div class="user-ui-header clearfix">
-	     <a class="left-bar" href="#">
+	     <a class="left-bar" href="usercenter.html">
 	     	<span class="glyphicon glyphicon-chevron-left"></span>
 	     </a>
 	     <span >修改密码</span>
-	     <a class="right-bar" href="#">
-	     	<span class="glyphicon glyphicon-shopping-cart"></span>
-	     </a>
     </div>
 	<!-- /header -->
 	<!-- content -->
@@ -53,21 +65,10 @@
 	<div class="container">
 		<div class="copyright">© 轮通之家 </div>
 	</div>
-</footer>	<!-- /footer -->
+</footer>	
+<!-- /footer -->
 </div>
-<script type="text/javascript">
-$(document).ready(function() {
-	$('#submit_btn').click(function(){
-		$passwd = $('#passwd').val();
-		$passwd_re = $('#passwd_re').val();
-		if($passwd != $passwd_re){
-			alert('2次输入的密码不一致');
-		}else{
-			$('#submit_form').submit();
-		}
-	});
-});
-</script>
+
 <!-- /page -->
 </body>
 </html>

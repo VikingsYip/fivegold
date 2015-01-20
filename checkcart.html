@@ -18,9 +18,10 @@
 <script src="css/jquery-1.10.2.min.js"></script>
 <script src="css/bootstrap.min.js"></script>
 
-<script type="text/javascript" src="css/jquery.mobile-1.3.2.js"></script>
+<!--<script type="text/javascript" src="css/jquery.mobile-1.3.2.js"></script>-->
 
 <!--
+
 <script type="text/javascript" src="css/jquery.nivo.slider-3.2.js"></script>
 <script type="text/javascript" src="css/swipe-2.0.js"></script>
 <script type="text/javascript" src="css/jquery.lazyload.js"></script>
@@ -73,7 +74,7 @@ function genOrder(){
 				$.each(objData.cart_goods, function (index, term) {
 			 	html +='<li class=\"clearfix\" style=\"margin-bottom:5px;\"><a class=\"pro_img\" href=\"#\" data-ajax=\"false\">';
 	            html+='<img alt=\"'+term.goods_name+'\" width=\"60\" height=\"60\" src=\"'+term.goods_thumb+'\"></a>';
-	            html+='<p class=\"pro_name\">'+term.goods_name+'（）</p>';
+	            html+='<p class=\"pro_name\">'+term.goods_name+'</p>';
 	            html+='<p class=\"pro_price\">共'+term.goods_number+'件<span>￥'+term.goods_price+'</span></p></li>';
               
 			 	});
@@ -230,7 +231,8 @@ $(document).ready(function() {
 			<section class="clearfix"><label>应付金额</label><span id='totalprice'><span></section>
         </section>
         <section style="padding:5px 5px;">
-	    	<input type="button" value="提交订单" data-theme="f" onclick="addOrder()">
+	    	<!--<input type="button" value="提交订单" data-theme="f" onclick="addOrder()">-->
+			<a class="btn btn-danger btn-block" href="javascript:addOrder()" data-theme="f">提交订单</a>
 	    </section>
 	    </form>
 	</div>
