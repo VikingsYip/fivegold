@@ -85,7 +85,7 @@ function newaddress(){
 	var district=m;//区
     address=myaddress+address;
 	var posturl ="http://www.zgltong.com/api/mobile.php?act=newaddress&user_id="+userid+"&country=0&province="+province+"&city="+city+"&district="+district+"&address="+address+"&consignee="+consignee+"&email="+email+"&tel="+tel+"&mobile="+mobile+"&zipcode="+zipcode+"&mode=test&default="+defaultval;
-	alert(posturl);
+	//alert(posturl);
 	var xhr = new XMLHttpRequest();
 	xhr.open("GET", posturl, true);
 	xhr.onreadystatechange = function() {
