@@ -34,7 +34,7 @@ function makeList() {
 			$.each(term.goods_attr, function (index, att) 							{
 			html+="("+att.name+"："+att.value+")";
 			});
-			html+="</p>单价："+term.goods_price+"\<br/><div class=\"form-group\"><button  class=\"btn btn-info mybtn\" id=\"minus_product\"   onClick=\"update_minus('"+term.rec_id+"')\">减</button ><input class=\"form-control\" style=\"width:70px;display:inline-block;\" type=\"text\" id=\""+term.rec_id+"\" min=\"1\"  value=\""+term.goods_number+"\"><a class=\"btn btn-info mybtn\" id=\"plus_product\"   onClick=\"update_plus('"+term.rec_id+"')\">加</a></div><section><a href=\"javascript:delcart("+term.rec_id+")\" data-ajax=\"false\" data-rel=\"popup\" data-position-to=\"window\" data-transition=\"pop\" data-icon=\"delete\" data-theme=\"d\">删除</a></section></td></tr></table>";
+			html+="</p>单价："+term.goods_price+"\<br/><div class=\"form-group\"><button  class=\"btn btn-info mybtn\" id=\"minus_product\"   onClick=\"update_minus('"+term.rec_id+"')\">减</button ><input class=\"form-control\" style=\"width:70px;display:inline-block;\" type=\"number\"  onkeyup=\"this.value=this.value.replace(/\D/g,'')\" id=\""+term.rec_id+"\" min=\"1\"  value=\""+term.goods_number+"\"><a class=\"btn btn-info mybtn\" id=\"plus_product\"   onClick=\"update_plus('"+term.rec_id+"')\">加</a></div><section><a href=\"javascript:delcart("+term.rec_id+")\" data-ajax=\"false\" data-rel=\"popup\" data-position-to=\"window\" data-transition=\"pop\" data-icon=\"delete\" data-theme=\"d\">删除</a></section></td></tr></table>";
 			});
 			document.getElementById('catHtml').innerHTML=html;
 			if ( html=="")  {  document.location.href="nocart.html" ; }
@@ -239,6 +239,14 @@ height:100%;
 	font-size:15px;
 }
 
+input[type='number'] {  
+        -moz-appearance:textfield;  
+    }  
+    input[type=number]::-webkit-inner-spin-button,  
+    input[type=number]::-webkit-outer-spin-button {  
+        -webkit-appearance: none;  
+        margin: 0;  
+    }  
 </style>
 
 <div class="modal fade" id="empty_dialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

@@ -102,7 +102,7 @@ function addtocart(){
 			var objData = jQuery.parseJSON(resultfromphp);
 			document.getElementById('alertmsg').innerHTML=objData.rsgmsg;
 			document.getElementById('addtocart_dialog').style.display ='block';
-			setTimeout("document.getElementById('addtocart_dialog').style.display ='none'",800)
+			setTimeout("document.getElementById('addtocart_dialog').style.display ='none'",800);
 		}
 	};
 	xhr.send();
@@ -231,6 +231,15 @@ function gooddesc(){
 	margin: 5px 0;
 }
 
+input[type='number'] {  
+        -moz-appearance:textfield;  
+    }  
+    input[type=number]::-webkit-inner-spin-button,  
+    input[type=number]::-webkit-outer-spin-button {  
+        -webkit-appearance: none;  
+        margin: 0;  
+    }  
+
 </style>
 <div class="swiper-container">
 	<div class="swiper-wrapper">
@@ -255,7 +264,7 @@ function gooddesc(){
 	<div class="m_10_my" style="padding:0 0px;">
 		<div class="form-group">
 			<input class="btn btn-default mybtn" id="minus_product" type="button" onClick="update_minus()" value="减">
-			<input class="form-control" name="goods[num]" data-role="none" style="width:60px;display:inline-block;" type="text" id="goods_num" min="1" value="1">
+			<input type="number" class="form-control" name="goods[num]" data-role="none" style="width:60px;display:inline-block;font-size:13px;" id="goods_num" min="1" value="1" onkeyup="this.value=this.value.replace(/\D/g,'')"  >
 			<input class="btn btn-default mybtn" id="plus_product"  type="button" onClick="update_plus()" value="加">
 		</div>
 		<div class="alert alert-danger m_5_0" id="tishi" style="display:none;"></div>
@@ -298,12 +307,9 @@ function gooddesc(){
         <h4 class="modal-title" id="myModalLabel">提示</h4>
       </div>
       <div class="modal-body" id="alertmsg"></div>
-      <!--<div class="modal-footer">
-        <button id="login" type="button" class="btn btn-info" onclick="javascript:void(0)" data-dismiss="modal">确认</button>
-      </div>-->
-    </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
+    </div>
+  </div>
+</div>
 
 <div id="collect_dialog" style="z-index:9999;position:fixed;left:100px;top:150px">
   <div class="modal-dialog">
@@ -316,8 +322,8 @@ function gooddesc(){
       <!--<div class="modal-footer">
         <button id="login" type="button" class="btn btn-info" onclick="javascript:void(0)" data-dismiss="modal">确认</button>
       </div>-->
-    </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
+    </div>
+  </div>
+</div>
 </body>
 </html>

@@ -2,7 +2,7 @@
 <html>
 <head>
 	<meta charset="utf-8" />
-	<title>轮通之家</title>
+	<title>轮通惠</title>
 	<meta name="keywords" content="">
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -27,19 +27,18 @@ function makelist(){
     		var resultfromphp = xhr.responseText;
     		//alert (resultfromphp);
     		var objData = jQuery.parseJSON(resultfromphp);
-    		
-    		 $.each(objData.listallcat, function (index, term) {	
-    		       //alert(term.ad_code);
-    		       var html = "";
-    		       html+=	"<div class=\"swiper-slide\" >";
-			html+="<a href=\"#\">";
-			html+="<img src=\""+term.ad_code+"\" width=\"100%\" >";
-			html+="</a>";
-			html+="</div>";
-			  document.getElementById('showimage').innerHTML+=html;
-			   });
+			$.each(objData.listallcat, function (index, term) {	
+				//alert(term.ad_code);
+				var html = "";
+				html+=	"<div class=\"swiper-slide\" >";
+				html+="<a href=\"#\">";
+				html+="<img src=\""+term.ad_code+"\" width=\"100%\" >";
+				html+="</a>";
+				html+="</div>";
+				document.getElementById('showimage').innerHTML+=html;
+			});
 			
-		// 首交轮播图初始化
+	// 首交轮播图初始化
 	 var $total_img = $('.total_img .swiper-container').swiper({
 		loop: true,
 		autoplay: 2000
@@ -68,7 +67,7 @@ function makehomegoods(){
     		var resultfromphp = xhr.responseText;
     		//alert (resultfromphp);
     		var objData = jQuery.parseJSON(resultfromphp);
-    		 var html = "";
+			var html = "";
     		html+="<table class=\"table table-bordered\">";	
 		    var i =0;
     		 $.each(objData.listallcat, function (index, term) {	
@@ -127,7 +126,7 @@ function postfind(){
 			<div class="col-xs-12" style="padding:0 0;">
 				<form id="search_form" action="javascript:postfind()" method="get">
 					<div class="col-xs-99">
-					<img alt="轮通之家" src="img/logo.png" width="45px" border="0">
+					<img alt="轮通惠" src="img/logo.png" width="45px" border="0">
 				</div>
 				<div class="input-group col-xs-100">
 				      <input type="text" class="form-control" name="scontent"  id="goodsname" value="" placeholder="搜索商品">
@@ -310,7 +309,7 @@ $(function(){
 				<a class="links" href="#"></a>
 			</div>
 			<div class="swiper-slide page-6 hide">
-				<h3 class="slogan bounceIn">轮通之家</h3>
+				<h3 class="slogan bounceIn">轮通惠</h3>
 				<a class="backhome" href="javascript:void(0);">去首页</a>
 			</div>
 		</div>

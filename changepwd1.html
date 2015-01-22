@@ -57,6 +57,7 @@ function changepwd() {
 			var objData = jQuery.parseJSON(resultfromphp);
 			document.getElementById('alertmsg').innerHTML=objData.rsgmsg;
 			if (objData.rsgcode=='000'){
+				 $.jStorage.set('password', new_pwd , {TTL: 28800000}); 
          	     document.getElementById('alertmsg2').innerHTML=objData.rsgmsg;
 				 document.getElementById('chpwd_dialog').style.display ='block';
     		}
@@ -96,11 +97,11 @@ function changepwd() {
 				   </div>
 				   <div class="form-group">
 					    <label for="passwd">新密码：</label>
-					    <input type="password" class="form-control" id="passwd" name="passwd" placeholder="请输入新密码">
+					    <input type="password" class="form-control" id="passwd" name="passwd" placeholder="请输入新密码" maxlength="32">
 				   </div>
 				   <div class="form-group">
 					    <label for="passwd_re">再次输入：</label>
-					    <input type="password" class="form-control" id="passwd_re" name="passwd_re" placeholder="请再次输入新密码">
+					    <input type="password" class="form-control" id="passwd_re" name="passwd_re" placeholder="请再次输入新密码" maxlength="32">
 				   </div>
 				</form>
 				<div class="form-group">

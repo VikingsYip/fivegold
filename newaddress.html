@@ -44,6 +44,14 @@
 	padding-right:10px;
 	color:#ffffff;
 }
+input[type='number'] {  
+        -moz-appearance:textfield;  
+    }  
+    input[type=number]::-webkit-inner-spin-button,  
+    input[type=number]::-webkit-outer-spin-button {  
+        -webkit-appearance: none;  
+        margin: 0;  
+    }  
 }
 </style>
 
@@ -55,13 +63,29 @@ function newaddress(){
 	var tel=0;
 	var mobile=encodeURIComponent(document.getElementById('delivery_mobile').value);	
 	var defaultval = encodeURIComponent(document.getElementById("delivery_default").value);
-	var zipcode=encodeURIComponent(document.getElementById('delivery_zip').value);						
+	var zipcode=encodeURIComponent(document.getElementById('delivery_zip').value);
 	//var zipcode = 0;
 	var userid = $.jStorage.get('userid');
 	if (userid==null) {  document.location.href="login.html"; }
-	var posturl ="http://www.zgltong.com/api/mobile.php?act=newaddress&user_id="+userid+"&country=0&province=0&city=0&district=0&address="+address+"&consignee="+consignee+"&email="+email+"&tel="+tel+"&mobile="+mobile+"&zipcode="+zipcode+"&mode=test&default="+defaultval;
-     //alert(posturl);
-     //posturl=encodeURIComponent(posturl);
+	var myaddress="";
+	var obj = document.getElementById('select1');     
+	var m=obj.options[obj.selectedIndex].value;
+	var mm=obj.options[obj.selectedIndex].text;
+	var province=m;//省
+	myaddress+=mm;
+	obj = document.getElementById('select2');     
+	m=obj.options[obj.selectedIndex].value;
+	mm=obj.options[obj.selectedIndex].text;
+	myaddress+=mm;
+	var city=m;//市
+	obj = document.getElementById('select3');     
+	m=obj.options[obj.selectedIndex].value;
+	mm=obj.options[obj.selectedIndex].text;
+	myaddress+=mm;
+	var district=m;//区
+    address=myaddress+address;
+	var posturl ="http://www.zgltong.com/api/mobile.php?act=newaddress&user_id="+userid+"&country=0&province="+province+"&city="+city+"&district="+district+"&address="+address+"&consignee="+consignee+"&email="+email+"&tel="+tel+"&mobile="+mobile+"&zipcode="+zipcode+"&mode=test&default="+defaultval;
+	alert(posturl);
 	var xhr = new XMLHttpRequest();
 	xhr.open("GET", posturl, true);
 	xhr.onreadystatechange = function() {
@@ -135,9 +159,6 @@ function makeselect3List(sid) {
 
 $(document).ready(function() {
 	 makeselect1List();
-	 makeselect2List("6");
-	 makeselect3List("78");
-
 });
 
 </script>
@@ -155,68 +176,80 @@ $(document).ready(function() {
 
 <!-- content -->
 <div data-role="content">
-		<form id="new_address_form" action="javascript:newaddress();" method="post">
-		<section class="checkout_section address_section">
-	         <section>
-	             <label for="delivery_name" ><span style="color:red">*</span>收货人：</label>
-	             <input type="text" name="delivery[ship_name]" id="delivery_name"  maxlength="5" placeholder="请输入收货人">
-			     <label for="delivery_mobile"><span style="color:red">*</span>手机：</label>
-			     <input type="number" data-clear-btn="true" name="delivery[ship_mobile]" id="delivery_mobile"  maxlength="11" placeholder="请输入手机号码">
-			     <input id="shipping_area" type="hidden" name="delivery[ship_area]">
-<fieldset data-role="controlgroup" data-mini="true">
-    <legend><span style="color:red">*</span>收货地区：</legend>
-    <label for="select1">省</label>
-    <select name="select1" id="select1" onchange="selectArea(this,2)">
-		<option value="_NULL_">请选择...</option><option value="2">北京</option><option value="3">安徽</option><option value="4">福建</option><option value="5">甘肃</option><option value="6">广东</option><option value="7">广西</option><option value="8">贵州</option><option value="9">海南</option><option value="10">河北</option><option value="11">河南</option><option value="12">黑龙江</option><option value="13">湖北</option><option value="14">湖南</option><option value="15">吉林</option><option value="16">江苏</option><option value="17">江西</option><option value="18">辽宁</option><option value="19">内蒙古</option><option value="20">宁夏</option><option value="21">青海</option><option value="22">山东</option><option value="23">山西</option><option value="24">陕西</option><option value="25">上海</option><option value="26">四川</option><option value="27">天津</option><option value="28">西藏</option><option value="29">新疆</option><option value="30">云南</option><option value="31">浙江</option><option value="32">重庆</option><option value="33">香港</option><option value="34">澳门</option><option value="35">台湾</option>
-	
-	</select>
-    <label for="select2">市</label>
-    <select name="select2" id="select2" onchange="selectArea(this,3)">
-        <option value='_NULL_'>请选择...</option>
-    </select>
-    <label for="select3">区</label>
-    <select name="select3" id="select3">
-        <option value='_NULL_'>请选择...</option>
-    </select>
-</fieldset>
-
-<script type="text/javascript">
-function selectArea(e,n){
-	var 
-	alter("我来了");
-}
-
-</script>
-
-
-
-			     <label for="delivery_address"><span style="color:red">*</span>收货地址：</label>
-			     <input type="text" data-clear-btn="true" name="delivery[ship_addr_area]" id="delivery_address"  maxlength="30" placeholder="请输入详细地址">
-			     <label for="delivery_zip">邮编：</label>
-			     <input type="number" data-clear-btn="true" name="delivery[ship_zip]" id="delivery_zip"  maxlength="6" placeholder="请输入邮编">
-				 <label for="delivery_day">是否为默认地址：</label>
-			     <select id="delivery_default" >
-                       <option value="1">默认地址</option>
-                       <option value="0">非默认地址</option>
-	         </section>
-	    </section>
-		<br/><br/>
-	    <section>
-	    <input id="save_address_btn" data-role="botton" type="button" value="保存地址">
-	    </section>
-		</form>
-	</div>
+<form id="new_address_form" action="javascript:newaddress();" method="post">
+	<section class="checkout_section address_section">
+		<section>
+			<label for="delivery_name" ><span style="color:red">*</span>收货人：</label>
+			<input type="text" name="delivery[ship_name]" id="delivery_name"  maxlength="5" placeholder="请输入收货人">
+			<label for="delivery_mobile"><span style="color:red">*</span>手机：</label>
+			<input type="text" data-clear-btn="true" name="delivery_mobile" id="delivery_mobile"  maxlength="11" onkeyup="this.value=this.value.replace(/\D/g,'')" placeholder="请输入手机号码">
+			<input id="shipping_area" type="hidden" name="delivery[ship_area]">
+			<fieldset data-role="controlgroup" data-mini="true">
+				<legend><span style="color:red">*</span>收货地区：</legend>
+				<label for="select1">省</label>
+				<select name="select1" id="select1" onchange="selectArea(this,2)"><option value='_NULL_'>请选择...</option></select>
+				<label for="select2">市</label>
+				<select name="select2" id="select2" onchange="selectArea(this,3)"><option value='_NULL_'>请选择...</option></select>
+				<label for="select3">区</label>
+				<select name="select3" id="select3"><option value='_NULL_'>请选择...</option></select>
+			</fieldset>
+			<label for="delivery_address"><span style="color:red">*</span>收货地址：</label>
+			<input type="text" data-clear-btn="true" name="delivery[ship_addr_area]" id="delivery_address"  maxlength="30" placeholder="请输入详细地址">
+			<label for="delivery_zip">邮编：</label>
+			<input type="text" data-clear-btn="true" name="delivery[ship_zip]" id="delivery_zip"  maxlength="6" onkeyup="this.value=this.value.replace(/\D/g,'')" placeholder="请输入邮编">
+			<label for="delivery_day">是否为默认地址：</label>
+			<select id="delivery_default" >
+				<option value="1">默认地址</option>
+				<option value="0">非默认地址</option>
+		</section>
+	</section>
+	<br/><br/>
+	<section><input id="save_address_btn" data-role="botton" type="button" value="保存地址"></section>
+</form>
+</div>
 <!-- /content -->
 
 <!-- footer -->
 <div data-role="footer" data-position="inline" data-theme="d">
     <footer class="user-ui-footer">
 	<div class="container">
-		<div class="copyright">轮通之路</div>
+		<div class="copyright">轮通惠</div>
 	</div>
 </footer>    
 </div>
 <!-- /footer -->
+</div><!-- /page -->
+<!--提示页面--开始-->
+<div id="mydialog" style="z-index:9999;position:fixed;left:100px;top:150px;width:150px;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">提示</h4>
+      </div>
+      <div class="modal-body" id="alertmsg"></div>
+    </div>
+  </div>
+</div><!--提示页面--end-->
+
+<script type="text/javascript">
+function selectArea(e,n){
+	var obj;
+	var m;
+	if (n==2)
+	{
+		obj = document.getElementById('select1');     
+		m=obj.options[obj.selectedIndex].value;
+		makeselect2List(m);
+	}
+	if (n==3)
+	{
+		obj = document.getElementById('select2');   
+		m=obj.options[obj.selectedIndex].value;
+		makeselect3List(m);
+	}
+}
+</script>
 
 <script type="text/javascript">
 
@@ -245,19 +278,5 @@ function myshow(msg){
 		$('#new_address_form').submit();
 	});
 	</script>
-</div>
-
-<div id="mydialog" style="z-index:9999;position:fixed;left:100px;top:150px;width:150px;">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title" id="myModalLabel">提示</h4>
-      </div>
-      <div class="modal-body" id="alertmsg"></div>
-    </div>
-  </div>
-</div>
-<!-- /page -->
 </body>
 </html>

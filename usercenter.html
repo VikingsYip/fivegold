@@ -19,14 +19,14 @@
 
 <script>
 $(document).ready(function() {
- var userid = $.jStorage.get('userid');
-     if (userid==null)
+	var userid = $.jStorage.get('userid');
+	if (userid==null)
         document.location.href="login.html";
-     else
+	else
      	 makelist();
 });
-function makelist(){
 
+function makelist(){
 	var username=$.jStorage.get('username');
 	var password=$.jStorage.get('password');					
     var posturl ="http://www.zgltong.com/api/mobile.php?act=loginusr&mode=test&user="+username+"&password="+password;
@@ -41,7 +41,27 @@ function makelist(){
     		if (objData.rsgcode=='000'){
     		    document.getElementById('username').innerHTML=objData.user_name;
     		    document.getElementById('rankname').innerHTML=objData.rank_name;
-    		    document.getElementById('mobilephone').innerHTML=objData.mobile_phone;
+    		    
+				$.jStorage.set('mobilephone', objData.mobile_phone , {TTL: 28800000}); 
+				
+				var sverification=objData.verification;
+				
+				var sphone="";
+
+				var ss=objData.mobile_phone;
+				
+				sphone+=ss.substr(0,3)+"****"+ss.substr(7,4)+"&nbsp;&nbsp;&nbsp;";
+
+				if (sverification=="1")
+				{
+					sphone+="<span style=\"color: red;\">已验证</span>"
+				}
+				else
+				{
+					sphone+="<a href=\"checktel.html\"  rel=\"external\"  class=\"btn btn-danger\">验证手机</a>"
+				}
+
+				document.getElementById('mobilephone').innerHTML=sphone;
     		}
 		 }
 	};
@@ -76,7 +96,7 @@ function makelist(){
 	    			</td>
 	    		</tr>-->
 	    		<tr>
-	    			<th style="width:40%">用户名：</th>
+	    			<th style="width:30%">用户名：</th>
 	    			<td><div id="username"></div></td>
 	    		</tr>
 	    		<tr>
@@ -84,8 +104,8 @@ function makelist(){
 	    			<td><div id="rankname"></div></td>
 	    		</tr>
 	    		<tr>
-	    			<th>手机号：<a class="btn btn-danger" href="javascript:void(0)" id="valid_mobile_btn" mobile="137*****140" data-toggle="modal" data-target="#mb_verify_modal">验证手机</a></th>
-	    			<td><div id="mobilephone">13725275140</div></td>
+	    			<th>手机号：</th>
+	    			<td><div id="mobilephone"></div></td>
 	    		</tr>
 			</table>
 		    <div class="list-group public_section">
@@ -161,6 +181,7 @@ $('#logout_btn').click(function(){
 	$.jStorage.set('userid', null , {TTL: 28800000}); 
     $.jStorage.set('username', null , {TTL: 28800000}); 
     $.jStorage.set('password', null , {TTL: 28800000}); 
+	$.jStorage.set('mobilephone', null , {TTL: 28800000}); 
     location.href='login.html';
 });
 

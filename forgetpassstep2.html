@@ -10,6 +10,8 @@
 <link rel="stylesheet" href="css/bootstrap.min.css">
 <script src="css/jquery-1.10.2.min.js"></script>
 <script src="css/bootstrap.min.js"></script>
+<script src="json2.js"></script>
+<script src="jstorage.js"></script>
 <link href="css/my.mobile-1.0.min.css" rel="stylesheet" type="text/css" media="screen, projection" /><style>
 .public_section .href_info {
 	position: relative;
@@ -64,49 +66,129 @@
 </head>
 <body><!-- page -->
 <div class="user-ui-page">
+
 <!-- header -->
 <div class="user-ui-header clearfix">
-	<a class="left-bar" href="go.html">
-		<span class="glyphicon glyphicon-home"></span>
+	<a class="left-bar" href="forgetpassstep1.html">
+		<span class="glyphicon glyphicon-chevron-left"></span>
 	</a>
-	<span >步骤3：修改新密码</span>
-	<a class="right-bar" href="gencart.html">
-		<span class="glyphicon glyphicon-shopping-cart"></span>
-	</a>
+	<span>步骤3：修改新密码</span>
 </div>
 <!-- /header -->
-		<!-- content -->
-		<div class="user-ui-content">
-		<section class="login_form">
-			<section class="panel" id="send_mobile"  style="padding-top:20px;">
-				<form data-role="form" action="forgetpassstep2.html" method="post">
-			    	<input type="hidden" name="find_type" value="mobile">
-			    	<section class="form-group">
-				    <label>用户名：</label> 
-					<input class="form-control" type="text" name="usename" id="usename" value="fionyxia" readonly>
-					</section>
-					<section class="form-group">
-				    <label>输入新密码</label>
-				    <input class="form-control" type="text" name="newpwd" id="newpwd" placeholder="请输入新密码">
-				    </section>
-					<section class="form-group">
-				    <label>再次输入新密码</label>
-				    <input class="form-control" type="text" name="newpwd1" id="newpwd1" placeholder="请再次输入新密码">
-				    </section>
-				    <section class="form-group">
-				    <input class="btn btn-info btn-block" type="submit" value="完成" data-icon="check" data-theme="f">
-				    </section>
-			    </form>
-			   </section>
-        </section>
 
-<script type="text/javascript">
-
-</script>
-
+<!-- content -->
+<div class="user-ui-content">
+	<section class="login_form">
+		<section class="panel" id="send_mobile"  style="padding-top:20px;">
+		<!--<form data-role="form" action="forgetpassstep2.html" method="post">-->
+			<input type="hidden" name="find_type" value="mobile">
+			<section class="form-group">
+				<label>用户名：</label> 
+				<input class="form-control" type="text" name="usename" id="usename" value="" readonly>
+			</section>
+			<section class="form-group">
+				<label>输入新密码</label>
+				<input class="form-control" type="password" name="newpwd" id="newpwd" placeholder="请输入新密码">
+			</section>
+			<section class="form-group">
+				<label>再次输入新密码</label>
+				<input class="form-control" type="password" name="newpwd1" id="newpwd1" placeholder="请再次输入新密码">
+			</section>
+			<section class="form-group">
+				<!--<a class="btn btn-info btn-block">修改密码完成!</a>-->
+				<a class="btn btn-info btn-block" onclick="gofinish()">修改密码完成!</a>
+			</section>
+		<!--</form>-->
+		</section>
+	</section>
 </div>
 <!-- /content -->
+
+<!--弹出窗口--begin-->
+<div id="finisth_dialog" style="z-index:9999;position:fixed;left:100px;top:150px;width:150px;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">提示</h4>
+      </div>
+      <div class="modal-body" id="alertmsg"></div>
+    </div>
+  </div>
 </div>
 
+<div id="chpwd_dialog" style="z-index:9999;position:fixed;left:100px;top:150px;width:150px;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">提示</h4>
+      </div>
+      <div class="modal-body" id="alertmsg2"></div>
+	  <div class="modal-footer">
+        <button id="reg_btn" type="button" class="btn btn-info" onclick="location.href='usercenter.html'">确认</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--弹出窗口-end-->
+
+
+
+</div><!---->
+
+<script type="text/javascript">
+$(document).ready(function() {
+	document.getElementById('finisth_dialog').style.display ='none';
+	document.getElementById('chpwd_dialog').style.display ='none';
+	var susername = $.jStorage.get('username');
+	document.getElementById('usename').value=susername;
+});
+
+function gofinish(){
+	var mynewpwd=encodeURIComponent(document.getElementById('newpwd').value);
+	var mynewpwd1=encodeURIComponent(document.getElementById('newpwd1').value);
+	var newpwdlength=$('#newpwd').val().length;
+	if (newpwdlength<6)
+	{
+		document.getElementById('alertmsg').innerHTML="密码小于6位!请重新输入:";
+		document.getElementById('finisth_dialog').style.display ='block';
+		setTimeout("document.getElementById('finisth_dialog').style.display ='none'",800);
+	}
+	
+	if (mynewpwd==mynewpwd1)
+	{
+		var suserid = $.jStorage.get('userid');
+		var posturl ="http://www.zgltong.com/api/mobile.php?act=editpassword&mode=test&user_id="+suserid+"&new_pwd="+mynewpwd;
+		//alert(posturl);
+		var xhr = new XMLHttpRequest();
+		xhr.open("GET", posturl, true);
+		xhr.onreadystatechange = function() {
+			 if (xhr.readyState==4 && xhr.status==200){
+				var resultfromphp = xhr.responseText;
+				var objData = jQuery.parseJSON(resultfromphp);
+				document.getElementById('alertmsg').innerHTML=objData.rsgmsg;
+				if (objData.rsgcode=='000'){
+					$.jStorage.set('password', mynewpwd , {TTL: 28800000}); 
+					document.getElementById('alertmsg2').innerHTML="密码修改成功!";
+					document.getElementById('chpwd_dialog').style.display ='block';
+				}
+				else {
+					document.getElementById('alertmsg').innerHTML="密码修改失败！请联系管理员!";
+					setTimeout("document.getElementById('finisth_dialog').style.display ='none'",800);
+				}
+			 }
+		};
+		xhr.send();
+
+	}else{
+		document.getElementById('alertmsg').innerHTML="两次输入的密码不一样";
+		document.getElementById('finisth_dialog').style.display ='block';
+		setTimeout("document.getElementById('finisth_dialog').style.display ='none'",800);
+	}
+}
+
+</script>
 </body>
 </html>

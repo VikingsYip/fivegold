@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>会员中心</title>
+<meta name="keywords" content="">
+<meta name="description" content="">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta content="telephone=no" name="format-detection" />
+<link rel="stylesheet" href="css/bootstrap.min.css">
+<script src="css/jquery-1.10.2.min.js"></script>
+<script src="css/bootstrap.min.js"></script>
+<link href="css/base.mobile.css" rel="stylesheet" type="text/css" media="screen, projection" /></head>
+<body><!-- page -->
+<div class="user-ui-page">
+	<!-- header -->
+	<div class="user-ui-header clearfix">
+		<a class="left-bar" href="usercenter.html"> <span class="glyphicon glyphicon-chevron-left"></span></a> 
+		<span>个人资料</span>
+	</div>
+	<!-- /header -->
+	<!-- content -->
+	<div class="user-ui-content">
+		<div class="container padding-none">
+		<div>
+		    <form class="form-inline" id="edit_form" action="mmember-saveMemberInfo.html" method="post">
+			<table class="table table-striped">
+				<tr>
+					<td><label>帐号：</label></td>
+					<td>
+						<div class="form-group">
+							<p style="width:150px;display: inline-block;">fionyxia</p>
+						</div>
+					</td>
+				</tr>
+				<!--<tr>
+					<td><label>邮箱：</label></td>
+					<td>
+						<div id="meminfo_email">
+							<p style="width:150px;display: inline-block;">f******a@qq.com	</p>
+							<p><a class="btn btn-danger" href="javascript:void(0)" id="modify_email_btn" email="f******a@qq.com" data-toggle="modal" data-target="#email_edit">修改</a>
+							</p>
+						</div>
+					</td>
+	    		</tr>-->
+				<tr>
+					<td><label>原手机号：</label></td>
+					<td>
+						<div id="meminfo_mobile">
+						<p id="member_mobile" style="width:150px;display: inline-block;">137*****140	</p>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td><label>新手机号：</label></td>
+					<td>
+						<div id="meminfo_mobile">
+						<div class="form-group">
+							<input id="contact_mobile" type='text' class="form-control" name='contact[phone][mobile]' value='' vtype='mobile' />
+						</div>
+							<div id="contact_mobile_flag" class="form-group" style="display:none;">
+								<span style="color:green;font-size:24px;" class="glyphicon glyphicon-ok-circle"></span>
+							</div>
+						</div>
+					</td>
+				</tr></table>
+				</form>
+		<p class="user-text-center ">
+		<a id="edit_meminfo_btn" class="btn btn-info btn-block" href="javascript:void(0)">保存修改</a></p>
+		</div>
+	</div>
+	</div>
+	<!-- /content -->
+<!-- footer -->
+	<footer class="user-ui-footer">
+	<div class="container">
+		<div class="copyright">轮通惠</div>
+	</div>
+</footer>	<!-- /footer -->
+</div>
+<div class="modal fade" id="mb_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">修改手机号码</h4>
+      </div>
+      <div class="modal-body">
+      	  <div id="alert_success" class="alert alert-success" style="display:none;">成功！</div>
+      	  <div id="alert_danger" class="alert alert-danger" style="display:none;">系统错误！</div>
+          <div class="form-group">
+		    <label for="mbnumber">新手机号码：</label>
+		    <input type="text" class="form-control" id="mbnumber" name="mbnumber" placeholder="请输入手机号">
+		  </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+        <button id="upd_btn" type="button" class="btn btn-info">保存修改</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div>
+<div class="modal fade" id="mb_verify_modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">验证手机号码</h4>
+      </div>
+      <div class="modal-body">
+      	  <div id="code_alert_success" class="alert alert-success" style="display:none;">成功！</div>
+      	  <div id="code_alert_danger" class="alert alert-danger" style="display:none;">系统错误！</div>
+          <div class="form-group">
+		    <label for="mbcode">验证码：<a id="get_code_btn" class="btn btn-danger btn-xs" href="javascript:void(0)">获取验证码</a></label>
+		    <input type="text" class="form-control" id="mbcode" name="mbcode" placeholder="请输入验证码">
+		  </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+        <button id="v_code_btn" type="button" class="btn btn-info">验证</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div>
+<div class="modal fade" id="email_edit" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">修改邮箱</h4>
+      </div>
+      <div class="modal-body">
+        <form role="form" action="#" method="post">
+          <div id="email_alert_success" class="alert alert-success" style="display:none;">成功！</div>
+      	  <div id="email_alert_danger" class="alert alert-danger" style="display:none;">系统错误！</div>
+		  <div class="form-group">
+		    <label for="mbemail">新邮箱地址：</label>
+		    <input type="email" class="form-control" id="mbemail" name="mbemail" placeholder="请输入新的邮箱">
+		  </div>
+		</form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+        <button id="email_edit_btn" type="button" class="btn btn-info">保存修改</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div>
+<div class="modal fade" id="email_binding" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">验证邮箱</h4>
+      </div>
+      <div class="modal-body">
+      	<div id="email_send_success" class="alert alert-success" style="display:none;">成功！</div>
+        <div id="email_send_danger" class="alert alert-danger" style="display:none;">系统错误！</div>
+      	<p>您好，我们将向您之前账户中填写的邮箱地址中发送一封验证邮件，请注意查收并及时验证。</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+        <button id="email_send_btn" type="button" class="btn btn-info">确认发送验证邮件</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div>
+<div class="modal fade" id="error_dialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">错误提示</h4>
+      </div>
+      <div class="modal-body">
+      	<p id="error_msg" class="alert alert-danger"></p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div>
+<script type="text/javascript">
+$('#edit_meminfo_btn').click(function(){
+	$('#edit_form').submit();
+});
+$('#contact_mobile').blur(function(){
+	$contact_mobile =  $('#contact_mobile').val();
+	if($contact_mobile.length==11){
+		$.ajax({
+			url: 'mmember-ajaxVerifyMemberMobile.html',
+			type: "POST",
+			data: {'mbnumber':$contact_mobile},
+			dataType:'json',
+			success: function(res){
+				if(res.result){
+					$('#contact_mobile_flag').show();
+				}else{
+					$('#error_msg').html(res.resmsg);
+					$('#error_dialog').modal('show');
+				}
+			}
+		});
+	}else if($contact_mobile.length>1){
+		$('#error_msg').html('请正确填写手机号');
+		$('#error_dialog').modal('show');
+	}
+});
+$('#mbnumber').blur(function(){
+	$mbnumberval =  $('#mbnumber').val();
+	if($mbnumberval.length==11){
+		$.ajax({
+			url: 'mmember-ajaxVerifyMemberMobile.html',
+			type: "POST",
+			data: {'mbnumber':$mbnumberval},
+			dataType:'json',
+			success: function(res){
+				if(res.result){
+					$('#alert_danger').hide();
+					$('#alert_success').html(res.resmsg);
+					$('#alert_success').show();
+				}else{
+					$('#alert_success').hide();
+					$('#alert_danger').html(res.resmsg);
+					$('#alert_danger').show();
+				}
+			}
+		});
+	}else{
+		$('#alert_success').hide();
+		$('#alert_danger').html('请正确填写您的手机号码！');
+		$('#alert_danger').show();
+	}
+});
+$('#upd_btn').click(function(){
+	$mbnumberval =  $('#mbnumber').val();
+		if($mbnumberval.length==11){
+			$.ajax({
+				url: 'mmember-ajaxUpdateMemberMobile.html',
+				type: "POST",
+				data: {'mbnumber':$mbnumberval},
+				dataType:'json',
+				success: function(res){
+					if(res.result){
+						// 刷新当前页
+						location.href="mmember-meminfo.html";
+					}else{
+						$('#alert_success').hide();
+						$('#alert_danger').html(res.resmsg);
+						$('#alert_danger').show();
+					}
+				}
+		});
+	}else{
+		$('#alert_success').hide();
+		$('#alert_danger').html('请正确填写您的手机号码！');
+		$('#alert_danger').show();
+	}
+});
+$('#get_code_btn').click(function(){
+	$.ajax({
+		url: 'mmember-ajaxGetMemberMobileCode.html',
+		type:'POST',
+		dataType:'json',
+		success: function(res){
+			if(res.result){
+				$('#code_alert_danger').hide();
+				$('#code_alert_success').html(res.resmsg);
+				$('#code_alert_success').show();
+				$('#get_code_btn').hide();
+			}else{
+				$('#code_alert_success').hide();
+				$('#code_alert_danger').html(res.resmsg);
+				$('#code_alert_danger').show();
+			}
+        }
+	});
+});
+$('#v_code_btn').click(function(){
+	$mbcodeval = $('#mbcode').val();
+	if($mbcodeval.length == 6){
+		$.ajax({
+			url: 'mmember-ajaxBindingMemberMobile.html',
+			type:'POST',
+			data:{'mbcode':$mbcodeval},
+			dataType:'json',
+			success: function(res){
+				if(res.result){
+					// 刷新当前页
+					location.href="mmember-meminfo.html";
+				}else{
+					$('#code_alert_success').hide();
+					$('#code_alert_danger').html(res.resmsg);
+					$('#code_alert_danger').show();
+				}
+	        }
+		});
+	}else{
+		$('#code_alert_success').hide();
+		$('#code_alert_danger').html('请正确填写验证码');
+		$('#code_alert_danger').show();
+	}
+});
+$('#mbemail').blur(function(){
+	$mbemail =  $('#mbemail').val();
+	if($mbemail!=null&&$mbemail!=''){
+		var $emailPat = /\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/;
+        var $matchArray = $mbemail.match($emailPat);
+        if ($matchArray == null) {
+        	$('#email_alert_success').hide();
+    		$('#email_alert_danger').html('邮箱格式不正确！');
+    		$('#email_alert_danger').show();
+        }else{
+        	$.ajax({
+    			url: 'mmember-ajaxVerifyMemberEmail.html',
+    			type: "POST",
+    			data: {'mbemail':$mbemail},
+    			dataType:'json',
+    			success: function(res){
+    				if(res.result){
+    					$('#email_alert_danger').hide();
+    					$('#email_alert_success').html(res.resmsg);
+    					$('#email_alert_success').show();
+    				}else{
+    					$('#email_alert_success').hide();
+    					$('#email_alert_danger').html(res.resmsg);
+    					$('#email_alert_danger').show();
+    				}
+    			}
+    		});
+        }
+	}else{
+		$('#email_alert_success').hide();
+		$('#email_alert_danger').html('请正确填写您的邮箱地址！');
+		$('#email_alert_danger').show();
+	}
+});
+$('#email_edit_btn').click(function(){
+	$mbemail =  $('#mbemail').val();
+	if($mbemail!=null&&$mbemail!=''){
+		var $emailPat = /\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*/;
+        var $matchArray = $mbemail.match($emailPat);
+        if ($matchArray == null) {
+        	$('#email_alert_success').hide();
+    		$('#email_alert_danger').html('邮箱格式不正确！');
+    		$('#email_alert_danger').show();
+        }else{
+        	$.ajax({
+    			url: 'mmember-ajaxUpdateMemberEmail.html',
+    			type: "POST",
+    			data: {'mbemail':$mbemail},
+    			dataType:'json',
+    			success: function(res){
+    				if(res.result){
+						// 刷新页面
+						location.href="mmember-meminfo.html";
+    				}else{
+    					$('#email_alert_success').hide();
+    					$('#email_alert_danger').html(res.resmsg);
+    					$('#email_alert_danger').show();
+    				}
+    			}
+    		});
+        }
+	}else{
+		$('#email_alert_success').hide();
+		$('#email_alert_danger').html('请正确填写您的邮箱地址！');
+		$('#email_alert_danger').show();
+	}
+});
+$('#email_send_btn').click(function(){
+	$.ajax({
+		url:'mmember-ajaxSendMemberEmail.html',
+		type: "POST",
+		dataType:'json',
+		success: function(res){
+			$('#email_send_danger').hide();
+			$('#email_send_success').html(res.resmsg);
+			$('#email_send_success').show();
+		}
+	});
+});
+</script>
+
+
+
+</body>
+</html>
