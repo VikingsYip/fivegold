@@ -1,3 +1,8 @@
+
+
+
+
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,7 +12,7 @@
 	<meta name="description" content="全部分类">
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 	<meta content="telephone=no" name="format-detection" />
-	<link href="css/jquery.mobile.my.css" rel="stylesheet" type="text/css" media="screen, projection" />
+	
 	<link rel="stylesheet" href="css/bootstrap.min.css">
 	<script src="css/jquery-1.10.2.min.js"></script>
 	<script src="css/jquery.cookie.js"></script>
@@ -15,8 +20,7 @@
 	<link href="css/base.mobile.css" rel="stylesheet" type="text/css" media="screen, projection" />	
 	<script src="json2.js"></script>
 	<script src="jstorage.js"></script>
-<script>
-
+<script>	
 function makeList() {
 	var xhr = new XMLHttpRequest();
 	xhr.open("GET", "http://www.zgltong.com/api/mobile.php?act=listallcat", true);
@@ -43,7 +47,7 @@ function makeList() {
 				}
 				else 
 				{
-					html+="<li class=\"cur1\" id=\""+term.all_id+"\"><a href=\"javascript:makeseList("+term.all_id+")\">"+term.all_name+"</li>";
+					html+="<li id=\""+term.all_id+"\"><a href=\"javascript:makeseList("+term.all_id+")\">"+term.all_name+"</li>";
 				}
 				
 			});
@@ -55,6 +59,7 @@ function makeList() {
 }
 
 function makeseList(mycatid) {
+
 	$.jStorage.set('mycatid', mycatid , {TTL: 28800000}); //取当前的点击的catid
 	var xhr = new XMLHttpRequest();
 	xhr.open("GET", "http://www.zgltong.com/api/mobile.php?act=listallcats&id="+mycatid, true);
@@ -66,15 +71,23 @@ function makeseList(mycatid) {
 			var objData = jQuery.parseJSON(resultfromphp);
 			$.each(objData, function (index, term) {
 				shtml+="<dt style=\"width:100%\" id=\"areaT_628_18588\">"+term.name+"</dt>";//第一级三个div开始
+
 				shtml+="<dd style=\"width:100%\">"//<dd>开始 
+					
 				$.each(term.cat_id, function (index, secondterm) {
+			
 					shtml+="<a href=\"listview.html?catid="+secondterm.id+"\"><img src=\""+secondterm.img+"\" ><span class=\"tit\">"+secondterm.name+"</span></a>";
+					
 			   });//second
+			   
 			   shtml+="</dd>";//<dd>结束
+
 			});
 			//alert(shtml);
 			document.getElementById('category2').innerHTML=shtml;
 			$.jStorage.set('finggoodsname', "", {TTL: 28800000}); 
+
+
   		}
 	};
 	xhr.send();
@@ -87,7 +100,7 @@ function postfind(){
 }
 
 $(document).ready(function() {
-	 makeList();
+	 //makeList();
 	 var ss = $.jStorage.get('mycatid');
 	 if (ss==null)  {makeseList(1); } else {makeseList(ss);}
 });
@@ -95,34 +108,24 @@ $(document).ready(function() {
 
 <script type="text/javascript">
 
-window.onload=function(){
-    var current=document.getElementsByTagName('li')[0];
-    document.body.onclick=function(e){
-        var a=e||window.event;
-        var src=a.srcElement||a.target;
-        src=src.parentNode;
-        if(src.tagName.toLowerCase()=='li'){
-			
-            if(current){
-				//去掉选择的Li    
-				$('#category1 li').removeClass('cur');
-				//重新指定要显示的Li
-				$(this).addClass('cur');
-            }else{
-				//去掉选择的Li    
-				$('#category1 li').removeClass('cur');
-				//重新指定要显示的Li
-				$(this).addClass('cur');			
-			}
-            current=src;
-            src.className='cur';
-            if(a.preventDefault){
-            }else{
-                a.returnValue=false;
-            }
-        }
-    }
-}
+$(document).ready(function(){ 
+
+  //得到LI
+
+
+$('#category1 li').live( 'click', function() { 
+
+		alert("我来了");
+
+		$('#category1 li').removeClass('cur');
+
+		$(this).addClass('cur')
+
+	});
+  
+});
+
+
 </script>
 
 </head>
@@ -157,16 +160,14 @@ window.onload=function(){
 	dt,dd{float:left;}
 </style>
 
-	<div id="yScroll1" class="yScroll1"  style="padding-top:10px;z-index:200;overflow:hidden;position:fixed"><!--yScroll-1-->
-			<ul class="category1" id="category1">
-				<!--<li id="" class="cur">家用电器</li>--> 
-			</ul>
+	<div id="yScroll1" class="yScroll1"  style="padding-top:10px;z-index:200;overflow:hidden;position: fixed "><!--yScroll-1-->
+				<ul class="category1" id="category1"><li class="cur1" id="1"><a href="javascript:makeseList(1)">轮胎</a></li><li class="cur" id="7"><a href="javascript:makeseList(7)">自行车配件</a></li><li class="cur1" id="14"><a href="javascript:makeseList(14)">测试</a></li><li class="cur1" id="26"><a href="javascript:makeseList(26)">电动车配件</a></li><li class="cur1" id="27"><a href="javascript:makeseList(27)">自行车</a></li><li class="cur1" id="28"><a href="javascript:makeseList(28)">电动车</a></li><li class="cur1" id="129"><a href="javascript:makeseList(129)">骑行装备</a></li></ul>
 		</div><!--yScroll-1-->
 <div class="dp-main"><!-- /dp-main -->
 	<div class="wx_wrap"><!-- /wx_wrap -->
 	
 
-		<div id="yScroll2" style="overflow: hidden; top: 45px; left: 76px; " ><!--yScroll-2-->
+		<div id="yScroll2" style="overflow: hidden; top: 45px; left: 76px; "><!--yScroll-2-->
 			<div style="padding-top:10px;padding-left:100px">
 				<dl class="category2" id="category2"> <!--category2--beign-->
 					<!--<dt>第一个分类</dt><dd><a target="#"><img src="img/logo.png"><span class="tit">彩电</span></a></dd>-->

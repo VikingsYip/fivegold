@@ -54,6 +54,8 @@ function makeList() {
 					document.getElementById('shopimg').src=term.bought_goods[currentimage].img_url;			 
 				}
 				document.getElementById('goods_name').innerHTML=term.goods_name;
+				document.getElementById('guige').innerHTML=term.guige;
+
 				//document.getElementById('goods_sn').innerHTML=term.goods_sn;
 				//document.getElementById('goods_brief').innerHTML=term.goods_brief;
 				var html = "";
@@ -221,7 +223,7 @@ function gooddesc(){
 	width:60px;
 	background:#5BC0DE;
 }
-#goods_name{
+#goods_name,#guige{
 	font-size:20px;
 }
 #shop_price{
@@ -259,12 +261,13 @@ input[type='number'] {
 	<table>
 		<tr><td><span id="goods_name"></span></td></tr>
 		<tr><td class="spec_list"><span id="specification"></span></td></tr>
+		<tr><td class="spec_list"><span id="guige"></span></td></tr>
 		<tr><td><span id="shop_price" style="color:#b10000;"></span></td></tr>
 	</table>
 	<div class="m_10_my" style="padding:0 0px;">
 		<div class="form-group">
 			<input class="btn btn-default mybtn" id="minus_product" type="button" onClick="update_minus()" value="减">
-			<input type="number" class="form-control" name="goods[num]" data-role="none" style="width:60px;display:inline-block;font-size:13px;" id="goods_num" min="1" value="1" onkeyup="this.value=this.value.replace(/\D/g,'')"  >
+			<input type="number" class="form-control" name="goods[num]" data-role="none" style="width:60px;display:inline-block;font-size:18px;" id="goods_num" min="1" value="1" onkeyup="this.value=this.value.replace(/\D/g,'')"  >
 			<input class="btn btn-default mybtn" id="plus_product"  type="button" onClick="update_plus()" value="加">
 		</div>
 		<div class="alert alert-danger m_5_0" id="tishi" style="display:none;"></div>

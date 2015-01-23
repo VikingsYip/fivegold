@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta content="telephone=no" name="format-detection" />
 <link href="css/jquery.mobile-1.3.2.css" rel="stylesheet" type="text/css" media="screen, projection" />
-<!--<link href="css/jquery.mobile.my.css" rel="stylesheet" type="text/css" media="screen, projection" />-->
+<link href="css/jquery.mobile.my.css" rel="stylesheet" type="text/css" media="screen, projection" />
 <link href="css/my.mobile-1.0.css" rel="stylesheet" type="text/css" media="screen, projection" />
 <link rel="stylesheet" href="css/bootstrap.min.css">
 <script type="text/javascript" src="css/jquery-1.10.2.js"></script>
@@ -94,7 +94,7 @@ function newaddress(){
     		//alert (resultfromphp);
     		var objData = jQuery.parseJSON(resultfromphp);
     		//alert (objData.rsgmsg);
-    		document.location.href="myaddress.html";
+    		document.location.href="checkout_myaddress.html";
 		 }
 	};
 	xhr.send();
@@ -165,14 +165,16 @@ $(document).ready(function() {
 </head>
 <body>
 <div data-role="page" id="cart" data-title="我的订单">
-	<!-- header -->
+
+<!-- header -->
     <div class="user-ui-header clearfix" id="header">
 	     <a class="left-bar" href="javascript:history.go(-1);">
+		 <!--<a class="left-bar" href="checkout_myaddress.html">-->
 	     	<span class="navbar-brand glyphicon glyphicon-chevron-left"></span>
 	     </a>
 	     <span>新增收货地址</span>
     </div>
-    <!-- /header -->
+<!-- /header -->
 
 <!-- content -->
 <div data-role="content">
@@ -197,13 +199,11 @@ $(document).ready(function() {
 			<input type="text" data-clear-btn="true" name="delivery[ship_addr_area]" id="delivery_address"  maxlength="30" placeholder="请输入详细地址">
 			<label for="delivery_zip">邮编：</label>
 			<input type="text" data-clear-btn="true" name="delivery[ship_zip]" id="delivery_zip"  maxlength="6" onkeyup="this.value=this.value.replace(/\D/g,'')" placeholder="请输入邮编">
-			<!--
-			<label for="delivery_day">是否为默认地址：</label>
+			<!--<label for="delivery_day">是否为默认地址：</label>
 			<select id="delivery_default" >
 				<option value="1">默认地址</option>
 				<option value="0">非默认地址</option>
-			</select>
-			-->
+			</select>-->
 		</section>
 	</section>
 	<section><input id="save_address_btn" data-role="botton" type="button" value="保存地址"></section>

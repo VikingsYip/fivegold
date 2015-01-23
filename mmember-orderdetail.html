@@ -42,14 +42,13 @@ function genOrder(){
 		     
 		    html ='';
 			
-			var pay_id=objData.payment_list[0].pay_id;
+			var pay_id=objData.order.pay_id;
 			if (pay_id==1)
 			{
 				html+='<p>付款方式：支付宝</p>';
 			}else{
 				html+='<p>付款方式：货到付款</p>';
 			}
-
 		    html+='<p>商品金额：￥'+objData.order.formated_goods_amount+'</p>';
 		    html+='<p>运费金额：￥'+objData.order.formated_shipping_fee+'</p>';		    
 		    html+='<p>应付金额：￥'+objData.order.formated_total_fee+'</p>';
