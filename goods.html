@@ -241,7 +241,12 @@ input[type='number'] {
         -webkit-appearance: none;  
         margin: 0;  
     }  
-
+.myheight{
+	height:10px;
+}
+.myinput{
+	padding-top:2px;
+}
 </style>
 <div class="swiper-container">
 	<div class="swiper-wrapper">
@@ -266,15 +271,15 @@ input[type='number'] {
 	</table>
 	<div class="m_10_my" style="padding:0 0px;">
 		<div class="form-group">
-			<input class="btn btn-default mybtn" id="minus_product" type="button" onClick="update_minus()" value="减">
-			<input type="number" class="form-control" name="goods[num]" data-role="none" style="width:60px;display:inline-block;font-size:18px;" id="goods_num" min="1" value="1" onkeyup="this.value=this.value.replace(/\D/g,'')"  >
+			<input class="btn btn-default mybtn" id="minus_product" type="button" onclick="update_minus()" value="减">
+			<input type="number" class="form-control myinput" name="goods_num" data-role="none" style="width:80px;display:inline-block;font-size:18px;" id="goods_num" min="1" value="1" onkeyup="this.value=this.value.replace(/\D/g,'')"  >
 			<input class="btn btn-default mybtn" id="plus_product"  type="button" onClick="update_plus()" value="加">
 		</div>
 		<div class="alert alert-danger m_5_0" id="tishi" style="display:none;"></div>
 		<div class="m_5_0"></div> 
 	</div>
 </div>
-
+<div class="myheight"></div>
 <div class="m_10_0" style="padding:0 10px;">
 	<ul class="list-group">
 		<li class="list-group-item">
