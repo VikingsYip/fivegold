@@ -25,8 +25,7 @@ var currentimage = 0;
 
 function makecartNum() {
 	var userid = $.jStorage.get('userid');
-	if (userid==null)
-        document.location.href="login.html"
+	if (userid==null) {   document.location.href="login.html";}
 	var xhr = new XMLHttpRequest();
 	xhr.open("POST", "http://www.zgltong.com/api/mobile.php?act=buylistcart&user_id="+userid, true);
 	xhr.onreadystatechange = function() {
@@ -54,8 +53,13 @@ function makeList() {
 					document.getElementById('shopimg').src=term.bought_goods[currentimage].img_url;			 
 				}
 				document.getElementById('goods_name').innerHTML=term.goods_name;
-				document.getElementById('guige').innerHTML=term.guige;
-
+				
+				var sguige=term.guige;
+				if (sguige != '')
+				{
+					document.getElementById('guige').innerHTML="规格："+term.guige;
+				}
+				//document.getElementById('guige').innerHTML=term.guige;
 				//document.getElementById('goods_sn').innerHTML=term.goods_sn;
 				//document.getElementById('goods_brief').innerHTML=term.goods_brief;
 				var html = "";
@@ -97,6 +101,7 @@ function addtocart(){
 		var posturl = "http://www.zgltong.com/api/mobile.php?act=addbuycart&goods_id="+shopid+"&number="+goods_num+"&userid="+userid+"&spec="+spec+"&price="+cartprice;	 
 	else
 		var posturl = "http://www.zgltong.com/api/mobile.php?act=addbuycart&goods_id="+shopid+"&number="+goods_num+"&userid="+userid+"&spec="+spec;
+	//alert(posturl);
 	xhr.open("POST", posturl, true);
 	xhr.onreadystatechange = function() {
   		 if (xhr.readyState==4 && xhr.status==200){
@@ -109,7 +114,7 @@ function addtocart(){
 	};
 	xhr.send();
 	window.setTimeout(function(){makecartNum();},800);
-	return true;
+	//return true;
 }
 
 function showNextImage(){
@@ -152,7 +157,7 @@ function collect(){
 		}
 	};
 	xhr.send();
-	return true;
+	//return true;
 }	
 	
 function update_plus(){
@@ -296,11 +301,9 @@ input[type='number'] {
 <div id="dp_footer" class="dp-footer">
 	<nav class="navbar navbar-default navbar-fixed-bottom" role="navigation">
 		<div class="container dp-menu-box">
-			<a class="btn btn-warning" style="width:80px"  href="javascript:collect();">关注</a>
-			<a class="btn btn-danger" style="width:180px"  href="javascript:addtocart();">加入购物车</a>
-			<div class="btn-group">
-				<a class="btn btn-success glyphicon glyphicon-shopping-cart" href="gencart.html"><span id="cartnum">(0)</span></a>
-			</div>
+			<a class="btn btn-warning" style="width:80px"  href="javascript:collect()">关注</a>
+			<a class="btn btn-danger" style="width:150px"  href="javascript:addtocart()">加入购物车</a>
+			<a class="btn btn-success glyphicon glyphicon-shopping-cart" style="width:100px" href="gencart.html"><span id="cartnum">(9999)</span></a>
 		  </div>
 	</nav>
 </div>

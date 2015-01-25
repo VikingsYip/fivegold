@@ -49,7 +49,7 @@ function genOrder(){
 			var objData = jQuery.parseJSON(resultfromphp);
 			if (objData.consignee){
 			if (objData.consignee.length==0){ 
-				document.location.href="newaddress.html";
+				document.location.href="newaddress_order.html";
 			}
 			var html ='';
 			if (objData.consignee.length>0){
@@ -69,7 +69,7 @@ function genOrder(){
 			 	html +='<li class=\"clearfix\" style=\"margin-bottom:5px;\"><a class=\"pro_img\" href=\"#\" data-ajax=\"false\">';
 	            html+='<img alt=\"'+term.goods_name+'\" width=\"60\" height=\"60\" src=\"'+term.goods_thumb+'\"></a>';
 	            html+='<p class=\"pro_name\">'+term.goods_name+'</p>';
-	            html+='<p class=\"pro_price\">共'+term.goods_number+'件<span>￥'+term.goods_price+'</span></p></li>';
+	            html+='<p class=\"pro_price\">共'+term.goods_number+'<span>￥'+term.goods_price+'</span></p></li>';
 			 	});
 			 	html +=' </ul>';
 			 	html +='</section>';          
