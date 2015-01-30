@@ -36,7 +36,12 @@ function makeList() {
 		html+='<td><p>订单编号：'+term.order_sn+'</p><p>订单金额：￥'+term.order_amount+'</p><p>下单日期：'+term.add_time+'</p><p>订单状态：<span style=\"color: red;\">'+term.handler+'</span></p></td>';
 		if (term.pay_name=='1')
 		{
-			html+='<td><p><a href=\"morder.html?orderid='+term.order_id+'\" class=\"btn btn-info\">付款</a></p><p><a href=\"mmember-orderdetail.html?orderid='+term.order_id+'\" class=\"btn btn-info\">查看</a></p></td>';
+			if (term.handler=="已取消")
+			{
+				html+='<td><p><a href=\"mmember-orderdetail.html?orderid='+term.order_id+'\" class=\"btn btn-info\">查看</a></p></td>';
+			}else{
+				html+='<td><p><a href=\"morder.html?orderid='+term.order_id+'\" class=\"btn btn-info\">付款</a></p><p><a href=\"mmember-orderdetail.html?orderid='+term.order_id+'\" class=\"btn btn-info\">查看</a></p></td>';
+			}
 		}
 		else{
 			html+='<td><p></p><p><a href=\"mmember-orderdetail.html?orderid='+term.order_id+'\" class=\"btn btn-info\">查看</a></p></td>';

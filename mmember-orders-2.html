@@ -24,7 +24,7 @@ function makeList() {
          if (userid==null)
         document.location.href="login.html";
 	var xhr = new XMLHttpRequest();
-	xhr.open("GET", "http://www.zgltong.com/api/mobile.php?act=mysalelist&userid="+userid, true);
+	xhr.open("GET", "http://www.zgltong.com/api/mobile.php?act=mysalelist&intro=canc&userid="+userid, true);
 	xhr.onreadystatechange = function() {
   		 if (xhr.readyState==4 && xhr.status==200){
     		var resultfromphp = xhr.responseText;
@@ -36,12 +36,12 @@ function makeList() {
 			$.each(objData.mysalelist, function (index, term) {
 			html+='<tr data-role=\"listview\" class=\"order_list\" data-inset=\"true\" data-divider-theme=\"d\">';
 			html+='<td><p>订单编号：'+term.order_sn+'</p><p>订单金额：￥'+term.order_amount+'</p><p>下单日期：'+term.add_time+'</p><p>订单状态：<span style=\"color: red;\">'+term.handler+'</span></p></td>';
-			html+='<td><p><a href=\"morder.html?orderid='+term.order_id+'\" class=\"btn btn-info\">付款</a></p><p><a href=\"mmember-orderdetail.html?orderid='+term.order_id+'\" class=\"btn btn-info\">查看</a></p></td>';
+			html+='<td><p></p><p><a href=\"mmember-orderdetail.html?orderid='+term.order_id+'\" class=\"btn btn-info\">查看</a></p></td>';
 			html+='</tr>';
-  	    });
-  	    	html+='</table>';
+			});
+			html+='</table>';
 			//alert(html);
-  	    	document.getElementById('listallcat').innerHTML=html;
+			document.getElementById('listallcat').innerHTML=html;
   		}
 	};
 	xhr.send();

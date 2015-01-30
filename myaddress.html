@@ -53,16 +53,9 @@ function makeList() {
 			var html ='';
 	  		if (objData.listallcat.length>0){
 			 $.each(objData.listallcat, function (index, term) {
-				if ( term.default == '1')
-				{
-					html+='<section class=\"receiver checkout_section address_section address_section_on\">';
-				}
-				else 
-				 {
-					html+='<section class=\"receiver checkout_section address_section\">';
-				 }
+				html+='<section class=\"receiver checkout_section address_section\">';
 		        html+='<section class=\"address_info\">';
-			    html+='<section class=\"address_name\">'+term.consignee+'&nbsp;'+term.mobile+'&nbsp;'+term.address_id+'(<a href="javascript:deladdress('+term.address_id+')">删除</a>)</section>';
+			    html+='<section class=\"address_name\">'+term.consignee+'&nbsp;'+term.mobile+'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(<a href="javascript:deladdress('+term.address_id+')">删除</a>)</section>';
 			    html+='<section class=\"address_content\">'+term.address+'</section>';
 		        html+='</section>';
 		        html+='<section class=\"check_address\">';
@@ -118,7 +111,7 @@ $(document).ready(function() {
 <div data-role="page" id="cart" data-title="我的订单">
 	<!-- header -->
     <div class="user-ui-header clearfix" id="header">
-	     <a class="left-bar" href="javascript:history.go(-1);">
+		 <a class="left-bar" data-ajax="false" href="usercenter.html">
 	     	<span class="navbar-brand glyphicon glyphicon-chevron-left"></span>
 	     </a>
 	     <span>新增收货地址</span>

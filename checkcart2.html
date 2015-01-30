@@ -8,7 +8,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta content="telephone=no" name="format-detection" />
 <meta content="telephone=no" name="format-detection" />
-<!--<link href="css/jquery.mobile-1.3.2.css" rel="stylesheet" type="text/css" media="screen, projection" />-->
 <link href="css/jquery.mobile.my.css" rel="stylesheet" type="text/css" media="screen, projection" />
 <link href="css/my.mobile-1.0.css" rel="stylesheet" type="text/css" media="screen, projection" />
 
@@ -16,12 +15,17 @@
 <link rel="stylesheet" href="css/base.mobile.css"  type="text/css" media="screen, projection" />
 <script src="css/jquery-1.10.2.min.js"></script>
 <script src="css/bootstrap.min.js"></script>
+
 <!--<script type="text/javascript" src="css/jquery.mobile-1.3.2.js"></script>-->
+
 <!--
+
 <script type="text/javascript" src="css/jquery.nivo.slider-3.2.js"></script>
 <script type="text/javascript" src="css/swipe-2.0.js"></script>
 <script type="text/javascript" src="css/jquery.lazyload.js"></script>
 -->
+
+
 <link href="fivegold.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="fivegold.js"></script>
 <script src="json2.js"></script>
@@ -49,7 +53,7 @@ function genOrder(){
 			var objData = jQuery.parseJSON(resultfromphp);
 			if (objData.consignee){
 			if (objData.consignee.length==0){ 
-				document.location.href="newaddress_order.html";
+				document.location.href="newaddress.html";
 			}
 			var html ='';
 			if (objData.consignee.length>0){
@@ -69,7 +73,7 @@ function genOrder(){
 			 	html +='<li class=\"clearfix\" style=\"margin-bottom:5px;\"><a class=\"pro_img\" href=\"#\" data-ajax=\"false\">';
 	            html+='<img alt=\"'+term.goods_name+'\" width=\"60\" height=\"60\" src=\"'+term.goods_thumb+'\"></a>';
 	            html+='<p class=\"pro_name\">'+term.goods_name+'</p>';
-	            html+='<p class=\"pro_price\">共'+term.goods_number+'<span>￥'+term.goods_price+'</span></p></li>';
+	            html+='<p class=\"pro_price\">共'+term.goods_number+'件<span>￥'+term.goods_price+'</span></p></li>';
 			 	});
 			 	html +=' </ul>';
 			 	html +='</section>';          
@@ -166,8 +170,7 @@ padding-top:50px;
 <div data-role="page" id="cart" data-title="我的订单">
 <!-- header -->
 <div class="user-ui-header clearfix" >
-	<!--<a class="left-bar" href="javascript:history.go(-1);">-->
-	<a class="left-bar" href="gencart.html">
+	<a class="left-bar" href="javascript:history.go(-1);">
 		<span class="navbar-brand glyphicon glyphicon-chevron-left"></span>
 	</a>
 	<span>订单确认</span>
@@ -246,7 +249,7 @@ $("#address_info").click(function(){
       </div>
       <div class="modal-body">
       		<p>友情提示：</p>
-		<p>亲，定单已锁定，如有变化，请联系客服</p><p> 400-006-8040</p>
+		<p>亲，定单已锁定，如有变化，请联系客服 400-006-8040</p>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
@@ -257,7 +260,7 @@ $("#address_info").click(function(){
 </div><!-- /.modal -->
 
 <script type="text/javascript">
-// 生成订单
+// 注销账户
 $('#genorder_btn').click(function(){
 	addOrder();
 });
