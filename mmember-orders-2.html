@@ -24,7 +24,7 @@ function makeList() {
          if (userid==null)
         document.location.href="login.html";
 	var xhr = new XMLHttpRequest();
-	xhr.open("GET", "http://120.24.209.210/api/mobile.php?act=mysalelist&userid="+userid, true);
+	xhr.open("GET", "http://www.zgltong.com/api/mobile.php?act=mysalelist&intro=canc&userid="+userid, true);
 	xhr.onreadystatechange = function() {
   		 if (xhr.readyState==4 && xhr.status==200){
     		var resultfromphp = xhr.responseText;
@@ -36,12 +36,12 @@ function makeList() {
 			$.each(objData.mysalelist, function (index, term) {
 			html+='<tr data-role=\"listview\" class=\"order_list\" data-inset=\"true\" data-divider-theme=\"d\">';
 			html+='<td><p>订单编号：'+term.order_sn+'</p><p>订单金额：￥'+term.order_amount+'</p><p>下单日期：'+term.add_time+'</p><p>订单状态：<span style=\"color: red;\">'+term.handler+'</span></p></td>';
-			html+='<td><p><a href=\"morder.html?orderid='+term.order_id+'\" class=\"btn btn-info\">付款</a></p><p><a href=\"mmember-orderdetail.html?orderid='+term.order_id+'\" class=\"btn btn-info\">查看</a></p></td>';
+			html+='<td><p></p><p><a href=\"mmember-orderdetail.html?orderid='+term.order_id+'\" class=\"btn btn-info\">查看</a></p></td>';
 			html+='</tr>';
-  	    });
-  	    	html+='</table>';
+			});
+			html+='</table>';
 			//alert(html);
-  	    	document.getElementById('listallcat').innerHTML=html;
+			document.getElementById('listallcat').innerHTML=html;
   		}
 	};
 	xhr.send();
@@ -69,12 +69,22 @@ $(document).ready(function() {
 		<!-- content -->
 		<div class="user-ui-content">
 		<div class="container padding-none">
-
-		<ul id="order_nav_bar" class="nav nav-tabs">
-		      <li id="tab1"><a href="mmember-orders.html">全部</a></li>
-			  <li id="tab3" ><a href="mmember-orders-1.html">待支付</a></li>
-			  <li id="tab2" class="active"><a href="mmember-orders-2.html">已取消</a></li>
-		    </ul>
+<style>
+#mytop1 th {text-align:center;border: 1px solid #ffffff; }
+</style>
+		<div id="mytop1"><table id="order_list" class="table table-striped">
+		<tbody>
+			<tr>
+				<th><a href="mmember-orders.html" >全部</a></th>
+				<th><a href="mmember-orders-1.html" >待支付</a></th>
+				<th><a href="mmember-orders-2.html" style="color:red">已取消</a></th>
+				<th><a href="mmember-orders-3.html">已支付</a></th>
+			</tr>
+			<tr>
+				<td></td><td></td><td></td><td></td>
+			</tr>
+		</tbody>
+		</table></div>
 
 	<div class="panel">
 		<div id="listallcat"></div><!--定单信息-->
@@ -176,7 +186,7 @@ $(document).ready(function() {
 		    	<div class="menu-img glyphicon glyphicon-shopping-cart"></div>
 		    	<div>购物车</div>
 		    </a>
-		    <a class="pull-left menu-btn" href="mmember-orders.html">
+		    <a class="pull-left menu-btn" style="color:red" href="mmember-orders.html">
 		    	<div class="menu-img glyphicon glyphicon-th-list"></div>
 		    	<div>订单</div>
 		    </a>

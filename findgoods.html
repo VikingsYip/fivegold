@@ -3,11 +3,11 @@
 <html>
 <head>
 	<meta charset="utf-8" />
-	<title>轮通之家</title>
+	<title>轮通惠</title>
 	<meta name="keywords" content="">
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-	<meta content="telephone=no" name="format-detection" />
+	<meta content="telephone=no" name="format-detection"/>
 	<link rel="stylesheet" href="css/bootstrap.min.css">
 	<script src="css/jquery-1.10.2.min.js"></script>
 	<script src="css/jquery.cookie.js"></script>
@@ -15,24 +15,22 @@
 	<link href="css/base.mobile.css" rel="stylesheet" type="text/css" media="screen, projection" />
 	<link href="fivegold.css" rel="stylesheet" type="text/css"/>
 	<script type="text/javascript" src="iscroll-lite.js"></script>
-     <script type="text/javascript" src="iscroll.js"></script>
-<script type="text/javascript" src="fivegold.js"></script>
-<script src="json2.js"></script>
-<script src="jstorage.js"></script>
+	<script type="text/javascript" src="iscroll.js"></script>
+	<script type="text/javascript" src="fivegold.js"></script>
+	<script src="json2.js"></script>
+	<script src="jstorage.js"></script>
 <script>	
-    function reorder(ordertype){
-		makeList(ordertype);
+function reorder(ordertype){
+	makeList(ordertype);
  }
  
 var sorting = 1;
+
 function makeList(ordertype) {
     var goodsname = request('goodsname');
-    //goodsname=encodeURIComponent(goodsname);
-	//alert(goodsname);
-	if (ordertype==null)
-	  ordertype="colligate";
+	if (ordertype==null) {  ordertype="colligate"; }
 	var xhr = new XMLHttpRequest();
-	xhr.open("GET", "http://120.24.209.210/api/mobile.php?act=findgoods&goodsname="+goodsname+"&intro="+ordertype+"&sorting="+sorting+"&mode=test", true);
+	xhr.open("GET", "http://www.zgltong.com/api/mobile.php?act=findgoods&goodsname="+goodsname+"&intro="+ordertype+"&sorting="+sorting+"&mode=test", true);
 	if (sorting == 1)
 	    sorting =2;
 	else
@@ -44,7 +42,7 @@ function makeList(ordertype) {
 			var html ='';
       		var objData = jQuery.parseJSON(resultfromphp);
 			$.each(objData.listallcat, function (index, term) {
-			html+="<div class=\"center-block goods-item\"><a class=\"href_info\" href=\"goods.html?goodsid="+term.goods_id+"\"><img style=\"margin-right:5px;\" class=\"img-rounded pull-left\" src=\""+term.goods_img+"\" alt=\""+term.goods_name+"\" width=\"80\" height=\"80\"/><div class=\"clearfix\"><p class=\"product_name\">"+term.goods_name+"</p><p class=\"product_name\">所有的参数</p><div class=\"product_price clearfix\" style=\"line-height:30px;\"><p style=\"font-size:16px;float:left;color:red\">￥"+term.shop_price+"</p></div></div></a></div>";
+			html+="<div class=\"center-block goods-item\"><a class=\"href_info\" href=\"goods.html?goodsid="+term.goods_id+"\"><img style=\"margin-right:5px;\" class=\"img-rounded pull-left\" src=\""+term.goods_img+"\" alt=\""+term.goods_name+"\" width=\"80\" height=\"80\"/><div class=\"clearfix\"><p class=\"product_name\">"+term.goods_name+"</p><p class=\"product_name\"></p><div class=\"product_price clearfix\" style=\"line-height:30px;\"><p style=\"font-size:16px;float:left;color:red\">￥"+term.shop_price+"</p></div></div></a></div>";
 			});
 			//alert(html);
 			if (html=='')
@@ -55,15 +53,18 @@ function makeList(ordertype) {
   		}
 	};
 	xhr.send();
-	
 }
 
 $(document).ready(function() {
 	//alert('hi');
+	var finggoodsname = $.jStorage.get('finggoodsname');
+	document.getElementById('goodsname').value=finggoodsname;
 	makeList('colligate');
 });
+
 function postfind(){
 	var goodsname=document.getElementById('goodsname').value;
+	$.jStorage.set('finggoodsname', goodsname, {TTL: 28800000}); 
 	document.location.href="findgoods.html?goodsname="+encodeURIComponent(goodsname);
 }
 </script>
@@ -76,7 +77,7 @@ function postfind(){
 			<div class="col-xs-12" style="padding:0 0;">
 		<form id="search_form" action="javascript:postfind()" method="get">
 					<div class="col-xs-99">
-					<img alt="轮通之家" src="img/logo.png" width="45px" border="0">
+					<img alt="轮通惠" src="img/logo.png" width="45px" border="0">
 				</div>
 				<div class="input-group col-xs-100">
 				      <input type="text" class="form-control" name="scontent"  id="goodsname" value="" placeholder="搜索商品">
@@ -92,11 +93,20 @@ function postfind(){
 <!-- search end -->
     <div class="dp-main">
 	<div class="container">
-		<ol class="breadcrumb">
-		  <li id="orderbest"><a href="javascript:reorder('sales');">销量</a></li>
-		  <li id="orderprice"><a href="javascript:reorder('price');">价格</a></li>
-		  <li id="ordernew"><a href="javascript:reorder('colligate');">最新</a></li>
-		</ol>
+<style>
+#mytop1 th {text-align:center;border: 1px solid #ffffff; }
+</style>
+		<div id="mytop1">
+		<table id="order_list" class="table table-striped">
+		<tbody>
+			<tr>
+				<th> <a href="javascript:reorder('sales');">销量</a></th>
+				<th><a href="javascript:reorder('price');">价格</a></th>
+				<th><a href="javascript:reorder('colligate');">最新</a></th>
+			</tr>
+		</tbody>
+		</table>
+        </div>
 		
 <!--产品 begin-->
  <div id ="catHtml"></div>
@@ -115,7 +125,7 @@ function postfind(){
 		    	<div class="menu-img glyphicon glyphicon-home"></div>
 		    	<div>首页</div>
 		    </a>
-		    <a class="pull-left menu-btn" href="listcat.html">
+		    <a class="pull-left menu-btn" style="color:red"  href="listcat.html">
 		    	<div class="menu-img glyphicon glyphicon-th-large"></div>
 		    	<div>分类</div>
 		    </a>

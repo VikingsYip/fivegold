@@ -20,47 +20,29 @@
 <script language="javascript">
 
 function makeList() {
-	var userid = $.jStorage.get('userid');
-	if (userid==null) {  document.location.href="login.html"; }
+     var userid = $.jStorage.get('userid');
+         if (userid==null)
+        document.location.href="login.html";
 	var xhr = new XMLHttpRequest();
-	xhr.open("GET", "http://www.zgltong.com/api/mobile.php?act=mysalelist&userid="+userid, true);
+	xhr.open("GET", "http://www.zgltong.com/api/mobile.php?act=mysalelist&intro=haspaid&userid="+userid, true);
 	xhr.onreadystatechange = function() {
-	if (xhr.readyState==4 && xhr.status==200){
-		var resultfromphp = xhr.responseText;
-		var objData = jQuery.parseJSON(resultfromphp);
-		var html ='';
-		html+='<table id=\"order_list\" class=\"table table-striped\"><tr><th>订单信息</th><th>操作</th></tr>';
-		$.each(objData.mysalelist, function (index, term) {
-		html+='<tr data-role=\"listview\" class=\"order_list\" data-inset=\"true\" data-divider-theme=\"d\">';
-		html+='<td><p>订单编号：'+term.order_sn+'</p>';
-		
-		if(term.order_amount =='0.00'){
-		html+='<p>订单金额：￥'+term.money+'</p>';
-		}else{
-		html+='<p>订单金额：￥'+term.order_amount+'</p>';
-		}
-		html+='<p>下单日期：'+term.add_time+'</p>';
-		html+='<p>订单状态：<span style=\"color: red;\">'+term.handler+'</span></p></td>';
-		if (term.pay_name=='1')
-		{
-			if (term.handler=="已取消")
-			{
-				html+='<td><p><a href=\"mmember-orderdetail.html?orderid='+term.order_id+'\" class=\"btn btn-info\">查看</a></p></td>';
-			}else if(term.handler=="已确认"){
-				html+='<td><p><a href=\"mmember-orderdetail.html?orderid='+term.order_id+'\" class=\"btn btn-info\">查看</a></p></td>';
-			}else{
-				html+='<td><p><a href=\"morder.html?orderid='+term.order_id+'\" class=\"btn btn-info\">付款</a></p><p><a href=\"mmember-orderdetail.html?orderid='+term.order_id+'\" class=\"btn btn-info\">查看</a></p></td>';		
-			}
-		}
-		else{
+  		 if (xhr.readyState==4 && xhr.status==200){
+    		var resultfromphp = xhr.responseText;
+			//alert(resultfromphp);
+      		var objData = jQuery.parseJSON(resultfromphp);
+			 // alert(objData.listallcat);
+			var html ='';
+			html+='<table id=\"order_list\" class=\"table table-striped\"><tr><th>订单信息</th><th>操作</th></tr>';
+			$.each(objData.mysalelist, function (index, term) {
+			html+='<tr data-role=\"listview\" class=\"order_list\" data-inset=\"true\" data-divider-theme=\"d\">';
+			html+='<td><p>订单编号：'+term.order_sn+'</p><p>订单金额：￥'+term.order_amount+'</p><p>下单日期：'+term.add_time+'</p><p>订单状态：<span style=\"color: red;\">'+term.handler+'</span></p></td>';
 			html+='<td><p></p><p><a href=\"mmember-orderdetail.html?orderid='+term.order_id+'\" class=\"btn btn-info\">查看</a></p></td>';
-		}
-		html+='</tr>';
-		});
-		html+='</table>';
-		//alert(html);
-		document.getElementById('listallcat').innerHTML=html;
-		}
+			html+='</tr>';
+			});
+			html+='</table>';
+			//alert(html);
+			document.getElementById('listallcat').innerHTML=html;
+  		}
 	};
 	xhr.send();
 }
@@ -87,6 +69,7 @@ $(document).ready(function() {
 		<!-- content -->
 		<div class="user-ui-content">
 		<div class="container padding-none">
+
 <style>
 #mytop1 th {text-align:center;border: 1px solid #ffffff; }
 </style>
@@ -94,14 +77,15 @@ $(document).ready(function() {
 		<table id="order_list" class="table table-striped">
 		<tbody>
 			<tr>
-				<th><a href="mmember-orders.html" style="color:red">全部</a></th>
+				<th><a href="mmember-orders.html">全部</a></th>
 				<th><a href="mmember-orders-1.html" >待支付</a></th>
-				<th><a href="mmember-orders-2.html">已取消</a></th>
-				<th><a href="mmember-orders-3.html">已支付</a></th>
+				<th><a href="mmember-orders-2.html" >已取消</a></th>
+				<th><a href="mmember-orders-3.html" style="color:red">已支付</a></th>
 			</tr>
 		</tbody>
 		</table>
         </div>
+
 	<div class="panel">
 		<div id="listallcat"></div><!--定单信息-->
 	</div>
@@ -163,7 +147,7 @@ $(document).ready(function() {
         if(!order_id>0 && !member_Id>0){
             return false;
         }
-        $.post("#", {'order_id':order_id,'member_id':member_Id},
+        $.post("/morder-deleteAfterSale.html", {'order_id':order_id,'member_id':member_Id},
                 function (data) {
                     if(data=='success'){
                         $('#del_after_sale').modal('hide');

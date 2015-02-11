@@ -2,7 +2,7 @@
 <html>
 <head>
 	<meta charset="utf-8" />
-	<title>轮通之家</title>
+	<title>轮通惠</title>
 	<meta name="keywords" content="">
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -14,36 +14,31 @@
 	<link rel="stylesheet" href="css/idangerous.swiper.css">
 	<script src="css/idangerous.swiper.min.js"></script>
 	<link href="css/base.mobile.css" rel="stylesheet" type="text/css" media="screen, projection" />	
-	<!-- load the json2 library (required for jstorage use) -->
 <script src="json2.js"></script>
-<!-- load the jstorage library -->
 <script src="jstorage.js"></script>
-	
-	<script>
-	function makelist(){
+<script>
+function makelist(){
 			
-    var posturl ="http://www.zgltong.com/api/mobile.php?act=carousel";
-
-      var xhr = new XMLHttpRequest();
+	var posturl ="http://www.zgltong.com/api/mobile.php?act=carousel";
+	var xhr = new XMLHttpRequest();
 	xhr.open("GET", posturl, true);
 	xhr.onreadystatechange = function() {
   		 if (xhr.readyState==4 && xhr.status==200){
     		var resultfromphp = xhr.responseText;
     		//alert (resultfromphp);
     		var objData = jQuery.parseJSON(resultfromphp);
-    		
-    		 $.each(objData.listallcat, function (index, term) {	
-    		       //alert(term.ad_code);
-    		       var html = "";
-    		       html+=	"<div class=\"swiper-slide\" >";
-			html+="<a href=\"#\">";
-			html+="<img src=\""+term.ad_code+"\" width=\"100%\" >";
-			html+="</a>";
-			html+="</div>";
-			  document.getElementById('showimage').innerHTML+=html;
-			   });
+			$.each(objData.listallcat, function (index, term) {	
+				//alert(term.ad_code);
+				var html = "";
+				html+=	"<div class=\"swiper-slide\" >";
+				html+="<a href=\"#\">";
+				html+="<img src=\""+term.ad_code+"\" width=\"100%\" >";
+				html+="</a>";
+				html+="</div>";
+				document.getElementById('showimage').innerHTML+=html;
+			});
 			
-		// 首交轮播图初始化
+	// 首交轮播图初始化
 	 var $total_img = $('.total_img .swiper-container').swiper({
 		loop: true,
 		autoplay: 2000
@@ -63,31 +58,28 @@
 	xhr.send();
 }
 
-	function makehomegoods(){
-			
+function makehomegoods(){
     var posturl ="http://www.zgltong.com/api/mobile.php?act=homegoods";
-
-      var xhr = new XMLHttpRequest();
+	var xhr = new XMLHttpRequest();
 	xhr.open("GET", posturl, true);
 	xhr.onreadystatechange = function() {
   		 if (xhr.readyState==4 && xhr.status==200){
     		var resultfromphp = xhr.responseText;
     		//alert (resultfromphp);
     		var objData = jQuery.parseJSON(resultfromphp);
-    		 var html = "";
+			var html = "";
     		html+="<table class=\"table table-bordered\">";	
 		    var i =0;
     		 $.each(objData.listallcat, function (index, term) {	
     		       //alert(term.ad_code);
     		      if (i%2==0) html+="<tr>";
     		       html+="<td align=\"center\" width=\"50%\"><div class=\"p_box\"><div class=\"p_img\"><a href=\"goods.html?goodsid="+term.id+"\" target=\"_blank\"><img class=\"img-rounded\" src=\""+term.img+"\" alt=\"\"></a>";
-				   html+="</div><div class=\"p-name\"><a href=\"goods.html?goodsid="+term.id+" \" target=\"_blank\">"+term.name+"</a></div><div class=\"p_price\"><p><span class=\"sale_price\">销售价：￥"+term.shop_price+"</span>";
+				   html+="</div><div class=\"p-name\"><a href=\"goods.html?goodsid="+term.id+" \" target=\"_blank\">"+term.name+"</a></div><div class=\"p_price\"><p><span class=\"sale_price\">￥"+term.shop_price+"</span>";
 				   html+="</p></div><a href=\"javascript:addtocart("+term.id+")\" class=\"btn btn-default\">&nbsp;购 &nbsp;&nbsp;买&nbsp;</a></div></td>";
 			      if (i%2==1) html+="</tr>";
 			      i++;
 			   });
 		   html+="</table>";
-		   //alert(html);
 		     document.getElementById('homegoods').innerHTML+=html;
 		 }
 	};
@@ -95,26 +87,18 @@
 }
 
 function addtocart(shopid){
- var userid = $.jStorage.get('userid');
-     if (userid==null)
-        document.location.href="login.html";
-var xhr = new XMLHttpRequest();
-     var goods_num = 1;
-	
-     var posturl = "http://120.24.209.210/api/mobile.php?act=addbuycart&goods_id="+shopid+"&number="+goods_num+"&userid="+userid
-	 
+	var userid = $.jStorage.get('userid');
+	if (userid==null) { document.location.href="login.html";}
+	var xhr = new XMLHttpRequest();
+	var goods_num = 1;
+	var posturl = "http://www.zgltong.com/api/mobile.php?act=addbuycart&goods_id="+shopid+"&number="+goods_num+"&userid="+userid
 	//alert(posturl);  	
 	xhr.open("GET", posturl, true);
 	xhr.onreadystatechange = function() {
   		 if (xhr.readyState==4 && xhr.status==200){
-    	       	var resultfromphp = xhr.responseText;
+    	    var resultfromphp = xhr.responseText;
 			//alert("添加成功");
-      		      var objData = jQuery.parseJSON(resultfromphp);
-		     //document.location.href="gencart.html";
-			 //alert (objData.rsgmsg);
-			 //document.getElementById('alertmsg').innerHTML=objData.rsgmsg;
-			  // alert(document.getElementById('alertmsg'));
-			//$('#addtocart_dialog').show();
+      		var objData = jQuery.parseJSON(resultfromphp);
 			document.location.href="gencart.html";
 		}
 	};
@@ -127,23 +111,22 @@ $(document).ready(function() {
 });
 
 function postfind(){
-var goodsname=document.getElementById('goodsname').value;
-document.location.href="findgoods.html?goodsname="+encodeURIComponent(goodsname);
+	var goodsname=document.getElementById('goodsname').value;
+	$.jStorage.set('finggoodsname', goodsname, {TTL: 28800000}); 
+	document.location.href="findgoods.html?goodsname="+encodeURIComponent(goodsname);
 }
 </script>
 	
 </head>
 <body>
-
-
 <div id="dp_header" class="dp-header hide">
-		<nav class="navbar navbar-fixed-top" role="navigation">
-		  <div class="container dp-menu-box myserch">
-		    <div class="row" style="margin:0 0;">
+	<nav class="navbar navbar-fixed-top" role="navigation">
+		<div class="container dp-menu-box myserch">
+			<div class="row" style="margin:0 0;">
 			<div class="col-xs-12" style="padding:0 0;">
 				<form id="search_form" action="javascript:postfind()" method="get">
 					<div class="col-xs-99">
-					<img alt="轮通之家" src="img/logo.png" width="45px" border="0">
+					<img alt="轮通惠" src="img/logo.png" width="45px" border="0">
 				</div>
 				<div class="input-group col-xs-100">
 				      <input type="text" class="form-control" name="scontent"  id="goodsname" value="" placeholder="搜索商品">
@@ -153,26 +136,23 @@ document.location.href="findgoods.html?goodsname="+encodeURIComponent(goodsname)
 				</div>
 			</form>
 			</div>
-	</div>
-		  </div>
-		</nav>
+		</div>
+		</div>
+	</nav>
 </div>
 
-
 <div id="dp_main" class="dp-main hide">
-<!-- S 轮播 -->
 <style>
 .myserch{
   background:red;
 }
-
 .total_img{
 	width: 100%;
 	max-width: 640px;
 	min-width: 320px;
 	margin:0px auto;
 	position: relative;
-	padding-top:58px;
+	padding-top:55px;
 }
 .total_img .swiper-container,.total_img .swiper-slide {
 	width: 640px;
@@ -206,9 +186,10 @@ document.location.href="findgoods.html?goodsname="+encodeURIComponent(goodsname)
 	text-indent: -9999px;
 	display: block;
 	opacity:0.3;
-	filter:alpha(opacity=30)
+	filter:alpha(opacity=30);
 }
 </style>
+<!-- E 轮播 -->
 <div class="total_img">
 	<div class="swiper-container">
 		<div class="swiper-wrapper" id="showimage"></div>
@@ -232,69 +213,6 @@ $(function(){
 *{
 	font-family: "Microsoft YaHei";
 }
-.public_section .href_info {
-	position: relative;
-	padding-right: 30px;
-}
-
-.public_section .href_info:after {
-	-webkit-transform: rotate(-45deg);
-	-moz-transform: rotate(-45deg);
-	-ms-transform: rotate(-45deg);
-	-o-transform: rotate(-45deg);
-	margin-top: -5px;
-	right: 15px;
-	content: '';
-	position: absolute;
-	width: 6px;
-	height: 6px;
-	top: 50%;
-	border-color: #444;
-	border-style: solid;
-	border-width: 0 2px 2px 0;
-}
-.user-ui-header{
-	font-size:20px;
-	color:#ffffff;
-	background:#b3a99f;
-	line-height:50px;
-	text-align: center;
-}
-.user-ui-header .left-bar{
-	float:left;
-	padding-left:10px;
-	color:#ffffff;
-}
-
-.user-ui-header .right-bar{
-	float:right;
-	padding-right:10px;
-	color:#ffffff;
-}
-.user-ui-content{
-	padding:10px 10px;
-}
-.user-ui-footer {
-	font-size: 20px;
-	color: #ffffff;
-	background: #b3a99f;
-	line-height: 50px;
-	text-align: center;
-}
-.home_fl {
-	padding: 0px 0px;
-}
-
-.fl6 .pro_box {
-	float: left;
-	width: 32%;
-	position: relative;
-}
-
-.fl6 .pro_box_margin {
-	margin-left: 2%;
-}
-
 .p_box img {
 	width: 100%;
 }
@@ -308,25 +226,12 @@ $(function(){
 	display:none;
 	text-decoration: line-through;
 }
-.user-ui-page{
-	width:100%;
-	max-width:640px;
-	margin:0px auto;
-}
 .p-name{
 	width:120px;
 	overflow: hidden;
 	white-space: nowrap;
-	text-overflow: ellipsis;
+	text-overflow: clip;
 }
-</style>
-<div class="clearfix" id="homegoods">
-		
-</div>	<!-- E 热卖轮播 -->
-</div>
-<!-- S 单品推荐  -->
-<div class="dp-main">
-<style>
 .single-goods {
 	width: 100%;
 	max-width: 640px;
@@ -390,10 +295,13 @@ $(function(){
 	-webkit-animation: bounceIn 1s .2s ease both;
 	-moz-animation: bounceIn 1s .2s ease both;
 }
-
-
-
 </style>
+<div class="clearfix" id="homegoods">
+		
+</div><!-- E 热卖轮播 -->
+</div>
+<!-- S 单品推荐  -->
+<div class="dp-main">
 <div id="single_goods" class="single-goods">
 	<div class="swiper-container">
 		<div class="swiper-wrapper">
@@ -401,12 +309,13 @@ $(function(){
 				<a class="links" href="#"></a>
 			</div>
 			<div class="swiper-slide page-6 hide">
-				<h3 class="slogan bounceIn">轮通之家</h3>
+				<h3 class="slogan bounceIn">轮通惠</h3>
 				<a class="backhome" href="javascript:void(0);">去首页</a>
 			</div>
 		</div>
 	</div>
 </div>
+
 <div class="next-page"></div>
 <script type="text/javascript">
 $(function(){
@@ -414,7 +323,6 @@ $(function(){
 	 $('#dp_header').removeClass("hide");
 	 $('#dp_main').removeClass("hide");
 	 $('#dp_footer').removeClass("hide");
-
 	 // 单品推荐轮播初始化
 	 var $single_goods = $('.single-goods .swiper-container').swiper({
 		mode:'vertical',
@@ -434,16 +342,6 @@ $(function(){
 	 });
 });
 
-// 设置cookie
-function setcookie(cookieName, cookieValue, seconds, path, domain, secure) {
-	var expires = new Date();
-	expires.setTime(expires.getTime() + seconds);
-	document.cookie = escape(cookieName) + '=' + escape(cookieValue)
-	+ (expires ? '; expires=' + expires.toGMTString() : '')
-	+ (path ? '; path=' + path : '/')
-	+ (domain ? '; domain=' + domain : '')
-	+ (secure ? '; secure' : '');
-}
 </script></div>
 
 <!-- 底部导航  -->
@@ -451,7 +349,7 @@ function setcookie(cookieName, cookieValue, seconds, path, domain, secure) {
 <div id="dp_footer" class="dp-footer hide">
 		<nav class="navbar navbar-default navbar-fixed-bottom" role="navigation">
 		  <div class="container dp-menu-box">
-		    <a class="pull-left menu-btn" href="go.html">
+		    <a class="pull-left menu-btn" style="color:red" href="go.html">
 		    	<div class="menu-img glyphicon glyphicon-home"></div>
 		    	<div>首页</div>
 		    </a>

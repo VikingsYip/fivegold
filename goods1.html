@@ -9,7 +9,10 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 	<meta content="telephone=no" name="format-detection" />
 	<link rel="stylesheet" href="css/bootstrap.min.css">
-	<script src="css/jquery-1.10.2.min.js"></script>
+	<!--<script src="css/jquery-1.10.2.min.js"></script>-->
+	<script src="js/jquery.js"></script>
+	<script type="text/javascript" src="js/jquery.event.drag-1.5.min.js"></script>
+	<script type="text/javascript" src="js/jquery.touchSlider.js"></script>
 	<script src="css/jquery.cookie.js"></script>
 	<script src="css/bootstrap.min.js"></script>
 	<link href="css/base.mobile.css" rel="stylesheet" type="text/css" media="screen, projection" />
@@ -50,8 +53,15 @@ function makeList() {
 				imagecount = term.bought_goods.length;
 				if (imagecount>0)
 				{//初始化显示第一个图片
-					document.getElementById('shopimg').src=term.bought_goods[currentimage].img_url;			 
+					//document.getElementById('shopimg').src=term.bought_goods[currentimage].img_url;			
+					
+						var shtml="";
+						$.each(term.bought_goods, function (myindex, myterm) {
+							shtml+="<li><span><img src=\""+myterm.img_url+"\" /></span></li>";
+					});
 				}
+				alert(shtml);
+				document.getElementById('mygoodimg').innerHTML=shtml;
 				document.getElementById('goods_name').innerHTML=term.goods_name;
 				
 				var sguige=term.guige;
@@ -59,6 +69,7 @@ function makeList() {
 				{
 					document.getElementById('guige').innerHTML="规格："+term.guige;
 				}
+				//document.getElementById('guige').innerHTML=term.guige;
 				//document.getElementById('goods_sn').innerHTML=term.goods_sn;
 				//document.getElementById('goods_brief').innerHTML=term.goods_brief;
 				var html = "";
@@ -114,29 +125,6 @@ function addtocart(){
 	xhr.send();
 	window.setTimeout(function(){makecartNum();},800);
 	//return true;
-}
-
-function showNextImage(){
-	var shopid=request('goodsid');
-	var xhr = new XMLHttpRequest();
-	xhr.open("GET", "http://www.zgltong.com/api/mobile.php?act=goodsdesc&goods_id="+shopid, true);
-	xhr.onreadystatechange = function() {
-		if (xhr.readyState==4 && xhr.status==200){
-			var resultfromphp = xhr.responseText;
-			var objData = jQuery.parseJSON(resultfromphp);
-			$.each(objData.listallcat, function (index, term) {	
-				if (imagecount>0 && currentimage<imagecount-1){
-					document.getElementById('shopimg').src=term.bought_goods[++currentimage].img_url;
-				}
-				else{
-					currentimage=0;
-					document.getElementById('shopimg').src=term.bought_goods[currentimage].img_url;
-				}
-			});
-		}
-	};
-	xhr.send();	
-	return true;
 }
 
 function collect(){
@@ -197,7 +185,7 @@ function gooddesc(){
 <style>
 .swiper-container, .swiper-slide {
   width:100%;
-  height:100%;
+  height:auto;
 }
 .swiper-container .previous{
 	position: absolute;
@@ -251,17 +239,66 @@ input[type='number'] {
 .myinput{
 	padding-top:2px;
 }
+
+
+	.main_visual{width:100%;}
+	.main_image {width:100%; overflow:hidden; position:relative;}
+	.main_image ul {width:100%; height:100%; overflow:hidden; position:absolute; top:0; left:0;}
+	.main_image li {float:left; width:100%; height:100%;}
+	.main_image li span {display:block; width:100%; height:100%;}
+	.main_image li span img{width:100%;}
+	.main_image li a {display:block; width:100%; height:100%;}
+	
+	.p_one .flicking_con { position:absolute; top:-10px; left:50%; z-index:60;}
+	.p_one .flicking_con .flicking_inner {position:absolute; bottom:20px; left:50%; margin-left:-75px; z-index:50; width:150px; height:10px; text-align:center;}	
+	.p_one .flicking_con a { width:10px; height:10px; margin:0 2px; padding:0; background:url(img/no.png)no-repeat; background-size:10px 10px; display:inline-block; text-indent:-1000px;}
+	.p_one .flicking_con a.on { background:url(img/yes.png)no-repeat; background-size:10px 10px;}	
+
 </style>
-<div class="swiper-container">
-	<div class="swiper-wrapper">
-		<div class="swiper-slide" align="center">
-			<img id="shopimg"  width="70%" src="img/lodinglogo.png" border="0">
-	    </div>
-	</div>
-	<a href="javascript:showNextImage();"><div class="previous">Previous</div></a>
-	<a href="javascript:showNextImage();"><div class="next">Next</div></a>
-</div>
-</div>
+
+<script type="text/javascript">
+var countAllTopPic = 2;
+$(document).ready(function () {
+	var height2=$(window).height();
+	$("#main_image").height("320px");	
+	$dragBln = false;
+        if(countAllTopPic > 1){
+            $(".main_image").touchSlider({
+                    flexible : true,
+                    speed : 200,		
+                    paging : $(".flicking_con a"),
+                    counter : function (e) {
+                            $(".flicking_con a").removeClass("on").eq(e.current-1).addClass("on");
+                            $(".main_image ul li").eq(e.current-1).find('img').attr('src',$(".main_image ul li").eq(e.current-1).find('img').attr('data-original'));
+                    }
+            });
+            $(".main_image").bind("mousedown", function() {
+                    $dragBln = false;
+            })
+            $(".main_image").bind("dragstart", function() {
+                    $dragBln = true;
+            })
+            $(".main_image a").click(function() {
+                    if($dragBln) {
+                            return false;
+                    }
+            })
+            
+        }
+});
+</script> 
+
+<!--flash-->
+        <div class="main_visual">            
+            <div class="main_image" id="main_image">
+                <ul id="mygoodimg">
+                    <!--<li><span><img src="img/default.jpg" data-original="aaaa.jpg" /></span></li>-->              
+				</ul>                      
+            </div>
+        </div>
+        <div style="text-align:center;clear:both">
+        </div>  
+      <!--flash-->
 
 <link rel="stylesheet" href="css/idangerous.swiper.css">
 <script src="css/idangerous.swiper.min.js"></script>
@@ -296,13 +333,13 @@ input[type='number'] {
 </div>
 <!-- /content -->
 		
+		
 <div id="dp_footer" class="dp-footer">
 	<nav class="navbar navbar-default navbar-fixed-bottom" role="navigation">
 		<div class="container dp-menu-box">
-			<a class="btn btn-success" style="width:15%"  href="tel:4000068040">客服</a>
-			<a class="btn btn-warning" style="width:15%"  href="javascript:collect()">关注</a>
-			<a class="btn btn-danger"  style="width:28%"  href="javascript:addtocart()">加入购物车</a>
-			<a class="btn btn-success glyphicon glyphicon-shopping-cart" style="width:30%" href="gencart.html"><span id="cartnum">(0)</span></a>
+			<a class="btn btn-warning" style="width:80px"  href="javascript:collect()">关注</a>
+			<a class="btn btn-danger" style="width:150px"  href="javascript:addtocart()">加入购物车</a>
+			<a class="btn btn-success glyphicon glyphicon-shopping-cart" style="width:100px" href="gencart.html"><span id="cartnum">(0)</span></a>
 		  </div>
 	</nav>
 </div>
