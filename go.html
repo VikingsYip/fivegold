@@ -74,7 +74,7 @@ function makehomegoods(){
     		       //alert(term.ad_code);
     		      if (i%2==0) html+="<tr>";
     		       html+="<td align=\"center\" width=\"50%\"><div class=\"p_box\"><div class=\"p_img\"><a href=\"goods.html?goodsid="+term.id+"\" target=\"_blank\"><img class=\"img-rounded\" src=\""+term.img+"\" alt=\"\"></a>";
-				   html+="</div><div class=\"p-name\"><a href=\"goods.html?goodsid="+term.id+" \" target=\"_blank\">"+term.name+"</a></div><div class=\"p_price\"><p><span class=\"sale_price\">￥"+term.shop_price+"</span>";
+				   html+="</div><div class=\"p-name\"><a href=\"goods.html?goodsid="+term.id+" \" target=\"_blank\">"+term.name+"</a></div><div class=\"p_price\"><p><span class=\"sale_price\" style=\"text-decoration:line-through;color:#c2ccd0;\">￥"+term.market_price+"</span><span class=\"sale_price\">￥"+term.shop_price+"</span>";
 				   html+="</p></div><a href=\"javascript:addtocart("+term.id+")\" class=\"btn btn-default\">&nbsp;购 &nbsp;&nbsp;买&nbsp;</a></div></td>";
 			      if (i%2==1) html+="</tr>";
 			      i++;
@@ -112,7 +112,7 @@ $(document).ready(function() {
 
 function postfind(){
 	var goodsname=document.getElementById('goodsname').value;
-	$.jStorage.set('finggoodsname', goodsname, {TTL: 28800000}); 
+	$.jStorage.set('finggoodsname', goodsname, {TTL: 2880000000}); 
 	document.location.href="findgoods.html?goodsname="+encodeURIComponent(goodsname);
 }
 </script>

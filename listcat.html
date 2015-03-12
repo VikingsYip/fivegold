@@ -2,9 +2,9 @@
 <html>
 <head>
 	<meta charset="utf-8" />
-	<title>全部分类</title>
-	<meta name="keywords" content="全部分类">
-	<meta name="description" content="全部分类">
+	<title>轮通惠-全部分类</title>
+	<meta name="keywords" content="轮通惠-全部分类">
+	<meta name="description" content="轮通惠-全部分类">
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 	<meta content="telephone=no" name="format-detection" />
 	<link href="css/jquery.mobile.my.css" rel="stylesheet" type="text/css" media="screen, projection" />
@@ -55,7 +55,7 @@ function makeList() {
 }
 
 function makeseList(mycatid) {
-	$.jStorage.set('mycatid', mycatid , {TTL: 28800000}); //取当前的点击的catid
+	$.jStorage.set('mycatid', mycatid , {TTL: 2880000000}); //取当前的点击的catid
 	var xhr = new XMLHttpRequest();
 	xhr.open("GET", "http://www.zgltong.com/api/mobile.php?act=listallcats&id="+mycatid, true);
 	xhr.onreadystatechange = function() {
@@ -74,7 +74,7 @@ function makeseList(mycatid) {
 			});
 			//alert(shtml);
 			document.getElementById('category2').innerHTML=shtml;
-			$.jStorage.set('finggoodsname', "", {TTL: 28800000}); 
+			$.jStorage.set('finggoodsname', "", {TTL: 2880000000}); 
   		}
 	};
 	xhr.send();
@@ -82,7 +82,7 @@ function makeseList(mycatid) {
 
 function postfind(){
 	var goodsname=document.getElementById('goodsname').value;
-	$.jStorage.set('finggoodsname', goodsname, {TTL: 28800000}); 
+	$.jStorage.set('finggoodsname', goodsname, {TTL: 2880000000}); 
 	document.location.href="findgoods.html?goodsname="+encodeURIComponent(goodsname);
 }
 

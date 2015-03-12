@@ -822,4 +822,6 @@ outline: 0;
 
 #myyqm {
 	padding: 5px 0;
+	float: left;
+
 }

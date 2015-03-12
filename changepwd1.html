@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="utf-8" />
-<title>会员中心</title>
+<title>轮通惠-会员中心</title>
 <meta name="keywords" content="">
 <meta name="description" content="">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -57,7 +57,7 @@ function changepwd() {
 			var objData = jQuery.parseJSON(resultfromphp);
 			document.getElementById('alertmsg').innerHTML=objData.rsgmsg;
 			if (objData.rsgcode=='000'){
-				 $.jStorage.set('password', new_pwd , {TTL: 28800000}); 
+				 $.jStorage.set('password', new_pwd , {TTL: 2880000000}); 
          	     document.getElementById('alertmsg2').innerHTML=objData.rsgmsg;
 				 document.getElementById('chpwd_dialog').style.display ='block';
     		}

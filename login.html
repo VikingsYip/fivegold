@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -60,9 +59,11 @@ function login(){
     		$('#logout_dialog').show();
 			document.getElementById('alertmsg').innerHTML=objData.rsgmsg;
     		if (objData.rsgcode=='000'){
-         	      $.jStorage.set('userid', objData.userid , {TTL: 28800000}); 
-         	      $.jStorage.set('username', username , {TTL: 28800000});
-         	      $.jStorage.set('password', password , {TTL: 28800000}); 
+         	      $.jStorage.set('userid', objData.userid , {TTL: 2880000000}); 
+         	      $.jStorage.set('username', username , {TTL: 2880000000});
+         	      $.jStorage.set('password', password , {TTL: 2880000000}); 
+         	      $.jStorage.set('gysa', objData.gysa , {TTL: 2880000000}); 
+				  $.jStorage.set('yqm', objData.yqm , {TTL: 2880000000}); 
     		}
 		 }
 	};

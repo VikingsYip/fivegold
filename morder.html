@@ -28,56 +28,27 @@ function genOrder(){
  var userid = $.jStorage.get('userid');
      if (userid==null)
         document.location.href="login.html";
-var orderid = request('orderid');
-      //document.location.href="addressMange.html";
+	var orderid = request('orderid');
 	var xhr = new XMLHttpRequest();
 	xhr.open("GET", "http://www.zgltong.com/api/mobile.php?act=mysaledesc&user_id="+userid+"&order_id="+orderid, true);
 	xhr.onreadystatechange = function() {
   		 if (xhr.readyState==4 && xhr.status==200){
     		var resultfromphp = xhr.responseText;
 			//alert(resultfromphp);
-			
-			 var objData = jQuery.parseJSON(resultfromphp);
-			
+			var objData = jQuery.parseJSON(resultfromphp);
 			var html ='';
-			
-		
 		    html+='<p>订单编号：</td><td width="70%">'+objData.order.order_sn+'</p>';
 		    html+='<p>订单金额：</td><td>￥'+objData.order.order_amount+'</p>';
 		    html+=' <p>已付金额：￥0.00</p>';
-			 html+='<p style="color:red;">应付金额：￥'+objData.order.order_amount+'</p>';
-		     
-		     document.getElementById('orderHtml').innerHTML=html; 
-		     
-		     // html ='';
-			
-			/*html+='<p>付款方式：支付宝</p>';
-		    html+='<p>商品金额：￥'+objData.order.formated_goods_amount+'</p>';
-		    html+='<p>运费金额：￥'+objData.order.formated_shipping_fee+'</p>';		    
-		    html+='<p>应付金额：￥'+objData.order.formated_total_fee+'</p>';
-		    html+='<p>已付金额：￥'+objData.order.formated_money_paid+'</p>';
-		    html+='<p>付款状态：未付款[未发货]</p>';
-		    //html+='<p>付款时间：</p>';
-		    
-		    document.getElementById('payHtml').innerHTML=html; 
-		      html ='';
-			
-			html+='<p>收货姓名：'+objData.order.consignee+'</p>';
-		    html+='<p>收货地址：'+objData.order.address+'</p>';
-		    html+='<p>手机号码：'+objData.order.mobile+'</p>';
-		     html+='<p>固定电话：'+objData.order.tel+'</p>';
-		      html+='<p>邮编号码：'+objData.order.zipcode+'</p>';
-		     html+='<p>配送方式：快递：网上支付</p>';
-		       document.getElementById('shipHtml').innerHTML=html; 
-		       
-		       document.getElementById('memo').innerHTML="<p>"+objData.order.postscript+"</p>"; 
-			*/
-			
-			   
+			html+='<p style="color:red;">应付金额：￥'+objData.order.order_amount+'</p>';
+		    document.getElementById('orderHtml').innerHTML=html; 
+
+			var html1="";
+			html1=objData.order.pay_online;
+			document.getElementById('mypay').innerHTML=html1; 
   		}
 	};
 	xhr.send();
-	
 }
 
 $(document).ready(function() {
@@ -113,14 +84,7 @@ $(document).ready(function() {
 			<input type="hidden" name="payment[memo]" value="" />
 			<div class="panel panel-default">
 			  <div class="panel-heading">付款信息：</div>
-			  <div class="panel-body" id="orderHtml">
-			  <!--div class="panel-body">
-			    <p>订单号：20141229154392</p>
-			    <p>订单金额：￥34.00</p>
-			    <p>已付金额：￥0.00</p>
-			    <p style="color:red;">应付金额：￥34.00</p>
-			  </div-->
-			</div>
+			  <div class="panel-body" id="orderHtml"></div>
 			<div class="panel panel-default">
 			  <div class="panel-heading">请选择支付方式：</div>
 			  <div class="panel-body">
@@ -134,9 +98,8 @@ $(document).ready(function() {
 			  </p>
 			</div>
 			</div>
-		    <div style="text-align:center;">
-		       		<a class="btn btn-danger" id="pay_btn" href="javascript:void(0);">确认支付</a>
-		    </div>
+			<!-- 支付按钮 -->
+			<div style="text-align:center;" id="mypay"></div>
 		</form>
 		
 				</div>
