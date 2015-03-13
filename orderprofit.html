@@ -27,7 +27,6 @@ function makeList() {
 	xhr.onreadystatechange = function() {
 	if (xhr.readyState==4 && xhr.status==200){
 		var resultfromphp = xhr.responseText;
-		alert(resultfromphp);
 		var objData = jQuery.parseJSON(resultfromphp);
 		var html ='';
 		html+='<table id=\"order_list\" class=\"table table-striped\"><tr><th>日期</th><th>服务费用汇总</th></tr>';
