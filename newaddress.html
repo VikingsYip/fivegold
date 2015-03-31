@@ -63,8 +63,7 @@ function newaddress(){
 	var mobile=encodeURIComponent(document.getElementById('delivery_mobile').value);	
 	//var defaultval = encodeURIComponent(document.getElementById("delivery_default").value);
 	var defaultval = 1;
-	var zipcode = '225461'
-	//var zipcode=encodeURIComponent(document.getElementById('delivery_zip').value);
+	var zipcode=encodeURIComponent(document.getElementById('delivery_zip').value);
 	//var zipcode = 0;
 	var userid = $.jStorage.get('userid');
 	if (userid==null) {  document.location.href="login.html"; }
@@ -196,8 +195,9 @@ $(document).ready(function() {
 			</fieldset>
 			<label for="delivery_address"><span style="color:red">*</span>收货地址：</label>
 			<input type="text" data-clear-btn="true" name="delivery[ship_addr_area]" id="delivery_address"  maxlength="30" placeholder="请输入详细地址">
-			<!--<label for="delivery_zip">邮编：</label>
+			<label for="delivery_zip">邮编：</label>
 			<input type="text" data-clear-btn="true" name="delivery[ship_zip]" id="delivery_zip"  maxlength="6" onkeyup="this.value=this.value.replace(/\D/g,'')" placeholder="请输入邮编">
+			<!--
 			<label for="delivery_day">是否为默认地址：</label>
 			<select id="delivery_default" >
 				<option value="1">默认地址</option>

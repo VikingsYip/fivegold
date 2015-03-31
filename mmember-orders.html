@@ -3,7 +3,7 @@
 <html>
 <head>
 <meta charset="utf-8" />
-<title>订单查询</title>
+<title>会员中心</title>
 <meta name="keywords" content="">
 <meta name="description" content="">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -30,7 +30,6 @@ function makeList() {
 		var objData = jQuery.parseJSON(resultfromphp);
 		var html ='';
 		html+='<table id=\"order_list\" class=\"table table-striped\"><tr><th>订单信息</th><th>操作</th></tr>';
-
 		$.each(objData.mysalelist, function (index, term) {
 		html+='<tr data-role=\"listview\" class=\"order_list\" data-inset=\"true\" data-divider-theme=\"d\">';
 		html+='<td><p>订单编号：'+term.order_sn+'</p>';
@@ -50,16 +49,11 @@ function makeList() {
 			}else if(term.handler=="已确认"){
 				html+='<td><p><a href=\"mmember-orderdetail.html?orderid='+term.order_id+'\" class=\"btn btn-info\">查看</a></p></td>';
 			}else{
-				html+='<td><p><a href=\"morder.html?orderid='+term.order_id+'\" class=\"btn btn-info\">付款</a></p><p><a href=\"mmember-orderdetail.html?orderid='+term.order_id+'\" class=\"btn btn-info\">查看</a></p></td>';	
+				html+='<td><p><a href=\"morder.html?orderid='+term.order_id+'\" class=\"btn btn-info\">付款</a></p><p><a href=\"mmember-orderdetail.html?orderid='+term.order_id+'\" class=\"btn btn-info\">查看</a></p></td>';		
 			}
 		}
 		else{
-			html+='<td><p></p><p><a href=\"mmember-orderdetail.html?orderid='+term.order_id+'\" class=\"btn btn-info\">查看</a></p>';
-			if (term.allow_to_modify=='1')
-			{
-				html+='<p><a href=\"modify-orders.html?orderid='+term.order_id+'\" class=\"btn btn-info\">修改</a></p>';
-			}
-			html+='</td>';
+			html+='<td><p></p><p><a href=\"mmember-orderdetail.html?orderid='+term.order_id+'\" class=\"btn btn-info\">查看</a></p></td>';
 		}
 		html+='</tr>';
 		});

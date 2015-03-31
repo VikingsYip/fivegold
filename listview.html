@@ -2,7 +2,7 @@
 <html>
 <head>
 	<meta charset="utf-8" />
-	<title>轮通惠-产品列表</title>
+	<title>轮通惠</title>
 	<meta name="keywords" content="">
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -11,18 +11,16 @@
 	<script src="css/jquery-1.10.2.min.js"></script>
 	<script src="css/jquery.cookie.js"></script>
 	<script src="css/bootstrap.min.js"></script>
-	<link href="css/base.mobile.css" rel="stylesheet" type="text/css" media="screen, projection" />
-	<script type="text/javascript" src="fivegold.js"></script>
+	<link rel="stylesheet" href="css/idangerous.swiper.css">
+	<script src="css/idangerous.swiper.min.js"></script>
+	<link href="css/base.mobile.css" rel="stylesheet" type="text/css" media="screen, projection" />	
 	<link href="fivegold.css" rel="stylesheet" type="text/css"/>
 	<script type="text/javascript" src="fivegold.js"></script>
-	<script src="json2.js"></script>
-	<script src="jstorage.js"></script>
  
-<script>	
+    <script>	
 function reorder(ordertype){
   makeList(ordertype);
  }
-
  var sorting = 1;
 function makeList(ordertype) {
     var catid = request('catid');
@@ -36,22 +34,19 @@ function makeList(ordertype) {
 	xhr.onreadystatechange = function() {
   		 if (xhr.readyState==4 && xhr.status==200){
     		var resultfromphp = xhr.responseText;
+			//alert(resultfromphp);
 			var html ='';
       		var objData = jQuery.parseJSON(resultfromphp);
-			html+='<table class="table table-striped">';
 			$.each(objData.listallcat, function (index, term) {
-
-				html+=' <tr>';
-		  		html+='<td width=60><a href=\"goods.html?goodsid='+term.goods_id+'\"><img width=\"100\" height=\"100\" class=\"img-rounded\" src=\"'+term.goods_img+'\"/></a></td>';
-		  		html+='<td><p><a href=\"goods.html?goodsid='+term.goods_id+'\">'+term.goods_name+'</a></p>';
-				html+='<p class=\"product_name\">所有的参数</p>';
-				html+="	<p><span style=\"text-decoration:line-through;color:#c2ccd0;\">￥"+term.market_price+"</span><span style=\"font-size:16px;color:red\">￥"+term.shop_price+"</span></p>";
-				html+='</td>';
-				html+='<td width=10><p></p><p></p><p><input type="checkbox" name="goodsid" value="'+term.goods_id+'"></p>'+'</td>';
-		  		html+=' </tr>';
+			html+="<div class=\"center-block goods-item\"><a class=\"href_info\" href=\"goods.html?goodsid="+term.goods_id+"\"><img style=\"margin-right:5px;\" class=\"img-rounded pull-left\" src=\""+term.goods_img+"\" alt=\""+term.goods_name+"\" width=\"100\" height=\"100\"/><div class=\"clearfix\"><p class=\"product_name\">"+term.goods_name+"</p><p class=\"product_name\">所有的参数</p><div class=\"product_price clearfix\" style=\"line-height:30px;\"><p style=\"font-size:16px;float:left;color:red\">￥"+term.shop_price+"</p></div></div></a></div>";
 			});
 			
-            html+='</table>';
+			if (html=='')
+			{
+				html='<section style=\"text-align:center;\"><p style=\"margin:30px 0px;\">暂无商品...<p></section>';
+			}
+
+			//alert(html);
 			document.getElementById('catHtml').innerHTML=html;
 			 
   		}
@@ -68,44 +63,6 @@ function postfind(){
 	var goodsname=document.getElementById('goodsname').value;
 	document.location.href="findgoods.html?goodsname="+encodeURIComponent(goodsname);
 }
-
-function orderbyall(){
-   
-	var str=document.getElementsByName("goodsid");
-	var objarray=str.length;
-	var chestr="";
-	for (i=0;i<objarray;i++){
-		if(str[i].checked == true)
-	   {
-			if (chestr=="")
-			{
-				chestr=str[i].value;
-			}else
-		    {
-				chestr+=","+str[i].value;
-			}
-	   }
-	}
-    
-	var userid = $.jStorage.get('userid');
-	var strurl="http://www.zgltong.com/api/mobile.php?act=batchaddtocart&goods_id="+chestr+"&userid="+userid;
-	//alert(strurl);
-	var xhr = new XMLHttpRequest();
-	xhr.open("GET", strurl, true);
-	xhr.onreadystatechange = function() {
-  		 if (xhr.readyState==4 && xhr.status==200){
-    		var resultfromphp = xhr.responseText;
-    		//alert (resultfromphp);
-    		var objData = jQuery.parseJSON(resultfromphp);
-    		//alert (objData.rsgmsg);
-    		document.location.href="gencart.html";
-		 }
-	};
-	xhr.send();
-
-
-}
-
 
 </script>
 </head>
@@ -135,7 +92,6 @@ function orderbyall(){
 				<th> <a href="javascript:reorder('sales');">销量</a></th>
 				<th><a href="javascript:reorder('price');">价格</a></th>
 				<th><a href="javascript:reorder('colligate');">最新</a></th>
-				<th><a href="javascript:orderbyall()">批量下单</a></th>
 			</tr>
 		</tbody>
 		</table>
@@ -176,26 +132,5 @@ function orderbyall(){
 		  </div>
 		</nav>
 </div>
-
-
-<div class="modal fade" id="genorder_dialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title" id="myModalLabel">您确定批量加入这些产品吗？</h4>
-      </div>
-      <div class="modal-body">
-      		<p>友情提示：</p>
-		<p>亲，定单已锁定，如有变化，请联系客服</p><p> 400-006-8040</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-        <button id="genorder_btn" type="button" class="btn btn-info">确认</button>
-      </div>
-    </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
-
 </body>
 </html>

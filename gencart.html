@@ -3,7 +3,7 @@
 <html>
 <head>
 <meta charset="utf-8" />
-<title>轮通惠-购物车</title>
+<title>购物车</title>
 <meta name="keywords" content="">
 <meta name="description" content="">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -17,8 +17,7 @@
 <script src="json2.js"></script>
 <script src="jstorage.js"></script>
 
-<script>
-
+<script>	
 function makeList() {
 	var userid = $.jStorage.get('userid');
 	if (userid==null) { document.location.href="login.html" }
@@ -32,22 +31,10 @@ function makeList() {
 			var objData = jQuery.parseJSON(resultfromphp);
 			   $.each(objData.goods_list, function (index, term) {
 			html+="<table class=\"table\"><tr><td valign=\"top\" width=\"50px\"><a href=\"goods.html?goodsid="+term.goods_id+"\"><img class=\"img-rounded\" width=\"100\" height=\"100\" src=\""+term.original_img+"\"></a></td><td><p>"+term.goods_name+"";
-			$.each(term.goods_attr, function (index, att) {
+			$.each(term.goods_attr, function (index, att) 							{
 			html+="("+att.name+"："+att.value+")";
 			});
-			var isgift=term.is_gift;
-			if (isgift==0)
-			{
-				html+="</p>单价："+term.goods_price+"\<br/><div class=\"form-group\"><button  class=\"btn btn-info mybtn\" id=\"minus_product\"   onClick=\"update_minus('"+term.rec_id+"')\">减</button ><input class=\"form-control myinput\" style=\"width:70px;display:inline-block;\" type=\"number\" id=\""+term.rec_id+"\" min=\"1\"  value=\""+term.goods_number+"\"  onkeyup=\"fchangenum(this,"+term.rec_id+")\"><a class=\"btn btn-info mybtn\" id=\"plus_product\"   onClick=\"update_plus('"+term.rec_id+"')\">加</a></div><section><a href=\"javascript:delcart("+term.rec_id+")\" data-ajax=\"false\" data-rel=\"popup\" data-position-to=\"window\" data-transition=\"pop\" data-icon=\"delete\" data-theme=\"d\">删除</a></section>";
-				
-				
-			}else{
-				
-				html+="</p>单价："+term.goods_price+"\<br/><div class=\"form-group\">"+term.goods_number+"</div>";
-			}
-			
-			//html+="</p>单价："+term.goods_price+"\<br/><div class=\"form-group\">赠送数量："+term.goods_number+"</div>";
-			html+="</td></tr></table>";
+			html+="</p>单价："+term.goods_price+"\<br/><div class=\"form-group\"><button  class=\"btn btn-info mybtn\" id=\"minus_product\"   onClick=\"update_minus('"+term.rec_id+"')\">减</button ><input class=\"form-control myinput\" style=\"width:70px;display:inline-block;\" type=\"number\" onkeyup=\"this.value=this.value.replace(/\D/g,'')\" id=\""+term.rec_id+"\" min=\"1\"  value=\""+term.goods_number+"\"><a class=\"btn btn-info mybtn\" id=\"plus_product\"   onClick=\"update_plus('"+term.rec_id+"')\">加</a></div><section><a href=\"javascript:delcart("+term.rec_id+")\" data-ajax=\"false\" data-rel=\"popup\" data-position-to=\"window\" data-transition=\"pop\" data-icon=\"delete\" data-theme=\"d\">删除</a></section></td></tr></table>";
 			});
 			document.getElementById('catHtml').innerHTML=html;
 			if ( html=="")  {  document.location.href="nocart.html" ; }
@@ -58,18 +45,24 @@ function makeList() {
 }
 
 function updatecart(newnumber,recid) {
-	var userid = $.jStorage.get('userid');
-	if (userid==null) { document.location.href="login.html" ;}
+    //alert(newnumber);
+    //alert(recid);
+ var userid = $.jStorage.get('userid');
+     if (userid==null)
+        document.location.href="login.html"
+	//alert(recid);
 	var xhr = new XMLHttpRequest();
 	xhr.open("GET", "http://www.zgltong.com/api/mobile.php?act=edltbuycart&user_id="+userid+"&new_number="+newnumber+"&rec_id="+recid+"&mode=test", true);
 	xhr.onreadystatechange = function() {
   		 if (xhr.readyState==4 && xhr.status==200){
-			var resultfromphp = xhr.responseText;
-			var objData = jQuery.parseJSON(resultfromphp);
-			if (objData.rsgcode == '000'){
+    		var resultfromphp = xhr.responseText;
+			//alert(resultfromphp);
+			//var html ='';
+      		  var objData = jQuery.parseJSON(resultfromphp);
+				if (objData.rsgcode == '000'){
 				makeList();
-			}
-            //document.location.href="gencart.html";	 
+				}
+                 //document.location.href="gencart.html";	 
   		}
 	};
 	xhr.send();
@@ -122,9 +115,11 @@ function delcart(recid){
 	  	 }
 	    }
 		
-function emptycart() {
-	var userid = $.jStorage.get('userid');
-	if (userid==null) { document.location.href="login.html" ;}
+   function emptycart() {
+   var userid = $.jStorage.get('userid');
+     if (userid==null)
+        document.location.href="login.html"
+
 	var xhr = new XMLHttpRequest();
 	xhr.open("GET", "http://www.zgltong.com/api/mobile.php?act=emptycart&user_id="+userid, true);
 	xhr.onreadystatechange = function() {
@@ -136,15 +131,6 @@ function emptycart() {
 	};
 	xhr.send();
 }
-
-
-function fchangenum(obj,recid){
-    var ss=obj.value.replace(/\D/g,'');
-	obj.value=ss;
-	updatecart(ss,recid);
-}
-
-
 </script>
 </head>
 <body>

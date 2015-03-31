@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -59,11 +60,9 @@ function login(){
     		$('#logout_dialog').show();
 			document.getElementById('alertmsg').innerHTML=objData.rsgmsg;
     		if (objData.rsgcode=='000'){
-         	      $.jStorage.set('userid', objData.userid , {TTL: 2880000000}); 
-         	      $.jStorage.set('username', username , {TTL: 2880000000});
-         	      $.jStorage.set('password', password , {TTL: 2880000000}); 
-         	      $.jStorage.set('gysa', objData.gysa , {TTL: 2880000000}); 
-				  $.jStorage.set('yqm', objData.yqm , {TTL: 2880000000}); 
+         	      $.jStorage.set('userid', objData.userid , {TTL: 28800000}); 
+         	      $.jStorage.set('username', username , {TTL: 28800000});
+         	      $.jStorage.set('password', password , {TTL: 28800000}); 
     		}
 		 }
 	};
@@ -84,7 +83,7 @@ function confirm(){
 <div class="user-ui-page">
 
 <!-- header -->
-<div class="user-ui-header clearfix">
+<div class="user-ui-header clearfix" style="padding-top:15px;">
 	<a class="left-bar" href="go.html">
 		<span class="glyphicon glyphicon-home"></span>
 	</a>
@@ -122,7 +121,7 @@ function confirm(){
 		<!-- /content -->
 </div>
 
-<div class="modal fade" id="logout_dialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+<div class="modal fade"  style="padding-top:15px;" id="logout_dialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">

@@ -3,7 +3,7 @@
 <html>
 <head>
 	<meta charset="utf-8" />
-	<title>轮通惠-商品详情</title>
+	<title>app</title>
 	<meta name="keywords" content="#">
 	<meta name="description" content="#">
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -69,7 +69,6 @@ function makeList() {
 				});
 			document.getElementById('specification').innerHTML=html;
 			//alert(shop_price);
-			document.getElementById('shop_price1').innerHTML='￥'+term.market_price;
 			document.getElementById('shop_price').innerHTML='￥'+term.shop_price;
 			makecartNum();
 			});
@@ -234,9 +233,6 @@ function gooddesc(){
 #shop_price{
 	font-size:25px;
 }
-#shop_price1{
-	font-size:25px;
-}
 .m_10_my{
 	margin: 5px 0;
 }
@@ -275,7 +271,7 @@ input[type='number'] {
 		<tr><td><span id="goods_name"></span></td></tr>
 		<tr><td class="spec_list"><span id="specification"></span></td></tr>
 		<tr><td class="spec_list"><span id="guige"></span></td></tr>
-		<tr><td><span id="shop_price1" style="text-decoration:line-through;color:#c2ccd0;"></span><span id="shop_price" style="color:#b10000;"></span></td></tr>
+		<tr><td><span id="shop_price" style="color:#b10000;"></span></td></tr>
 	</table>
 	<div class="m_10_my" style="padding:0 0px;">
 		<div class="form-group">

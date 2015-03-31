@@ -35,18 +35,14 @@ function genOrder(){
 			
 			html+='<p>订单状态：<span style="color: red;">'+objData.order.order_status+'</span></p>';
 		    html+='<p>订单编号：</td><td width="70%">'+objData.order.order_sn+'</p>';
-			if(objData.order.order_amount =='0.00'){
-			html+='<p>订单金额：</td><td>￥'+objData.order.money_paid+'</p>';
-			}else{
-			html+='<p>订单金额：</td><td>￥'+objData.order.order_amount+'</p>';
-			}
+		    html+='<p>订单金额：</td><td>￥'+objData.order.order_amount+'</p>';
 		    html+='<p>下单日期：</td><td>'+objData.order.formated_add_time+'</p>';
 		    document.getElementById('orderHtml').innerHTML=html; 
 		     
 		    html ='';
 			
 			var pay_id=objData.order.pay_id;
-			if (pay_id==4)
+			if (pay_id==1)
 			{
 				html+='<p>付款方式：支付宝</p>';
 			}else{
@@ -268,7 +264,7 @@ $('#cancel_btn').click(function(){
 		}
 	};
 	xhr.send();
-	location.href='mmember-orders.html';
+	//location.href='mmember-orders.html';
 });
 </script>
 

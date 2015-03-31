@@ -41,7 +41,7 @@ function makelist(){
     		    document.getElementById('username').innerHTML=objData.user_name;
     		    document.getElementById('rankname').innerHTML=objData.rank_name;
     		    
-				$.jStorage.set('mobilephone', objData.mobile_phone , {TTL: 2880000000}); 
+				$.jStorage.set('mobilephone', objData.mobile_phone , {TTL: 28800000}); 
 				
 				var sverification=objData.verification;
 				
@@ -61,21 +61,6 @@ function makelist(){
 				}
 
 				document.getElementById('mobilephone').innerHTML=sphone;
-
-				var strgysa=$.jStorage.get('gysa');
-				var stryqm=$.jStorage.get('yqm');
-
-				if ( strgysa =="1")
-				{
-					var stryqmdesc="<table class=\"table\"><tr><th  style=\"width:30%\">推荐码：</th><td ><div>"+stryqm+"</div></td></tr></table>";
-					document.getElementById('myyqm').innerHTML=stryqmdesc;
-
-					var strmysale="";
-					strmysale+="<a href=\"mycust.html\"  rel=\"external\"  class=\"list-group-item href_info\">我的客户列表</a>";
-					strmysale+="<a href=\"mysaleorder.html\"  rel=\"external\"  class=\"list-group-item href_info\">我的客户订单</a>";
-					strmysale+="<a href=\"orderprofit.html\"  rel=\"external\"  class=\"list-group-item href_info\">服务费用查询</a>";
-					document.getElementById('mysale').innerHTML=strmysale;
-				}
     		}
 		 }
 	};
@@ -87,7 +72,7 @@ function makelist(){
 <body><!-- page -->
 <div class="user-ui-page">
         <!-- header -->
-        <div class="user-ui-header clearfix">
+        <div class="user-ui-header clearfix"  style="padding-top:15px;">
 	        <a class="left-bar" href="go.html"  rel="external" >
 	        	<span class="glyphicon glyphicon-home"></span>
 	        </a>
@@ -98,7 +83,7 @@ function makelist(){
         </div>
 	    <!-- /header -->
 		<!-- content -->
-		<div class="user-ui-content">
+		<div class="user-ui-content"  style="padding-top:70px;">
 			<div class="container">
 			<table class="table">
 	    		<!--<tr>
@@ -117,17 +102,11 @@ function makelist(){
 	    			<th>会员：</th>
 	    			<td><div id="rankname"></div></td>
 	    		</tr>
-	    		
-				<tr>
+	    		<tr>
 	    			<th>手机号：</th>
 	    			<td><div id="mobilephone"></div></td>
 	    		</tr>
 			</table>
-
-
-			<div id="myyqm"></div>
-
-
 		    <div class="list-group public_section">
 		      <a href="modify-user.html" class="list-group-item href_info">修改手机号</a>
 			  <a href="changepwd1.html"  rel="external"  class="list-group-item href_info">修改密码</a>
@@ -135,10 +114,8 @@ function makelist(){
 			  <a href="mmember-orders.html"  rel="external"  class="list-group-item href_info">我的订单</a>
 			  <a href="listcollection.html"  rel="external"  class="list-group-item href_info">我的收藏</a>
               <a href="myaddress.html"  rel="external"  class="list-group-item href_info">我的地址</a>
+              
 			</div>
-
-		    <div class="list-group public_section" id="mysale"></div>
-
 			<p>
 		    	<a class="btn btn-danger btn-block" href="javascript:void(0)" data-toggle="modal" data-target="#logout_dialog">注销当前账户</a>
 			</p>
@@ -147,7 +124,7 @@ function makelist(){
 		<!-- /content -->
 		<!-- footer -->
 
-<div id="dp_footer" class="dp-footer">
+<div id="dp_footer" class="dp-footer	">
 		<nav class="navbar navbar-default navbar-fixed-bottom" role="navigation">
 		  <div class="container dp-menu-box">
 		    <a class="pull-left menu-btn" href="go.html" rel="external">
@@ -200,13 +177,11 @@ function makelist(){
 // 注销账户
 $('#logout_btn').click(function(){
 
-	$.jStorage.set('userid', null , {TTL: 2880000000}); 
-    $.jStorage.set('username', null , {TTL: 2880000000}); 
-    $.jStorage.set('password', null , {TTL: 2880000000}); 
-	$.jStorage.set('mobilephone', null , {TTL: 2880000000}); 
-	$.jStorage.set('mobilephone', null , {TTL: 2880000000}); 
-	$.jStorage.set('gysa', null , {TTL: 2880000000}); 
-	$.jStorage.set('yqm', null, {TTL: 2880000000}); 
+	$.jStorage.set('userid', null , {TTL: 28800000}); 
+    $.jStorage.set('username', null , {TTL: 28800000}); 
+    $.jStorage.set('password', null , {TTL: 28800000}); 
+	$.jStorage.set('mobilephone', null , {TTL: 28800000}); 
+	$.jStorage.set('mobilephone', null , {TTL: 28800000}); 
 
     location.href='login.html';
 });

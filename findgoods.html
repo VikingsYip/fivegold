@@ -64,7 +64,7 @@ $(document).ready(function() {
 
 function postfind(){
 	var goodsname=document.getElementById('goodsname').value;
-	$.jStorage.set('finggoodsname', goodsname, {TTL: 2880000000}); 
+	$.jStorage.set('finggoodsname', goodsname, {TTL: 28800000}); 
 	document.location.href="findgoods.html?goodsname="+encodeURIComponent(goodsname);
 }
 </script>

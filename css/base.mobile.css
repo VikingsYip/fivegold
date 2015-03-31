@@ -818,8 +818,3 @@ outline: 0;
 .category2 .txt_list a:nth-child(3n):after {
 	display: none
 }
-
-
-#myyqm {
-	padding: 5px 0;
-}
