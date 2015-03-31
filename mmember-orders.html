@@ -50,11 +50,16 @@ function makeList() {
 			}else if(term.handler=="已确认"){
 				html+='<td><p><a href=\"mmember-orderdetail.html?orderid='+term.order_id+'\" class=\"btn btn-info\">查看</a></p></td>';
 			}else{
-				html+='<td><p><a href=\"morder.html?orderid='+term.order_id+'\" class=\"btn btn-info\">付款</a></p><p><a href=\"mmember-orderdetail.html?orderid='+term.order_id+'\" class=\"btn btn-info\">查看</a></p></td>';		
+				html+='<td><p><a href=\"morder.html?orderid='+term.order_id+'\" class=\"btn btn-info\">付款</a></p><p><a href=\"mmember-orderdetail.html?orderid='+term.order_id+'\" class=\"btn btn-info\">查看</a></p></td>';	
 			}
 		}
 		else{
-			html+='<td><p></p><p><a href=\"mmember-orderdetail.html?orderid='+term.order_id+'\" class=\"btn btn-info\">查看</a></p></td>';
+			html+='<td><p></p><p><a href=\"mmember-orderdetail.html?orderid='+term.order_id+'\" class=\"btn btn-info\">查看</a></p>';
+			if (term.allow_to_modify=='1')
+			{
+				html+='<p><a href=\"modify-orders.html?orderid='+term.order_id+'\" class=\"btn btn-info\">修改</a></p>';
+			}
+			html+='</td>';
 		}
 		html+='</tr>';
 		});

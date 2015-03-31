@@ -3,7 +3,7 @@
 <html>
 <head>
 <meta charset="utf-8" />
-<title>订单查询</title>
+<title>轮通惠-订单查询</title>
 <meta name="keywords" content="">
 <meta name="description" content="">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -201,7 +201,6 @@ $(document).ready(function() {
 				}
 				$.get(next_page, function( data ) {
 					$("#order_list" ).append( data );
-					// 重新渲染jqm的样式
 					$("#order_list" ).trigger( "create" );
 					$.mobile.loading( "hide" );
 
