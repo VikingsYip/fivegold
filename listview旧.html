@@ -1,97 +1,84 @@
-
 <!DOCTYPE html>
 <html>
 <head>
 	<meta charset="utf-8" />
-	<title>轮通惠</title>
+	<title>轮通惠-产品列表</title>
 	<meta name="keywords" content="">
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-	<meta content="telephone=no" name="format-detection"/>
+	<meta content="telephone=no" name="format-detection" />
 	<link rel="stylesheet" href="css/bootstrap.min.css">
 	<script src="css/jquery-1.10.2.min.js"></script>
 	<script src="css/jquery.cookie.js"></script>
 	<script src="css/bootstrap.min.js"></script>
-	<link href="css/base.mobile.css" rel="stylesheet" type="text/css" media="screen, projection" />
+	<link rel="stylesheet" href="css/idangerous.swiper.css">
+	<script src="css/idangerous.swiper.min.js"></script>
+	<link href="css/base.mobile.css" rel="stylesheet" type="text/css" media="screen, projection" />	
 	<link href="fivegold.css" rel="stylesheet" type="text/css"/>
-	<script type="text/javascript" src="iscroll-lite.js"></script>
-	<script type="text/javascript" src="iscroll.js"></script>
 	<script type="text/javascript" src="fivegold.js"></script>
-	<script src="json2.js"></script>
-	<script src="jstorage.js"></script>
-<script>	
-function reorder(ordertype){
-	makeList(ordertype);
- }
  
-var sorting = 1;
-
+    <script>	
+function reorder(ordertype){
+  makeList(ordertype);
+ }
+ var sorting = 1;
 function makeList(ordertype) {
-    var goodsname = request('goodsname');
-	if (ordertype==null) {  ordertype="colligate"; }
+    var catid = request('catid');
+	if (ordertype==null)   ordertype="colligate";
 	var xhr = new XMLHttpRequest();
-	xhr.open("GET", "http://www.zgltong.com/api/mobile.php?act=findgoods&goodsname="+goodsname+"&intro="+ordertype+"&sorting="+sorting+"&mode=test", true);
-	if (sorting == 1)
+	xhr.open("GET", "http://www.zgltong.com/api/mobile.php?act=listcatgoods&cat_id="+catid+"&intro="+ordertype+"&sorting="+sorting, true);
+		if (sorting == 1)
 	    sorting =2;
 	else
 	    sorting =1;
 	xhr.onreadystatechange = function() {
   		 if (xhr.readyState==4 && xhr.status==200){
     		var resultfromphp = xhr.responseText;
-			//alert(resultfromphp);
 			var html ='';
       		var objData = jQuery.parseJSON(resultfromphp);
 			$.each(objData.listallcat, function (index, term) {
-			html+="<div class=\"center-block goods-item\"><a class=\"href_info\" href=\"goods.html?goodsid="+term.goods_id+"\"><img style=\"margin-right:5px;\" class=\"img-rounded pull-left\" src=\""+term.goods_img+"\" alt=\""+term.goods_name+"\" width=\"80\" height=\"80\"/><div class=\"clearfix\"><p class=\"product_name\">"+term.goods_name+"</p><p class=\"product_name\"></p><div class=\"product_price clearfix\" style=\"line-height:30px;\"><p style=\"font-size:16px;float:left;color:red\">￥"+term.shop_price+"</p></div></div></a></div>";
+			html+="<div class=\"center-block goods-item\"><a class=\"href_info\" href=\"goods.html?goodsid="+term.goods_id+"\"><img style=\"margin-right:5px;\" class=\"img-rounded pull-left\" src=\""+term.goods_img+"\" alt=\""+term.goods_name+"\" width=\"100\" height=\"100\"/><div class=\"clearfix\"><p class=\"product_name\">"+term.goods_name+"</p><p class=\"product_name\">所有的参数</p><div class=\"product_price clearfix\" style=\"line-height:30px;\"><span style=\"text-decoration:line-through;color:#c2ccd0;\">￥"+term.market_price+"</span><span style=\"font-size:16px;color:red\">￥"+term.shop_price+"</span></div></div></a></div>";
 			});
-			//alert(html);
+			
 			if (html=='')
 			{
 				html='<section style=\"text-align:center;\"><p style=\"margin:30px 0px;\">暂无商品...<p></section>';
 			}
+
 			document.getElementById('catHtml').innerHTML=html;
+			 
   		}
 	};
 	xhr.send();
+	
 }
 
 $(document).ready(function() {
-	//alert('hi');
-	var finggoodsname = $.jStorage.get('finggoodsname');
-	document.getElementById('goodsname').value=finggoodsname;
-	makeList('colligate');
+	 makeList('colligate');
 });
 
 function postfind(){
 	var goodsname=document.getElementById('goodsname').value;
-	$.jStorage.set('finggoodsname', goodsname, {TTL: 2880000000}); 
 	document.location.href="findgoods.html?goodsname="+encodeURIComponent(goodsname);
 }
+
 </script>
 </head>
 <body>
+<!-- header -->
+<div class="user-ui-header clearfix">
+	<a class="left-bar" href="listcat.html">
+		<span class="glyphicon glyphicon-chevron-left"></span>
+	</a>
+	<span>查询结果</span>
+	<a class="right-bar" href="checkcart.html">
+		<span class="glyphicon glyphicon-shopping-cart"></span>
+	</a>
+</div>
+<!-- /header -->
 
-<div class="dp-header" id="header">
-	<div class="container-fluid" style="background-color:#E0DFDB;margin-bottom:5px;padding:10px 10px;">
-	<div class="row" style="margin:0 0;">
-			<div class="col-xs-12" style="padding:0 0;">
-		<form id="search_form" action="javascript:postfind()" method="get">
-					<div class="col-xs-99">
-					<img alt="轮通惠" src="img/logo.png" width="45px" border="0">
-				</div>
-				<div class="input-group col-xs-100">
-				      <input type="text" class="form-control" name="scontent"  id="goodsname" value="" placeholder="搜索商品">
-				      <span class="input-group-btn">
-				        <input class="btn btn-default" type="submit" value="搜索">
-				      </span>
-				</div>
-			</form>
-			</div>
-	</div>
-	</div>	
-	</div>
-<!-- search end -->
-    <div class="dp-main">
+<!-- search end -->	
+	<div class="dp-main" style="padding-top:70px">
 	<div class="container">
 <style>
 #mytop1 th {text-align:center;border: 1px solid #ffffff; }
@@ -107,8 +94,7 @@ function postfind(){
 		</tbody>
 		</table>
         </div>
-		
-<!--产品 begin-->
+ <!--产品 begin-->
  <div id ="catHtml"></div>
 <!--产品 end-->
 
@@ -118,14 +104,14 @@ function postfind(){
 </div>
 <!-- /content -->
 
-<div id="dp_footer" class="dp-footer">
+<div id="dp_footer" class="dp-footer	">
 		<nav class="navbar navbar-default navbar-fixed-bottom" role="navigation">
 		  <div class="container dp-menu-box">
 		    <a class="pull-left menu-btn" href="go.html">
 		    	<div class="menu-img glyphicon glyphicon-home"></div>
 		    	<div>首页</div>
 		    </a>
-		    <a class="pull-left menu-btn" style="color:red"  href="listcat.html">
+		    <a class="pull-left menu-btn"  style="color:red"  href="listcat.html">
 		    	<div class="menu-img glyphicon glyphicon-th-large"></div>
 		    	<div>分类</div>
 		    </a>

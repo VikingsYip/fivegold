@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="utf-8" />
-<title>登陆/注册</title>
+<title>轮通惠-登陆/注册</title>
 <meta name="keywords" content="">
 <meta name="description" content="">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -170,7 +170,7 @@ function gofinish(){
 				var objData = jQuery.parseJSON(resultfromphp);
 				document.getElementById('alertmsg').innerHTML=objData.rsgmsg;
 				if (objData.rsgcode=='000'){
-					$.jStorage.set('password', mynewpwd , {TTL: 28800000}); 
+					$.jStorage.set('password', mynewpwd , {TTL: 2880000000}); 
 					document.getElementById('alertmsg2').innerHTML="密码修改成功!";
 					document.getElementById('chpwd_dialog').style.display ='block';
 				}

@@ -30,11 +30,21 @@ function makeList() {
 			var html ='';
 			var objData = jQuery.parseJSON(resultfromphp);
 			   $.each(objData.goods_list, function (index, term) {
-			html+="<table class=\"table\"><tr><td valign=\"top\" width=\"50px\"><a href=\"goods.html?goodsid="+term.goods_id+"\"><img class=\"img-rounded\" width=\"100\" height=\"100\" src=\""+term.original_img+"\"></a></td><td><p>"+term.goods_name+"";
-			$.each(term.goods_attr, function (index, att) 							{
-			html+="("+att.name+"："+att.value+")";
-			});
-			html+="</p>单价："+term.goods_price+"\<br/><div class=\"form-group\"><button  class=\"btn btn-info mybtn\" id=\"minus_product\"   onClick=\"update_minus('"+term.rec_id+"')\">减</button ><input class=\"form-control\" style=\"width:70px;display:inline-block;\" type=\"number\"  onkeyup=\"this.value=this.value.replace(/\D/g,'')\" id=\""+term.rec_id+"\" min=\"1\"  value=\""+term.goods_number+"\"><a class=\"btn btn-info mybtn\" id=\"plus_product\"   onClick=\"update_plus('"+term.rec_id+"')\">加</a></div><section><a href=\"javascript:delcart("+term.rec_id+")\" data-ajax=\"false\" data-rel=\"popup\" data-position-to=\"window\" data-transition=\"pop\" data-icon=\"delete\" data-theme=\"d\">删除</a></section></td></tr></table>";
+			   html+="<table class=\"table\"><tr><td valign=\"top\" width=\"50px\"><a href=\"goods.html?goodsid="+term.goods_id+"\"><img class=\"img-rounded\" width=\"100\" height=\"100\" src=\""+term.original_img+"\"></a></td><td><p>"+term.goods_name+"";
+			   $.each(term.goods_attr, function (index, att) 							{
+			     html+="("+att.name+"："+att.value+")";
+			   });
+
+			var isgift=term.is_gift;
+			if (isgift==0)
+			{
+				html+="</p>单价："+term.goods_price+"\<br/><div class=\"form-group\"><button  class=\"btn btn-info mybtn\" id=\"minus_product\"   onClick=\"update_minus('"+term.rec_id+"')\">减</button ><input class=\"form-control myinput\" style=\"width:70px;display:inline-block;\" type=\"number\" onkeyup=\"this.value=this.value.replace(/\D/g,'')\" id=\""+term.rec_id+"\" min=\"1\"  value=\""+term.goods_number+"\"><a class=\"btn btn-info mybtn\" id=\"plus_product\"   onClick=\"update_plus('"+term.rec_id+"')\">加</a></div><section><a href=\"javascript:delcart("+term.rec_id+")\" data-ajax=\"false\" data-rel=\"popup\" data-position-to=\"window\" data-transition=\"pop\" data-icon=\"delete\" data-theme=\"d\">删除</a></section>";
+			}else{
+				html+="</p>单价："+term.goods_price+"\<br/><div class=\"form-group\">赠送数量："+term.goods_number+"</div>";
+			}
+			
+
+			html+="</td></tr></table>";
 			});
 			document.getElementById('catHtml').innerHTML=html;
 			if ( html=="")  {  document.location.href="nocart.html" ; }
@@ -45,24 +55,17 @@ function makeList() {
 }
 
 function updatecart(newnumber,recid) {
-    //alert(newnumber);
-    //alert(recid);
- var userid = $.jStorage.get('userid');
-     if (userid==null)
-        document.location.href="login.html"
-	//alert(recid);
+    var userid = $.jStorage.get('userid');
+    if (userid==null) ｛ document.location.href="login.html" ;}
 	var xhr = new XMLHttpRequest();
 	xhr.open("GET", "http://www.zgltong.com/api/mobile.php?act=edltbuycart&user_id="+userid+"&new_number="+newnumber+"&rec_id="+recid+"&mode=test", true);
 	xhr.onreadystatechange = function() {
   		 if (xhr.readyState==4 && xhr.status==200){
     		var resultfromphp = xhr.responseText;
-			//alert(resultfromphp);
-			//var html ='';
       		  var objData = jQuery.parseJSON(resultfromphp);
 				if (objData.rsgcode == '000'){
 				makeList();
 				}
-                 //document.location.href="gencart.html";	 
   		}
 	};
 	xhr.send();
@@ -70,7 +73,6 @@ function updatecart(newnumber,recid) {
 
 
 $(document).ready(function() {
-	//alert('hi');
 	 makeList();
 });
 
@@ -80,45 +82,40 @@ function delcart(recid){
 	xhr.onreadystatechange = function() {
   		 if (xhr.readyState==4 && xhr.status==200){
     		var resultfromphp = xhr.responseText;
-			//alert (resultfromphp);
-			//alert ('删除成功');
 			var objData = jQuery.parseJSON(resultfromphp);
-			//alert(objData.rsgmsg);
-			//$('#listallcat').removeData(;
 			document.location.href="gencart.html";
   		}
 	};
 	xhr.send();
 }
 
- function update_minus(e){
-	    	$num = $('#'+e).val();
-	    	$num--;
-	    	if($num<=1){
-	    		$('#'+e).val(1);
-	    		updatecart(1,e);
-	    	}else{
-	    		$('#'+e).val($num);
-	    		updatecart($num,e);
-	    	}
-	    }
+function update_minus(e){
+	$num = $('#'+e).val();
+	$num--;
+	if($num<=1){
+		$('#'+e).val(1);
+		updatecart(1,e);
+	}else{
+		$('#'+e).val($num);
+		updatecart($num,e);
+		}
+}
 
-	    function update_plus(e){
-	    	$num = $('#'+e).val();
-	    	$num++;
-	    	if($num>=10000){
-	    		$('#'+e).val(10000);
-	    		updatecart(10000,e);
-	    	}else{
-	    		$('#'+e).val($num);
-	    		updatecart($num,e);
-	  	 }
-	    }
+function update_plus(e){
+	$num = $('#'+e).val();
+	$num++;
+	if($num>=10000){
+		$('#'+e).val(10000);
+		updatecart(10000,e);
+	}else{
+		$('#'+e).val($num);
+		updatecart($num,e);
+	}
+}
 		
-   function emptycart() {
-   var userid = $.jStorage.get('userid');
-     if (userid==null)
-        document.location.href="login.html"
+function emptycart() {
+	var userid = $.jStorage.get('userid');
+	if (userid==null)  document.location.href="login.html"
 
 	var xhr = new XMLHttpRequest();
 	xhr.open("GET", "http://www.zgltong.com/api/mobile.php?act=emptycart&user_id="+userid, true);
@@ -161,50 +158,23 @@ function delcart(recid){
 
 
 <div id="dp_footer" class="dp-footer">
-	<nav class="navbar navbar-default navbar-fixed-bottom" style="height:140px" role="navigation">
+	<nav class="navbar navbar-default navbar-fixed-bottom" role="navigation">
 		<form class="form-inline" action="checkcart.html" method="post" data-ajax="false">
 		<div class="panel panel-default mypanel">
 		    <div class="myalert alert-info " id="total"></div>
         </div>
-            <div class="myleft"><!--<a class="btn btn-default" href="javascript:emptycart();">清除购物车</a>-->
+            <div class="myleft">
 			
 			<a class="btn btn-default" href="javascript:void(0)" data-toggle="modal" data-target="#empty_dialog">清除购物车</a>
 			
             <input class="btn btn-danger" type="submit" value="去结算" readonly>
 			
 			<input type="buttom" id="cartnum" onclick="javascript:document.location.href='listcat.html';" value="继续购物" class="btn btn-danger aa" style="width:100px" readonly ></div>
-
-			<div class="container dp-menu-box">
-		    <a class="pull-left menu-btn" href="go.html">
-		    	<div class="menu-img glyphicon glyphicon-home"></div>
-		    	<div>首页</div>
-		    </a>
-		    <a class="pull-left menu-btn" href="listcat.html">
-		    	<div class="menu-img glyphicon glyphicon-th-large"></div>
-		    	<div>分类</div>
-		    </a>
-		    <a class="pull-left menu-btn" href="usercenter.html">
-		    	<div class="menu-img glyphicon glyphicon-user"></div>
-		    	<div>我的</div>
-		    </a>
-		    <a class="pull-left menu-btn" href="gencart.html"  style="color:red" >
-		    	<div class="menu-img glyphicon glyphicon-shopping-cart"></div>
-		    	<div>购物车</div>
-		    </a>
-		    <a class="pull-left menu-btn" href="mmember-orders.html">
-		    	<div class="menu-img glyphicon glyphicon-th-list"></div>
-		    	<div>订单</div>
-		    </a>
-		  </div>
 	    </div>
 		</form>
-		
 	</nav>
 </div>
-
-
 <!-- /footer -->
-
 </div>
 <!-- /page -->
 
@@ -247,6 +217,10 @@ input[type='number'] {
         -webkit-appearance: none;  
         margin: 0;  
     }  
+
+.myinput{
+	padding-top:2px;
+}
 </style>
 
 <div class="modal fade" id="empty_dialog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

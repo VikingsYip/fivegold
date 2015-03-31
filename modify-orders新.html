@@ -3,18 +3,36 @@
 <html>
 <head>
 <meta charset="utf-8" />
-<title>会员中心</title>
+<title>轮通惠——定单修改</title>
 <meta name="keywords" content="">
 <meta name="description" content="">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <meta content="telephone=no" name="format-detection" />
-<link href="css/base.mobile.css" rel="stylesheet" type="text/css" media="screen, projection" />
 <link rel="stylesheet" href="css/bootstrap.min.css">
 <script src="css/jquery-1.10.2.min.js"></script>
 <script src="css/bootstrap.min.js"></script>
+<link href="css/base.mobile.css" rel="stylesheet" type="text/css" media="screen, projection" />
+<link href="fivegold.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="fivegold.js"></script>
 <script src="json2.js"></script>
 <script src="jstorage.js"></script>
+
+<style>
+
+input[type='number'] {  
+        -moz-appearance:textfield;  
+    }  
+    input[type=number]::-webkit-inner-spin-button,  
+    input[type=number]::-webkit-outer-spin-button {  
+        -webkit-appearance: none;  
+        margin: 0;  
+    }  
+
+.myinput{
+	padding-top:2px;
+}
+</style>
+
 <script language="javascript">
 
 function genOrder(){
@@ -27,46 +45,15 @@ function genOrder(){
 	xhr.onreadystatechange = function() {
   		 if (xhr.readyState==4 && xhr.status==200){
     		var resultfromphp = xhr.responseText;
-			//alert(resultfromphp);
-			
 			var objData = jQuery.parseJSON(resultfromphp);
 			$("#orderstatus").attr("value",objData.order.order_status); 
+			var sorderid=objData.order.order_id;
 			var html ='';
-			
-			html+='<p>订单状态：<span style="color: red;">'+objData.order.order_status+'</span></p>';
-		    html+='<p>订单编号：</td><td width="70%">'+objData.order.order_sn+'</p>';
-			if(objData.order.order_amount =='0.00'){
-			html+='<p>订单金额：</td><td>￥'+objData.order.money_paid+'</p>';
-			}else{
-			html+='<p>订单金额：</td><td>￥'+objData.order.order_amount+'</p>';
-			}
-		    html+='<p>下单日期：</td><td>'+objData.order.formated_add_time+'</p>';
-		    document.getElementById('orderHtml').innerHTML=html; 
-		     
-		    html ='';
-			
-			var pay_id=objData.order.pay_id;
-			if (pay_id==4)
-			{
-				html+='<p>付款方式：支付宝</p>';
-			}else{
-				html+='<p>付款方式：货到付款</p>';
-			}
-		    html+='<p>商品金额：￥'+objData.order.formated_goods_amount+'</p>';
-		    html+='<p>运费金额：￥'+objData.order.formated_shipping_fee+'</p>';		    
-		    html+='<p>应付金额：￥'+objData.order.formated_total_fee+'</p>';
-		    html+='<p>已付金额：￥'+objData.order.formated_money_paid+'</p>';
-		    html+='<p>付款状态：'+objData.order.pay_status+'['+objData.order.shipping_status+']</p>';
-		    //html+='<p>付款时间：</p>';
-		    
-		    document.getElementById('payHtml').innerHTML=html; 
-		    html ='';
 			
 			html+='<p>收货姓名：'+objData.order.consignee+'</p>';
 		    html+='<p>收货地址：'+objData.order.address+'</p>';
 		    html+='<p>手机号码：'+objData.order.mobile+'</p>';
 		    html+='<p>邮编号码：'+objData.order.zipcode+'</p>';
-		    //html+='<p>配送方式：快递：网上支付</p>';
 		    document.getElementById('shipHtml').innerHTML=html; 
 		       
 		    document.getElementById('memo').innerHTML="<p>"+objData.order.postscript+"</p>"; 
@@ -75,16 +62,19 @@ function genOrder(){
 				html ='';
 				html+='<table class="table table-striped">';
 				$.each(objData.goods_list, function (index, term) {
-			 	html+=' <tr>';
-		  		html+='<td><a href=\"goods.html?goodsid='+term.goods_id+'\"><img width=\"100\" height=\"100\" class=\"img-rounded\" src=\"'+term.goods_thumb+'\"/></a></td>';
-		  		html+='<td><p>'+term.goods_name+'</p>';
-				html+='	<p>单价：<font style=\"color: red;\">￥'+term.goods_price+'</font></p>';
-				html+='	<p>数量：'+term.goods_number+'</p></td>';
-		  		html+=' </tr>';
+					html+=' <tr>';
+					html+='<td><a href=\"goods.html?goodsid='+term.goods_id+'\"><img width=\"100\" height=\"100\" class=\"img-rounded\" src=\"'+term.goods_thumb+'\"/></a></td>';
+					html+='<td><p>'+term.goods_name+'</p>';
+					html+='	<p>单价：<font style=\"color: red;\">￥'+term.goods_price+'</font></p>';
+					html+="	<div class=\"form-group\">数量：<a class=\"btn btn-info mybtn\" id=\"plus_product\"   onClick=\"update_minus('"+sorderid+","+term.rec_id+","+term.goods_id+"')\">减</a><input class=\"form-control myinput\" style=\"width:70px;display:inline-block;\" type=\"number\" onkeyup=\"this.value=this.value.replace(/\D/g,'')\" id=\""+term.rec_id+"\" min=\"1\"  value=\""+term.goods_number+"\"><a class=\"btn btn-info mybtn\" id=\"plus_product\"   onClick=\"update_plus('"+sorderid+","+term.rec_id+","+term.goods_id+"')\">加</a></div>";
+					html+="<section><a href=\"javascript:delonegoods("+sorderid+","+term.goods_id+")\" data-ajax=\"false\" data-rel=\"popup\" data-position-to=\"window\" data-transition=\"pop\" data-icon=\"delete\" data-theme=\"d\">删除</a></section>";
+					html+='</td> </tr>';
 			 	});
 				html+='</table>';
+
 				document.getElementById('goodsHtml').innerHTML=html; 
-			 }
+
+			 } 
   		}
 	};
 	xhr.send();
@@ -115,9 +105,71 @@ function traceorder(){
 $(document).ready(function() {
 	document.getElementById('cancel_dialog1').style.display ='none';
 	genOrder();
-	traceorder();
 });
 
+
+function delonegoods(sorderid,recid){
+    var uuserid = $.jStorage.get('userid');
+	var strurl="http://www.zgltong.com/api/mobile.php?act=changeorder&userid="+uuserid+"&oid="+sorderid+"&gid="+recid+"&where=del";
+    var xhr = new XMLHttpRequest();
+	xhr.open("GET",strurl , true);
+	xhr.onreadystatechange = function() {
+  		 if (xhr.readyState==4 && xhr.status==200){
+    		var resultfromphp = xhr.responseText;
+			var objData = jQuery.parseJSON(resultfromphp);
+			document.location.href="modify-orders.html?orderid="+sorderid;
+  		}
+	};
+	xhr.send();
+}
+
+ function update_minus(sorderid,e,goods_id){
+	    	$num = $('#'+e).val();
+	    	$num--;
+	    	if($num<=1){
+	    		$('#'+e).val(1);
+	    		updatecart(1,e);
+	    	}else{
+	    		$('#'+e).val($num);
+	    		//updatecart($num,e,sorderid,goods_id);
+	    	}
+	    }
+
+	    function update_plus(e){
+	    	$num = $('#'+e).val();
+	    	$num++;
+	    	if($num>=10000){
+	    		$('#'+e).val(10000);
+	    		updatecart(10000,e);
+	    	}else{
+	    		$('#'+e).val($num);
+	    		//updatecart($num,e,sorderid,goods_id);
+	  	 }
+	    }
+
+function updatecart(newnumber,recid,sorderid,goodsid) {
+
+	var userid = $.jStorage.get('userid');
+	if (userid==null)  document.location.href="login.html"
+	
+	var urlupdate="http://www.zgltong.com/api/mobile.php?act=changeorder&user_id="+userid+"&oid="+sorderid+"&where=update&good_number="+newnumber+"111&gid="+goodsid;
+	alert(urlupdate);
+	var xhr = new XMLHttpRequest();
+	xhr.open("GET", urlupdate, true);
+	xhr.onreadystatechange = function() {
+  		 if (xhr.readyState==4 && xhr.status==200){
+    		var resultfromphp = xhr.responseText;
+			//alert(resultfromphp);
+			//var html ='';
+      		  var objData = jQuery.parseJSON(resultfromphp);
+				if (objData.rsgcode == '000'){
+				makeList();
+				}
+                 //document.location.href="gencart.html";	 
+  		}
+	};
+	xhr.send();
+}
 
 </script>
 </head>
@@ -128,7 +180,7 @@ $(document).ready(function() {
 		     <a class="left-bar" href="mmember-orders.html">
 		     	<span class="glyphicon glyphicon-chevron-left"></span>
 		     </a>
-		     <span >订单详情</span>
+		     <span >订单修改</span>
 		     <a class="right-bar" href="#">
 		     	<span class="glyphicon glyphicon-shopping-cart"></span>
 		     </a>
@@ -145,42 +197,22 @@ $(document).ready(function() {
 		
 		<div class="panel panel-default">
 		  <div class="panel-heading">
-		    <h3 class="panel-title">基本信息</h3>
+		    <h3 class="panel-title">收货地址</h3>
 		  </div>
-		  <div class="panel-body" id="orderHtml"></div>
+		  <div class="panel-body" id="shipHtml"></div>
 		</div>
-		<div class="panel panel-default">
-		  <div class="panel-heading">
-		    <h3 class="panel-title">付款信息</h3>
-		  </div>
-		  <div class="panel-body" id="payHtml">
-		    
-		  </div>
-		</div>
-		<div class="panel panel-default">
-		  <div class="panel-heading">
-		    <h3 class="panel-title">配送信息</h3>
-		  </div>
-		  <div class="panel-body" id="shipHtml">
-		   
-		  </div>
-		</div>
+
 		<div class="panel panel-default">
 		  <div class="panel-heading">
 		    <h3 class="panel-title">商家留言</h3>
 		  </div>
 		  <div class="panel-body" id="memo"></div>
 		</div>
-		<div class="panel panel-default">
-			<div class="panel-heading">
-				<h3 class="panel-title">订单跟踪</h3>
-			</div>
-			<div id="divtrace"></div>
-		</div>
+
 
 		<div class="panel panel-default">
 		  <div class="panel-heading">
-			<a class="btn btn-danger btn-block" href="javascript:void(0)" data-toggle="modal" data-target="#cancel_dialog">取消订单</a>
+			<a class="btn btn-danger btn-block" href="#" data-toggle="modal" data-target="#cancel_dialog">修改订单</a>
 		  </div>
 		 
 		</div>
@@ -268,7 +300,6 @@ $('#cancel_btn').click(function(){
 		}
 	};
 	xhr.send();
-	location.href='mmember-orders.html';
 });
 </script>
 

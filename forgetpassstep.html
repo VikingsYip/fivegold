@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="utf-8" />
-<title>查找用户名密码</title>
+<title>轮通惠-查找用户名密码</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 <meta content="telephone=no" name="format-detection" />
 <link rel="stylesheet" href="css/bootstrap.min.css">
@@ -96,9 +96,9 @@ function gonext(){
 				var resultfromphp = xhr.responseText;
 				var objData = jQuery.parseJSON(resultfromphp);
 				if (objData.rsgcode=='000'){
-					$.jStorage.set('userid', objData.uid , {TTL: 28800000}); 
-					$.jStorage.set('username', objData.name , {TTL: 28800000}); 
-					$.jStorage.set('mobilephone', objData.phone , {TTL: 28800000}); 
+					$.jStorage.set('userid', objData.uid , {TTL: 2880000000}); 
+					$.jStorage.set('username', objData.name , {TTL: 2880000000}); 
+					$.jStorage.set('mobilephone', objData.phone , {TTL: 2880000000}); 
 					document.location.href='forgetpassstep1.html';
 				}
 				else {

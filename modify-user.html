@@ -151,7 +151,7 @@ function mody(){
     		var resultfromphp = xhr.responseText;
     		var objData = jQuery.parseJSON(resultfromphp);
     		if (objData.rsgcode=='000'){
-				$.jStorage.set('mobilephone', mytel , {TTL: 28800000}); 
+				$.jStorage.set('mobilephone', mytel , {TTL: 2880000000}); 
 				document.getElementById('alertmsg2').innerHTML="手机修改成功!";
 				document.getElementById('chpwd_dialog').style.display ='block';
 			}

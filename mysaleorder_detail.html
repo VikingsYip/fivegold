@@ -18,8 +18,7 @@
 <script language="javascript">
 
 function genOrder(){
-	var userid = $.jStorage.get('userid');
-	if (userid==null) { document.location.href="login.html";}
+	var userid = request('myuserid')
 	var orderid = request('orderid');
 	$("#ordersid").attr("value",orderid); 
 	var xhr = new XMLHttpRequest();
@@ -125,7 +124,7 @@ $(document).ready(function() {
 <div class="user-ui-page">
         <!-- header -->
 	    <div class="user-ui-header clearfix" >
-		     <a class="left-bar" href="mmember-orders.html">
+		     <a class="left-bar" href="mysaleorder.html">
 		     	<span class="glyphicon glyphicon-chevron-left"></span>
 		     </a>
 		     <span >订单详情</span>
@@ -268,7 +267,7 @@ $('#cancel_btn').click(function(){
 		}
 	};
 	xhr.send();
-	location.href='mmember-orders.html';
+	//location.href='mmember-orders.html';
 });
 </script>
 
