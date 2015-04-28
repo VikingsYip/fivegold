@@ -31,6 +31,8 @@ input[type='number'] {
 .myinput{
 	padding-top:2px;
 }
+
+.mytop {padding-top:20px;}
 </style>
 
 <script language="javascript">
@@ -187,9 +189,9 @@ function updatecart(newnumber,recid,sorderid,goodsid) {
 				if (objData.rsgcode == '000'){
 				makeList();
 				}
-                document.getElementById('alertmsg2').innerHTML="更新定单成功!";
-				document.getElementById('cancel_dialog1').style.display ='block';
-				setTimeout("document.getElementById('cancel_dialog1').style.display ='none'",800)
+                //document.getElementById('alertmsg2').innerHTML="更新定单成功!";
+				//document.getElementById('cancel_dialog1').style.display ='block';
+				//setTimeout("document.getElementById('cancel_dialog1').style.display ='none'",800)
   		}
 	};
 	xhr.send();
@@ -197,21 +199,23 @@ function updatecart(newnumber,recid,sorderid,goodsid) {
 
 
 function alteright() {
-
 	document.getElementById('alertmsg2').innerHTML="更新定单成功!";
 	document.getElementById('cancel_dialog1').style.display ='block';
 	setTimeout("document.getElementById('cancel_dialog1').style.display ='none'",800)
 	document.location.href="mmember-orders.html";
-
 }
 
+function newchange() {
+  //先确认生成的序列
 
+  alert('来了');
+}
 </script>
 </head>
 <body><!-- page -->
 <div class="user-ui-page">
         <!-- header -->
-	    <div class="user-ui-header clearfix" >
+	    <div class="user-ui-header clearfix mytop" >
 		     <a class="left-bar" href="mmember-orders.html">
 		     	<span class="glyphicon glyphicon-chevron-left"></span>
 		     </a>
@@ -247,7 +251,7 @@ function alteright() {
 
 		<div class="panel panel-default">
 		  <div class="panel-heading">
-			<a class="btn btn-danger btn-block" href="javascript:alteright()">修改订单</a>
+			<a class="btn btn-danger btn-block" href="javascript:newchange()">修改订单</a>
 		  </div>
 		 
 		</div>

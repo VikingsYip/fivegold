@@ -38,15 +38,12 @@ function makeList() {
 			var isgift=term.is_gift;
 			if (isgift==0)
 			{
-				html+="</p>单价："+term.goods_price+"\<br/><div class=\"form-group\"><button  class=\"btn btn-info mybtn\" id=\"minus_product\"   onClick=\"update_minus('"+term.rec_id+"')\">减</button ><input class=\"form-control myinput\" style=\"width:70px;display:inline-block;\" type=\"number\" id=\""+term.rec_id+"\" min=\"1\"  value=\""+term.goods_number+"\"  onkeyup=\"fchangenum(this,"+term.rec_id+")\"><a class=\"btn btn-info mybtn\" id=\"plus_product\"   onClick=\"update_plus('"+term.rec_id+"')\">加</a></div><section><a href=\"javascript:delcart("+term.rec_id+")\" data-ajax=\"false\" data-rel=\"popup\" data-position-to=\"window\" data-transition=\"pop\" data-icon=\"delete\" data-theme=\"d\">删除</a></section>";
-				
-				
+				html+="</p>单价："+term.goods_price+"\<br/><div class=\"form-group\"><button  class=\"btn btn-info mybtn\" id=\"minus_product\"   onClick=\"update_minus('"+term.rec_id+"')\">减</button ><input class=\"form-control myinput\" style=\"width:70px;display:inline-block;\" type=\"number\" name=\"good_number["+term.rec_id+"]\" id=\""+term.rec_id+"\" min=\"1\"  value=\""+term.goods_number+"\"  onkeyup=\"fchangenum(this,"+term.rec_id+")\"><a class=\"btn btn-info mybtn\" id=\"plus_product\"   onClick=\"update_plus('"+term.rec_id+"')\">加</a></div><section><a href=\"javascript:delcart("+term.rec_id+")\" data-ajax=\"false\" data-rel=\"popup\" data-position-to=\"window\" data-transition=\"pop\" data-icon=\"delete\" data-theme=\"d\">删除</a></section>";
 			}else{
 				
-				html+="</p>单价："+term.goods_price+"\<br/><div class=\"form-group\">"+term.goods_number+"</div>";
+				html+="</p>单价："+term.goods_price+"\<br/><div class=\"form-group\">赠送数量："+term.goods_number+"</div>";
 			}
 			
-			//html+="</p>单价："+term.goods_price+"\<br/><div class=\"form-group\">赠送数量："+term.goods_number+"</div>";
 			html+="</td></tr></table>";
 			});
 			document.getElementById('catHtml').innerHTML=html;
@@ -56,6 +53,7 @@ function makeList() {
 	};
 	xhr.send();
 }
+
 
 function updatecart(newnumber,recid) {
 	var userid = $.jStorage.get('userid');
@@ -69,7 +67,6 @@ function updatecart(newnumber,recid) {
 			if (objData.rsgcode == '000'){
 				makeList();
 			}
-            //document.location.href="gencart.html";	 
   		}
 	};
 	xhr.send();
@@ -77,7 +74,6 @@ function updatecart(newnumber,recid) {
 
 
 $(document).ready(function() {
-	//alert('hi');
 	 makeList();
 });
 
@@ -142,13 +138,17 @@ function fchangenum(obj,recid){
     var ss=obj.value.replace(/\D/g,'');
 	obj.value=ss;
 	updatecart(ss,recid);
+    obj.focus();
 }
 
 
 </script>
 </head>
 <body>
-<div class="user-ui-page">
+<style>
+	.mytop {padding-top:20px;}
+</style>
+<div class="user-ui-page mytop">
 <!-- header -->
 	<div class="user-ui-header clearfix" >
 	      <a class="left-bar" href="go.html">

@@ -3,7 +3,7 @@
 <html>
 <head>
 	<meta charset="utf-8" />
-	<title>轮通惠</title>
+	<title>轮通惠-查询结果</title>
 	<meta name="keywords" content="">
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -41,11 +41,23 @@ function makeList(ordertype) {
 			//alert(resultfromphp);
 			var html ='';
       		var objData = jQuery.parseJSON(resultfromphp);
+
+			html+='<table class="table table-striped">';
+			var ishtml='1';
+
 			$.each(objData.listallcat, function (index, term) {
-			html+="<div class=\"center-block goods-item\"><a class=\"href_info\" href=\"goods.html?goodsid="+term.goods_id+"\"><img style=\"margin-right:5px;\" class=\"img-rounded pull-left\" src=\""+term.goods_img+"\" alt=\""+term.goods_name+"\" width=\"80\" height=\"80\"/><div class=\"clearfix\"><p class=\"product_name\">"+term.goods_name+"</p><p class=\"product_name\"></p><div class=\"product_price clearfix\" style=\"line-height:30px;\"><p style=\"font-size:16px;float:left;color:red\">￥"+term.shop_price+"</p></div></div></a></div>";
+				ishtml='2'
+				html+=' <tr>';
+		  		html+='<td width=60><a href=\"goods.html?goodsid='+term.goods_id+'\"><img width=\"100\" height=\"100\" class=\"img-rounded\" src=\"'+term.goods_img+'\"/></a></td>';
+		  		html+='<td><p><a href=\"goods.html?goodsid='+term.goods_id+'\">'+term.goods_name+'</a></p>';
+				html+="	<p><span style=\"text-decoration:line-through;color:#c2ccd0;\">￥"+term.market_price+"</span><span style=\"font-size:16px;color:red\">￥"+term.shop_price+"</span></p>";
+				html+='</td>';
+				html+='<td width=10><p></p><p></p><p><input type="checkbox" name="goodsid" value="'+term.goods_id+'"></p>'+'</td>';
+		  		html+=' </tr>';
+
 			});
-			//alert(html);
-			if (html=='')
+			html+='</table>';
+			if (ishtml=='1')
 			{
 				html='<section style=\"text-align:center;\"><p style=\"margin:30px 0px;\">暂无商品...<p></section>';
 			}
@@ -67,13 +79,51 @@ function postfind(){
 	$.jStorage.set('finggoodsname', goodsname, {TTL: 2880000000}); 
 	document.location.href="findgoods.html?goodsname="+encodeURIComponent(goodsname);
 }
+
+function orderbyall(){
+   
+	var str=document.getElementsByName("goodsid");
+	var objarray=str.length;
+	var chestr="";
+	for (i=0;i<objarray;i++){
+		if(str[i].checked == true)
+	   {
+			if (chestr=="")
+			{
+				chestr=str[i].value;
+			}else
+		    {
+				chestr+=","+str[i].value;
+			}
+	   }
+	}
+	var userid = $.jStorage.get('userid');
+	var strurl="http://www.zgltong.com/api/mobile.php?act=batchaddtocart&goods_id="+chestr+"&userid="+userid;
+	//alert(strurl);
+	var xhr = new XMLHttpRequest();
+	xhr.open("GET", strurl, true);
+	xhr.onreadystatechange = function() {
+  		 if (xhr.readyState==4 && xhr.status==200){
+    		var resultfromphp = xhr.responseText;
+    		//alert (resultfromphp);
+    		var objData = jQuery.parseJSON(resultfromphp);
+    		//alert (objData.rsgmsg);
+    		document.location.href="gencart.html";
+		 }
+	};
+	xhr.send();
+}
+
 </script>
 </head>
 <body>
-
+<style>
+#mytop1 th {text-align:center;border: 1px solid #ffffff; }
+.mytop {padding-top:20px;}
+</style>
 <div class="dp-header" id="header">
-	<div class="container-fluid" style="background-color:#E0DFDB;margin-bottom:5px;padding:10px 10px;">
-	<div class="row" style="margin:0 0;">
+	<div class="container-fluid " style="background-color:#E0DFDB;margin-bottom:5px;padding:10px 10px;">
+	<div class="row mytop" style="margin:0 0;">
 			<div class="col-xs-12" style="padding:0 0;">
 		<form id="search_form" action="javascript:postfind()" method="get">
 					<div class="col-xs-99">
@@ -93,9 +143,7 @@ function postfind(){
 <!-- search end -->
     <div class="dp-main">
 	<div class="container">
-<style>
-#mytop1 th {text-align:center;border: 1px solid #ffffff; }
-</style>
+
 		<div id="mytop1">
 		<table id="order_list" class="table table-striped">
 		<tbody>
@@ -103,6 +151,7 @@ function postfind(){
 				<th> <a href="javascript:reorder('sales');">销量</a></th>
 				<th><a href="javascript:reorder('price');">价格</a></th>
 				<th><a href="javascript:reorder('colligate');">最新</a></th>
+				<th><a href="javascript:orderbyall()">批量下单</a></th>
 			</tr>
 		</tbody>
 		</table>
