@@ -56,6 +56,7 @@ function makeList() {
 
 function makeseList(mycatid) {
 	$.jStorage.set('mycatid', mycatid , {TTL: 2880000000}); //取当前的点击的catid
+	var strgysa=$.jStorage.get('gysa');
 	var xhr = new XMLHttpRequest();
 	xhr.open("GET", "http://www.zgltong.com/api/mobile.php?act=listallcats&id="+mycatid, true);
 	xhr.onreadystatechange = function() {
@@ -68,7 +69,13 @@ function makeseList(mycatid) {
 				shtml+="<dt style=\"width:100%\" id=\"areaT_628_18588\">"+term.name+"</dt>";//第一级三个div开始
 				shtml+="<dd style=\"width:100%\">"//<dd>开始 
 				$.each(term.cat_id, function (index, secondterm) {
-					shtml+="<a href=\"listview.html?catid="+secondterm.id+"\"><img src=\""+secondterm.img+"\" ><span class=\"tit\">"+secondterm.name+"</span></a>";
+					if (strgysa=='1') //B类客户
+					{
+						shtml+="<a href=\"listview.html?catid="+secondterm.id+"\"><img src=\""+secondterm.img+"\" ><span class=\"tit\">"+secondterm.name+"</span></a>";
+					}
+					else{  //C类客户
+						shtml+="<a href=\"listview.html?catid="+secondterm.id+"\"><img src=\""+secondterm.img+"\" ><span class=\"tit\">"+secondterm.name+"</span></a>";
+					}
 			   });//second
 			   shtml+="</dd>";//<dd>结束
 			});

@@ -91,7 +91,7 @@ function addtocart(shopid){
 	if (userid==null) { document.location.href="login.html";}
 	var xhr = new XMLHttpRequest();
 	var goods_num = 1;
-	var posturl = "http://www.zgltong.com/api/mobile.php?act=addbuycart&goods_id="+shopid+"&number="+goods_num+"&userid="+userid
+	var posturl = "http://www.zgltong.com/api/mobile.php?act=addbuycart&goods_id="+shopid+"&number="+goods_num+"&userid="+userid;
 	//alert(posturl);  	
 	xhr.open("GET", posturl, true);
 	xhr.onreadystatechange = function() {

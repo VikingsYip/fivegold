@@ -56,11 +56,11 @@ function makeList() {
 		else{
 			html+='<td><p></p><p><a href=\"mmember-orderdetail.html?orderid='+term.order_id+'\" class=\"btn btn-info\">查看</a></p>';
 
-			//html+='<p><a href=\"modify-orders.html?orderid='+term.order_id+'\" class=\"btn btn-info\">修改</a></p>';
+			html+='<p><a href=\"modify-orders.html?orderid='+term.order_id+'\" class=\"btn btn-info\">修改</a></p>';
 
 			if (term.allow_to_modify=='1')
 			{
-				//html+='<p><a href=\"modify-orders.html?orderid='+term.order_id+'\" class=\"btn btn-info\">修改</a></p>';
+				html+='<p><a href=\"modify-orders.html?orderid='+term.order_id+'\" class=\"btn btn-info\">修改</a></p>';
 			}
 			html+='</td>';
 		}

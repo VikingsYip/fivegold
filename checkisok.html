@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8" />
+<title>轮通惠-查看服务费</title>
+<meta name="keywords" content="">
+<meta name="description" content="">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta content="telephone=no" name="format-detection" />
+<link rel="stylesheet" href="css/bootstrap.min.css">
+<script src="css/jquery-1.10.2.min.js"></script>
+<script src="css/bootstrap.min.js"></script>
+<script type="text/javascript" src="fivegold.js"></script>
+<script src="json2.js"></script>
+<script src="jstorage.js"></script>
+
+<link href="css/my.mobile-1.0.min.css" rel="stylesheet" type="text/css" media="screen, projection" /><style>
+.public_section .href_info {
+	position: relative;
+	padding-right: 30px;
+}
+
+.public_section .href_info:after {
+	-webkit-transform: rotate(-45deg);
+	-moz-transform: rotate(-45deg);
+	-ms-transform: rotate(-45deg);
+	-o-transform: rotate(-45deg);
+	margin-top: -5px;
+	right: 15px;
+	content: '';
+	position: absolute;
+	width: 6px;
+	height: 6px;
+	top: 50%;
+	border-color: #444;
+	border-style: solid;
+	border-width: 0 2px 2px 0;
+}
+.user-ui-header{
+	font-size:20px;
+	color:#ffffff;
+	background:#b3a99f;
+	line-height:50px;
+	text-align: center;
+}
+.user-ui-header .left-bar{
+	float:left;
+	padding-left:10px;
+	color:#ffffff;
+}
+
+.user-ui-header .right-bar{
+	float:right;
+	padding-right:10px;
+	color:#ffffff;
+}
+.user-ui-content{
+	padding:10px 10px;
+}
+.user-ui-footer {
+	font-size: 20px;
+	color: #ffffff;
+	background: #b3a99f;
+	line-height: 50px;
+	text-align: center;
+}
+.mytop {padding-top:20px;}
+</style>
+</head>
+<body><!-- page -->
+<div class="user-ui-page mytop">
+<!-- header -->
+<div class="user-ui-header clearfix ">
+	<a class="left-bar" href="go.html">
+		<span class="glyphicon glyphicon-home"></span>
+	</a>
+	<span>填写手机验证码</span>
+	<a class="right-bar" href="gencart.html">
+		<span class="glyphicon glyphicon-shopping-cart"></span>
+	</a>
+</div>
+<!-- /header -->
+
+<!-- content -->
+<div class="user-ui-content">
+	<section class="login_form">
+	<section class="panel" id="send_mobile"  style="padding-top:20px;">
+		<input type="hidden" name="find_type" value="mobile">
+		<section class="form-group">
+			<label><span id="showtel">手机：</span>&nbsp;&nbsp;<a class="btn btn-info btn-xs" onclick="get_mb_code()">获取验证码</a>(半小时有效)</label>
+
+			<input class="form-control" type="text" name="mobile_code" id="mobile_code" placeholder="请输入验证码">
+		</section>
+		<section class="form-group">
+			<a class="btn btn-info btn-block" onclick="btn_ischeck()">确认后查看服务费</a>
+		</section>
+	</section>
+	</section>
+</div>
+
+<input type="hidden" name="mytel" id="mytel" value="13725275140"/>
+<input type="hidden" name="mychenckcode" id="mychenckcode" value="4007"/>
+<!-- /content -->
+</div>
+
+<script type="text/javascript">
+
+$(document).ready(function() {
+	document.getElementById('checkcode_dialog').style.display ='none';
+	document.getElementById('checkcode_dialog1').style.display ='none';
+	
+	var ss=$.jStorage.get('mobilephone');
+	$("#mytel").attr("value",ss); 
+	var s1="手机："+ss.substr(0,3)+"****"+ss.substr(7,4);
+	document.getElementById('showtel').innerHTML=s1;
+});
+
+
+function get_mb_code(){
+	var myteling=$('#mytel').attr("value");
+	var posturl ="http://www.zgltong.com/api/mobile.php?act=checkservice&mode=test&user_tel="+myteling;
+	var xhr = new XMLHttpRequest();
+	xhr.open("GET", posturl, true);
+	xhr.onreadystatechange = function() {
+  		 if (xhr.readyState==4 && xhr.status==200){
+    		var resultfromphp = xhr.responseText;
+    		var objData = jQuery.parseJSON(resultfromphp);
+    		if (objData.rsgcode=='000'){
+				$("#mychenckcode").attr("value",objData.rsgcheck); 
+				document.getElementById('alertmsg').innerHTML="短信发送成功，请输入验证码!";
+				document.getElementById('checkcode_dialog').style.display ='block';
+				setTimeout("document.getElementById('checkcode_dialog').style.display ='none'",800)
+    		}
+			else{
+				document.getElementById('alertmsg').innerHTML="请检查手机号码，如手机号码正确，请联系客服!";
+				document.getElementById('checkcode_dialog').style.display ='block';
+				setTimeout("document.getElementById('checkcode_dialog').style.display ='none'",800)
+			 }
+		 }
+	};
+	xhr.send();
+	return false;
+}
+
+
+function btn_ischeck(){
+	var userid = $.jStorage.get('userid');
+	var mytelings=$('#mytel').attr("value");
+	var rightcode=$('#mychenckcode').attr("value");
+	var mycodes=encodeURIComponent(document.getElementById('mobile_code').value);	
+	
+	if (rightcode==mycodes)
+	{
+		$.jStorage.set('ischeck', '1', {TTL: 1800000}); 
+		document.getElementById('alertmsg2').innerHTML="可以查看服务费了（半个小时内有效）！";
+		document.getElementById('checkcode_dialog1').style.display ='block';
+
+	}//两者之间的值相等
+	else
+	{
+		document.getElementById('alertmsg').innerHTML="验证码输入错误！";
+		document.getElementById('checkcode_dialog').style.display ='block';
+		setTimeout("document.getElementById('checkcode_dialog').style.display ='none'",800);
+	}
+}
+</script>
+
+
+<!--弹出窗口--begin-->
+<div id="checkcode_dialog" style="z-index:9999;position:fixed;left:100px;top:150px;width:150px;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">提示</h4>
+      </div>
+      <div class="modal-body" id="alertmsg"></div>
+    </div>
+  </div>
+</div>
+
+<div id="checkcode_dialog1" style="z-index:9999;position:fixed;left:100px;top:150px;width:150px;">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title" id="myModalLabel">提示</h4>
+      </div>
+      <div class="modal-body" id="alertmsg2"></div>
+	  <div class="modal-footer">
+        <button id="reg_btn" type="button" class="btn btn-info" onclick="location.href='listview.html?catid=5'">确认</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!--弹出窗口--en-->
+</body>
+</html>

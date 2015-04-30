@@ -52,6 +52,10 @@ function genOrder(){
 			var sorderid=objData.order.order_id;
 			var html ='';
 			
+			var qtyeditid ='';//term.rec_id 购物车产品ID
+			var qtyeditcount='';//term.goods_number  商品的数量
+			var goodid ='';//term.goods_id 商品ID
+
 			html+='<p>收货姓名：'+objData.order.consignee+'</p>';
 		    html+='<p>收货地址：'+objData.order.address+'</p>';
 		    html+='<p>手机号码：'+objData.order.mobile+'</p>';
@@ -76,6 +80,13 @@ function genOrder(){
 						html+="	<div class=\"form-group\">数量：<a class=\"btn btn-info mybtn\" id=\"plus_product\"   onClick=\"update_minus("+sorderid+","+term.rec_id+","+term.goods_id+")\">减</a><input class=\"form-control myinput\" style=\"width:70px;display:inline-block;\" type=\"number\" onkeyup=\"fchangenum(this,"+sorderid+","+term.rec_id+","+term.goods_id+")\" id=\""+term.rec_id+"\" min=\"1\"  value=\""+term.goods_number+"\"><a class=\"btn btn-info mybtn\" id=\"plus_product\"   onClick=\"update_plus("+sorderid+","+term.rec_id+","+term.goods_id+")\">加</a></div>";
 						html+="<section><a href=\"javascript:delonegoods("+sorderid+","+term.goods_id+")\" data-ajax=\"false\" data-rel=\"popup\" data-position-to=\"window\" data-transition=\"pop\" data-icon=\"delete\" data-theme=\"d\">删除</a></section>";
 						html+='</td> </tr>';
+
+						if (goodid =='')        { goodid+=term.goods_id;                              } else { goodid+=','+term.goods_id;}
+						if (qtyeditid =='')     { qtyeditid+=term.rec_id;                             } else { qtyeditid+=','+term.rec_id;}
+						if (qtyeditcount =='')  { qtyeditcount+=term.goods_id+','+term.goods_number;  } else { qtyeditcount+=':'+term.goods_id+','+term.goods_number; }
+
+
+
 					}else 
 					{
 						html+=' <tr>';
@@ -89,6 +100,11 @@ function genOrder(){
 				html+='</table>';
 
 				document.getElementById('goodsHtml').innerHTML=html; 
+
+				$("#qtyeditid").attr("value",qtyeditid);        //
+				$("#goodid").attr("value",goodid);        //
+				$("#qtyeditcount").attr("value",qtyeditcount);  //
+				//alert(qtyeditcount);
 
 			 } 
   		}
@@ -165,11 +181,40 @@ function delonegoods(sorderid,recid){
 	    }
 
 
-function fchangenum(obj,recidsorderid,goodsid){
+function fchangenum(obj,recidsorderid,goodsid){ //新的修改数量
     var ss=obj.value.replace(/\D/g,'');
+	if (ss=='') {  ss='0'; }
 	obj.value=ss;
-	updatecart(ss,recid,sorderid,goodsid);
+
+	var strqtyeditid=$('#qtyeditid').attr("value");        //取出ID值 id1,id2,id3
+	var goodid=$('#goodid').attr("value");                 //取出商品ID值 id1,id2,id3
+	var strqtyeditcount='';                                //存放形式 id,value:id,value
+
+	var strs= new Array();          //定义一数组 
+	strs=strqtyeditid.split(",");   //字符分割
+
+    var strsgood= new Array();      //定义一数组 
+	strsgood=goodid.split(",");     //字符分割
+
+	var j,k;
+	for (i=0;i<strs.length;i++ )    //重新组装修改后的数量
+	{ 
+	   j=strs[i]; //取出id的值
+	   k=$("#"+j).val();
+	   j=strsgood[i]; //取出id的值
+	   if (strqtyeditcount =='')  { strqtyeditcount+=j+','+k;  } else { strqtyeditcount+=':'+j+','+k; }
+	} 
+
+	$("#qtyeditcount").attr("value",strqtyeditcount); 
+
 }
+
+//function fchangenum(obj,recidsorderid,goodsid){ //原先的修改数量
+//    var ss=obj.value.replace(/\D/g,'');
+//	obj.value=ss;
+//	updatecart(ss,recid,sorderid,goodsid);
+//}
+
 
 
 function updatecart(newnumber,recid,sorderid,goodsid) {
@@ -207,15 +252,42 @@ function alteright() {
 
 function newchange() {
   //先确认生成的序列
+	var userid = $.jStorage.get('userid');
+	if (userid==null) { document.location.href="login.html";}
+	var newnum=$('#qtyeditcount').attr("value");   
+	var ordersid=$('#ordersid').attr("value");
+	var posturl = "http://www.zgltong.com/api/mobile.php?act=changeordernew&user_id="+userid+"&new_number="+newnum+"&oid="+ordersid;
+	var xhr = new XMLHttpRequest();
+	xhr.open("GET", posturl, true);
+	xhr.onreadystatechange = function() {
+  		 if (xhr.readyState==4 && xhr.status==200){
+    	    var resultfromphp = xhr.responseText;
+			//alert("添加成功");
+      		var objData = jQuery.parseJSON(resultfromphp);
+			document.location.href="mmember-orders.html";
+		}
+	};
+	xhr.send();
+}
 
-  alert('来了');
+
+function showme(){ //测试中间的结果
+
+	var rightcode=$('#qtyeditcount').attr("value");
+	alert(rightcode);
+
 }
 </script>
 </head>
 <body><!-- page -->
-<div class="user-ui-page">
+
+<input type="hidden" name="qtyeditid" id="qtyeditid" value=""/>
+<input type="hidden" name="goodid"    id="goodid"    value=""/>
+<input type="hidden" name="qtyeditcount" id="qtyeditcount" value=""/>
+
+<div class="user-ui-page mytop">
         <!-- header -->
-	    <div class="user-ui-header clearfix mytop" >
+	    <div class="user-ui-header clearfix " >
 		     <a class="left-bar" href="mmember-orders.html">
 		     	<span class="glyphicon glyphicon-chevron-left"></span>
 		     </a>
@@ -252,6 +324,7 @@ function newchange() {
 		<div class="panel panel-default">
 		  <div class="panel-heading">
 			<a class="btn btn-danger btn-block" href="javascript:newchange()">修改订单</a>
+			<!--<a class="btn btn-info mybtn" id="plus_product" onclick="showme()">测试</a>-->
 		  </div>
 		 
 		</div>
@@ -312,18 +385,6 @@ function newchange() {
 </div><!-- /.modal -->
 
 
-
-<script type="text/javascript">
-
-// 注销定单
-$('#cancel_btn').click(function(){
-	
-				document.getElementById('alertmsg2').innerHTML="更新定单成功!";
-				document.getElementById('cancel_dialog1').style.display ='block';
-				setTimeout("document.getElementById('cancel_dialog1').style.display ='none'",800)
-			
-});
-</script>
 
 <div id="cancel_dialog1" style="z-index:9999;position:fixed;left:100px;top:150px;width:150px;">
   <div class="modal-dialog">

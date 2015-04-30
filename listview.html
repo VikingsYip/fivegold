@@ -23,12 +23,22 @@ function reorder(ordertype){
   makeList(ordertype);
  }
 
- var sorting = 1;
+var sorting = 1;
 function makeList(ordertype) {
     var catid = request('catid');
 	if (ordertype==null)   ordertype="colligate";
+	var strgysa=$.jStorage.get('gysa');//是否为B类用户
+	var sqlstr;
+	if (strgysa =="1")
+	{
+		sqlstr="http://www.zgltong.com/api/mobile.php?act=listcatgoods&cat_id="+catid+"&intro="+ordertype+"&sorting="+sorting;
+
+	}else{
+
+		sqlstr="http://www.zgltong.com/api/mobile.php?act=listcatgoods&show=02&cat_id="+catid+"&intro="+ordertype+"&sorting="+sorting;
+	}
 	var xhr = new XMLHttpRequest();
-	xhr.open("GET", "http://www.zgltong.com/api/mobile.php?act=listcatgoods&cat_id="+catid+"&intro="+ordertype+"&sorting="+sorting, true);
+	xhr.open("GET",sqlstr , true);
 		if (sorting == 1)
 	    sorting =2;
 	else
@@ -38,14 +48,29 @@ function makeList(ordertype) {
     		var resultfromphp = xhr.responseText;
 			var html ='';
       		var objData = jQuery.parseJSON(resultfromphp);
+			var strgysa='';//二级供应商
+			var ischeck;//当前是否通知
 			html+='<table class="table table-striped">';
 			$.each(objData.listallcat, function (index, term) {
 
 				html+=' <tr>';
 		  		html+='<td width=60><a href=\"goods.html?goodsid='+term.goods_id+'\"><img width=\"100\" height=\"100\" class=\"img-rounded\" src=\"'+term.goods_img+'\"/></a></td>';
 		  		html+='<td><p><a href=\"goods.html?goodsid='+term.goods_id+'\">'+term.goods_name+'</a></p>';
-				html+='<p class=\"product_name\">所有的参数</p>';
-				html+="	<p><span style=\"text-decoration:line-through;color:#c2ccd0;\">￥"+term.market_price+"</span><span style=\"font-size:16px;color:red\">￥"+term.shop_price+"</span></p>";
+				//html+='<p class=\"product_name\">所有的参数</p>';
+				html+="	<p>售价:<span style=\"text-decoration:line-through;color:#c2ccd0;\">￥"+term.market_price+"</span><span style=\"font-size:16px;color:red\">￥"+term.shop_price+"</span></p>";
+				strgysa=$.jStorage.get('gysa');
+				ischeck=$.jStorage.get('ischeck');
+				if ( strgysa =="1")
+				{
+					if (ischeck=="1")
+					{
+						html+='<p class=\"product_name\">服务费:<span style=\"font-size:16px;color:red\">￥'+term.gys_money+'</span></p>';
+					}else
+					{
+						html+='<p class=\"product_name\"><a href=\"checkisok.html\" class=\"btn btn-danger btn-sm\">查看服务费</a></p>';
+					}
+					
+				}
 				html+='</td>';
 				html+='<td width=10><p></p><p></p><p><input type="checkbox" name="goodsid" value="'+term.goods_id+'"></p>'+'</td>';
 		  		html+=' </tr>';

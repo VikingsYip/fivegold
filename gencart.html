@@ -29,8 +29,12 @@ function makeList() {
     		var resultfromphp = xhr.responseText;
 			//alert(resultfromphp);
 			var html ='';
+			
+			var qtyeditid ='';//term.rec_id 购物车产品ID
+			var qtyeditcount='';//term.goods_number  商品的数量
+
 			var objData = jQuery.parseJSON(resultfromphp);
-			   $.each(objData.goods_list, function (index, term) {
+			$.each(objData.goods_list, function (index, term) {
 			html+="<table class=\"table\"><tr><td valign=\"top\" width=\"50px\"><a href=\"goods.html?goodsid="+term.goods_id+"\"><img class=\"img-rounded\" width=\"100\" height=\"100\" src=\""+term.original_img+"\"></a></td><td><p>"+term.goods_name+"";
 			$.each(term.goods_attr, function (index, att) {
 			html+="("+att.name+"："+att.value+")";
@@ -44,9 +48,16 @@ function makeList() {
 				html+="</p>单价："+term.goods_price+"\<br/><div class=\"form-group\">赠送数量："+term.goods_number+"</div>";
 			}
 			
+			if (qtyeditid =='')     { qtyeditid+=term.rec_id;                           } else { qtyeditid+=','+term.rec_id;}
+			if (qtyeditcount =='')  { qtyeditcount+=term.rec_id+','+term.goods_number;  } else { qtyeditcount+=':'+term.rec_id+','+term.goods_number; }
+
 			html+="</td></tr></table>";
 			});
 			document.getElementById('catHtml').innerHTML=html;
+
+			$("#qtyeditid").attr("value",qtyeditid);        //
+			$("#qtyeditcount").attr("value",qtyeditcount);  //
+
 			if ( html=="")  {  document.location.href="nocart.html" ; }
 			else {  document.getElementById('total').innerHTML="<p>商品总金额：￥"+objData.total.goods_price+"</p>"; } 
   		}
@@ -136,15 +147,71 @@ function emptycart() {
 
 function fchangenum(obj,recid){
     var ss=obj.value.replace(/\D/g,'');
+	if (ss=='') {  ss='0'; }
+	obj.value=ss;
+
+	var strqtyeditid=$('#qtyeditid').attr("value");        //取出ID值 id1,id2,id3
+	var strqtyeditcount='';                                //存放形式 id,value:id,value
+
+	var strs= new Array();          //定义一数组 
+	strs=strqtyeditid.split(",");   //字符分割
+	var j,k;
+	for (i=0;i<strs.length;i++ )    //重新组装修改后的数量
+	{ 
+	   j=strs[i]; //取出id的值
+	   k=$("#"+j).val();
+	   if (strqtyeditcount =='')  { strqtyeditcount+=j+','+k;  } else { strqtyeditcount+=':'+j+','+k; }
+	} 
+
+	$("#qtyeditcount").attr("value",strqtyeditcount); 
+}
+
+
+function updateqty(){  //更新购物车的数量
+	var userid = $.jStorage.get('userid');
+	if (userid==null) { document.location.href="login.html";}
+	var newnum=$('#qtyeditcount').attr("value");   
+	var posturl = "http://www.zgltong.com/api/mobile.php?act=edltbuycartnew&user_id="+userid+"&new_number="+newnum;
+	//alert(posturl); 
+	var xhr = new XMLHttpRequest();
+	xhr.open("GET", posturl, true);
+	xhr.onreadystatechange = function() {
+  		 if (xhr.readyState==4 && xhr.status==200){
+    	    var resultfromphp = xhr.responseText;
+			//alert("添加成功");
+      		var objData = jQuery.parseJSON(resultfromphp);
+			document.location.href="checkcart.html";
+		}
+	};
+	xhr.send();
+
+}
+
+
+function fchangenum1(obj,recid){  //原来的过程，输入一个数字，界面就要动态刷新，输入框不见了
+    var ss=obj.value.replace(/\D/g,'');
 	obj.value=ss;
 	updatecart(ss,recid);
     obj.focus();
+}
+
+function showme(){ //测试中间的结果
+
+	var qqqqq=$('#qtyeditid').attr("value");
+	alert(qqqqq);
+
+	var rightcode=$('#qtyeditcount').attr("value");
+	alert(rightcode);
 }
 
 
 </script>
 </head>
 <body>
+
+<input type="hidden" name="qtyeditid" id="qtyeditid" value="6621,6622"/>
+<input type="hidden" name="qtyeditcount" id="qtyeditcount" value="6621:12,6622:12"/>
+
 <style>
 	.mytop {padding-top:20px;}
 </style>
@@ -184,9 +251,19 @@ function fchangenum(obj,recid){
 			
 			<a class="btn btn-default" href="javascript:void(0)" data-toggle="modal" data-target="#empty_dialog">清除购物车</a>
 			
-            <input class="btn btn-danger" type="submit" value="去结算" readonly>
+            <a class="btn btn-danger" id="plus_product" onclick="updateqty()">去结算</a>
 			
-			<input type="buttom" id="cartnum" onclick="javascript:document.location.href='listcat.html';" value="继续购物" class="btn btn-danger aa" style="width:100px" readonly ></div>
+			<!--<input class="btn btn-danger" type="submit" value="去结算" readonly>-->
+			
+			<input type="buttom" id="cartnum" onclick="javascript:document.location.href='listcat.html';" value="继续购物" class="btn btn-danger aa" style="width:100px" readonly >
+			
+			<!--<a class="btn btn-info mybtn" id="plus_product" onclick="showme()">测试</a>-->
+
+
+			
+
+
+			</div>
 	    </div>
 		</form>
 	</nav>
