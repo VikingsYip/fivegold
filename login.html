@@ -64,6 +64,8 @@ function login(){
          	      $.jStorage.set('password', password , {TTL: 2880000000}); 
          	      $.jStorage.set('gysa', objData.gysa , {TTL: 2880000000}); //二级供应商
 				  $.jStorage.set('yqm', objData.yqm , {TTL: 2880000000});   //验证码
+				  $.jStorage.set('xversion', '1' , {TTL: 2880000000});   //版本可用否
+
     		}
 		 }
 	};
