@@ -17,6 +17,26 @@
 	<script src="jstorage.js"></script>
 <script>
 
+function checkappversion() {
+	var xhr = new XMLHttpRequest();
+	xhr.open("GET", "http://www.zgltong.com/api/mobile.php?act=appversion&andios=1&version=1.01", true);
+	xhr.onreadystatechange = function() {
+  		 if (xhr.readyState==4 && xhr.status==200){
+    		var resultfromphp = xhr.responseText;
+			
+      		var objData = jQuery.parseJSON(resultfromphp);
+      		if ('001'==objData.rsgcode)      			
+      			return;      		
+			$.each(objData, function (index, term) {				
+				//alert(term.url);
+			});
+		
+  		}
+	};
+	xhr.send();
+	
+}
+
 function makeList() {
 	var xhr = new XMLHttpRequest();
 	xhr.open("GET", "http://www.zgltong.com/api/mobile.php?act=listallcat", true);
@@ -94,6 +114,7 @@ function postfind(){
 }
 
 $(document).ready(function() {
+checkappversion();
 	 makeList();
 	 var ss = $.jStorage.get('mycatid');
 	 if (ss==null)  {makeseList(1); } else {makeseList(ss);}
