@@ -8,7 +8,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta content="telephone=no" name="format-detection" />
 <meta content="telephone=no" name="format-detection" />
-<!--<link href="css/jquery.mobile-1.3.2.css" rel="stylesheet" type="text/css" media="screen, projection" />-->
 <link href="css/jquery.mobile.my.css" rel="stylesheet" type="text/css" media="screen, projection" />
 <link href="css/my.mobile-1.0.css" rel="stylesheet" type="text/css" media="screen, projection" />
 
@@ -16,12 +15,6 @@
 <link rel="stylesheet" href="css/base.mobile.css"  type="text/css" media="screen, projection" />
 <script src="css/jquery-1.10.2.min.js"></script>
 <script src="css/bootstrap.min.js"></script>
-<!--<script type="text/javascript" src="css/jquery.mobile-1.3.2.js"></script>-->
-<!--
-<script type="text/javascript" src="css/jquery.nivo.slider-3.2.js"></script>
-<script type="text/javascript" src="css/swipe-2.0.js"></script>
-<script type="text/javascript" src="css/jquery.lazyload.js"></script>
--->
 <link href="fivegold.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="fivegold.js"></script>
 <script src="json2.js"></script>
@@ -76,8 +69,12 @@ function genOrder(){
 			 	document.getElementById('goodsHtml').innerHTML=html;         
 			 }
 			 //html+='<li><h1>总计</h1><p>商品数量:'+objData.total.real_goods_count+'</p><p>商品总价:¥'+objData.total.goods_price+'</p><p><s>市场总价:¥'+objData.total.market_price+'</s></p><p>节省了:¥'+objData.total.saving_formated+'</p></li>';
-		      document.getElementById('goodsprice').innerHTML='¥'+objData.total.goods_price;         
-		      document.getElementById('totalprice').innerHTML='¥'+objData.total.goods_price;         
+		      document.getElementById('goodsprice').innerHTML='¥'+objData.total.goods_price; 
+		      document.getElementById('totalprice').innerHTML='¥'+objData.total.goods_price; 
+		      document.getElementById('showrmb').innerHTML='轮通币:  '+objData.total.ratio; 
+
+			  $("#howrmb").attr("value",objData.total.availableintegral); 
+			  $("#totalrmb").attr("value",objData.total.goods_price); 
 		    
              /*
 		     if (objData.shipping_list.length>0){
@@ -127,9 +124,12 @@ function addOrder(){
     var need_inv=0;//1要，0不要;
     var inv_type=' ';//发票类型
     var userid = $.jStorage.get('userid');
-    if (userid==null)
-        document.location.href="login.html";
-	var posturl="http://www.zgltong.com/api/mobile.php?act=orderconfirmation&user_id="+userid+"&mode=test&shipping_id="+shippingid+'&pay_id='+paymentid+'&need_inv='+need_inv+'&address_id='+myaddressid+'&postscript='+memo;
+	var myjf=document.getElementById('strjf').value;//积分
+    if (userid==null) document.location.href="login.html";
+	var posturl="http://www.zgltong.com/api/mobile.php?act=orderconfirmation&user_id="+userid+"&mode=test&shipping_id="+shippingid;
+	posturl+='&pay_id='+paymentid+'&need_inv='+need_inv+'&address_id='+myaddressid+'&postscript='+memo;
+	posturl+='&integral='+myjf;
+
     var xhr = new XMLHttpRequest();
 	xhr.open("POST", posturl, true);
 	xhr.onreadystatechange = function() {
@@ -139,6 +139,41 @@ function addOrder(){
   		}
 	};
 	xhr.send();
+}
+
+function changejf(obj){
+    var ss=obj.value.replace(/\D/g,'');
+	obj.value=ss;
+	
+	if (ss=='')
+	{
+		ss='0';
+	}
+	var strhowrmb=$('#howrmb').attr("value");  //取出订单的最大可兑现在的轮通币
+
+	var strtotalrmb=$('#totalrmb').attr("value");  //取出订单金额
+
+	var ssint=parseInt(ss);
+	var strhowrmbint=parseInt(strhowrmb);
+	var strtotalrmbint=parseFloat(strtotalrmb);
+
+    var ss100=ssint/100;
+	var ssyy=strtotalrmbint-ss100;
+
+	if (ssint>strhowrmbint)
+	{
+		obj.value='';
+		alert('已超数字啦');
+		document.getElementById('jfrmb').innerHTML=''; 
+		document.getElementById('jfprice').innerHTML='¥0'; 
+		document.getElementById('totalprice').innerHTML=strtotalrmb; 
+
+	}else
+	{
+		document.getElementById('jfrmb').innerHTML='可抵'+ss100+'元'; 
+		document.getElementById('jfprice').innerHTML='¥'+ss100; 
+		document.getElementById('totalprice').innerHTML=ssyy; 
+	}
 }
 
 $(document).ready(function() {
@@ -158,6 +193,15 @@ $(document).ready(function() {
 .mydress{
 padding-top:50px;
 }
+
+input[type='number'] {  
+        -moz-appearance:textfield;  
+    }  
+    input[type=number]::-webkit-inner-spin-button,  
+    input[type=number]::-webkit-outer-spin-button {  
+        -webkit-appearance: none;  
+        margin: 0;  
+    }  
 
 </style>
 </head>
@@ -206,14 +250,25 @@ padding-top:50px;
         </section>
 
         <section class="checkout_section product_section">
+              <section class="checkout_title" id="showrmb" name="showrmb"></section>
+	          使用<input class="form-control myinput" style="width:80px;display:inline-block;" type="number" value="" id="strjf" name="strjf" onkeyup="changejf(this)">
+			  <span id='jfrmb'><span>
+        </section>
+		
+		<input type="hidden" name="howrmb" id="howrmb" value=""/>
+		<input type="hidden" name="totalrmb" id="totalrmb" value=""/>
+
+        <section class="checkout_section product_section">
               <section class="checkout_title">对商家留言(最多输入50个文字)</section>
 	          <section>
 	              <input type="text" id="memo" name="memo" class="form-control">
 	          </section>
         </section>
-        <section class="checkout_section price_section">
+
+		<section class="checkout_section price_section">
 			<section class="clearfix"><label>商品总价</label><span id='goodsprice'><span></section>
 			<section class="clearfix"><label>运费金额</label><span id='shipprice'>¥0<span></section>
+			<section class="clearfix"><label>优惠金额</label><span id='jfprice'>¥0<span></section>
 			<section class="clearfix"><label>应付金额</label><span id='totalprice'><span></section>
         </section>
         <section style="padding:5px 5px;">
@@ -244,7 +299,7 @@ $("#address_info").click(function(){
       </div>
       <div class="modal-body">
       		<p>友情提示：</p>
-		<p>亲，定单已锁定，如有变化，请联系客服</p><p> 400-006-8040</p>
+		    <p>亲，定单已锁定，如有变化，请联系客服</p><p> 400-006-8040</p>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>

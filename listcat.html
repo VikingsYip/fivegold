@@ -28,18 +28,37 @@ function checkappversion() {
       		if ('001'==objData.rsgcode)      			
       			return;      		
 			$.each(objData, function (index, term) {				
-				//alert(term.url);
+				document.location.href="http://zgltong.com/app/android.html";
 			});
-		
   		}
 	};
 	xhr.send();
-	
 }
 
 function makeList() {
+	
+	checkappversion();
+
+	var sqlstr = "http://www.zgltong.com/api/mobile.php?act=listallcat"; //B级的查询
+
+	//先判断用户的类型
+	var userid = $.jStorage.get('userid');//403
+	var isgysa = $.jStorage.get('gysa');  //是否是B类
+	var mytel  = $.jStorage.get('mytel'); 
+
+	if (userid==null) { sqlstr+="&is_show=1";} 
+    else{
+		$.jStorage.set('userid', userid , {TTL: 2880000000}); 
+		$.jStorage.set('gysa', isgysa , {TTL: 2880000000}); //二级供应商
+		$.jStorage.set('mytel', mytel, {TTL: 2880000000});//用户名名称
+		if (isgysa == '0')
+		{
+			sqlstr+="&is_show=1";  //C级
+		}
+	}
+
 	var xhr = new XMLHttpRequest();
-	xhr.open("GET", "http://www.zgltong.com/api/mobile.php?act=listallcat", true);
+	xhr.open("GET",sqlstr, true);
 	xhr.onreadystatechange = function() {
   		 if (xhr.readyState==4 && xhr.status==200){
     		var resultfromphp = xhr.responseText;
@@ -57,7 +76,6 @@ function makeList() {
 				if (i==term.all_id)
 				{
 					//frist_id=term.all_id;
-					
 					html+="<li class=\"cur\" id=\""+term.all_id+"\"><a href=\"javascript:makeseList("+term.all_id+")\">"+term.jianc_name+"</li>";
 					//i=2;
 				}
@@ -71,14 +89,18 @@ function makeList() {
   		}
 	};
 	xhr.send();
-	
 }
 
 function makeseList(mycatid) {
 	$.jStorage.set('mycatid', mycatid , {TTL: 2880000000}); //取当前的点击的catid
 	var strgysa=$.jStorage.get('gysa');
+	var findsql="http://www.zgltong.com/api/mobile.php?act=listallcats&id="+mycatid;
+	if (strgysa=='0')
+	{
+		findsql+='&is_show=1'; //限制C类查看
+	}
 	var xhr = new XMLHttpRequest();
-	xhr.open("GET", "http://www.zgltong.com/api/mobile.php?act=listallcats&id="+mycatid, true);
+	xhr.open("GET",findsql , true);
 	xhr.onreadystatechange = function() {
 		if (xhr.readyState==4 && xhr.status==200){
     		var resultfromphp = xhr.responseText;
@@ -114,7 +136,6 @@ function postfind(){
 }
 
 $(document).ready(function() {
-checkappversion();
 	 makeList();
 	 var ss = $.jStorage.get('mycatid');
 	 if (ss==null)  {makeseList(1); } else {makeseList(ss);}
@@ -208,8 +229,6 @@ window.onload=function(){
 		</div><!--yScroll-2-->
 	</div><!-- /wx_wrap -->
 </div><!-- /dp-main -->
-
-
 
 <div id="dp_footer" class="dp-footer 	">
 		<nav class="navbar navbar-default navbar-fixed-bottom" role="navigation">

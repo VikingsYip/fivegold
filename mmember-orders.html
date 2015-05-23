@@ -42,22 +42,18 @@ function makeList() {
 		}
 		html+='<p>下单日期：'+term.add_time+'</p>';
 		html+='<p>订单状态：<span style=\"color: red;\">'+term.handler+'</span></p></td>';
-		if (term.pay_name=='1')
+		if (term.pay_name=='1') //支付方式
 		{
-			if (term.handler=="已取消")
-			{
-				html+='<td><p><a href=\"mmember-orderdetail.html?orderid='+term.order_id+'\" class=\"btn btn-info\">查看</a></p></td>';
-			}else if(term.handler=="已确认"){
-				html+='<td><p><a href=\"mmember-orderdetail.html?orderid='+term.order_id+'\" class=\"btn btn-info\">查看</a></p></td>';
-			}else{
-				html+='<td><p><a href=\"morder.html?orderid='+term.order_id+'\" class=\"btn btn-info\">付款</a></p><p><a href=\"mmember-orderdetail.html?orderid='+term.order_id+'\" class=\"btn btn-info\">查看</a></p></td>';	
+			html+='<td><p><a href=\"mmember-orderdetail.html?orderid='+term.order_id+'\" class=\"btn btn-info\">查看</a></p></td>';
+			if(term.handler=="未确认"){
+				html+='<p><a href=\"modify-orders.html?orderid='+term.order_id+'\" class=\"btn btn-info\">修改</a></p>';
 			}
 		}
 		else{
 			html+='<td><p></p><p><a href=\"mmember-orderdetail.html?orderid='+term.order_id+'\" class=\"btn btn-info\">查看</a></p>';
-
-			html+='<p><a href=\"modify-orders.html?orderid='+term.order_id+'\" class=\"btn btn-info\">修改</a></p>';
-
+			if(term.handler=="未确认"){
+				html+='<p><a href=\"modify-orders.html?orderid='+term.order_id+'\" class=\"btn btn-info\">修改</a></p>';	
+			}
 			if (term.allow_to_modify=='1')
 			{
 				html+='<p><a href=\"modify-orders.html?orderid='+term.order_id+'\" class=\"btn btn-info\">修改</a></p>';
@@ -67,7 +63,6 @@ function makeList() {
 		html+='</tr>';
 		});
 		html+='</table>';
-		//alert(html);
 		document.getElementById('listallcat').innerHTML=html;
 		}
 	};

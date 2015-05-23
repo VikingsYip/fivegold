@@ -204,6 +204,26 @@ function showme(){ //测试中间的结果
 	alert(rightcode);
 }
 
+function updateqty00(){  //更新购物车的数量后继续购物
+	var userid = $.jStorage.get('userid');
+	if (userid==null) { document.location.href="login.html";}
+	var newnum=$('#qtyeditcount').attr("value");   
+	var posturl = "http://www.zgltong.com/api/mobile.php?act=edltbuycartnew&user_id="+userid+"&new_number="+newnum;
+	//alert(posturl); 
+	var xhr = new XMLHttpRequest();
+	xhr.open("GET", posturl, true);
+	xhr.onreadystatechange = function() {
+  		 if (xhr.readyState==4 && xhr.status==200){
+    	    var resultfromphp = xhr.responseText;
+			//alert("添加成功");
+      		var objData = jQuery.parseJSON(resultfromphp);
+			document.location.href="listcat.html";
+		}
+	};
+	xhr.send();
+}
+
+
 
 </script>
 </head>
@@ -255,11 +275,11 @@ function showme(){ //测试中间的结果
 			
 			<!--<input class="btn btn-danger" type="submit" value="去结算" readonly>-->
 			
-			<input type="buttom" id="cartnum" onclick="javascript:document.location.href='listcat.html';" value="继续购物" class="btn btn-danger aa" style="width:100px" readonly >
+			<!--<input type="buttom" id="cartnum" onclick="javascript:document.location.href='listcat.html';" value="继续购物" class="btn btn-danger aa" style="width:100px" readonly >-->
 			
 			<!--<a class="btn btn-info mybtn" id="plus_product" onclick="showme()">测试</a>-->
 
-
+			<a class="btn btn-danger aa" id="plus_product" onclick="updateqty00()">继续购物</a>
 			
 
 

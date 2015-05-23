@@ -119,9 +119,7 @@ function postfind(){
 	
 </head>
 <body>
-<style>
-	.mytop {padding-top:1px;}
-</style>
+
 <div id="dp_header" class="dp-header hide">
 	<nav class="navbar navbar-fixed-top mytop" role="navigation">
 		<div class="container dp-menu-box myserch">
@@ -146,6 +144,8 @@ function postfind(){
 
 <div id="dp_main" class="dp-main hide">
 <style>
+.mytop {padding-top:1px;}
+
 .myserch{
   background:red;
 }
@@ -191,28 +191,6 @@ function postfind(){
 	opacity:0.3;
 	filter:alpha(opacity=30);
 }
-</style>
-<!-- E 轮播 -->
-<div class="total_img">
-	<div class="swiper-container">
-		<div class="swiper-wrapper" id="showimage"></div>
-		<div class="previous">Previous</div>
-		<div class="next">Next</div>
-	</div>
-</div>
-<script type="text/javascript">
-$(function(){
-	 var _height = $(window).height();
-	 var _width = $(window).width();
-	 _width = _width > 640 ? 640 : _width;
-	 $(".total_img .swiper-container,.total_img .swiper-wrapper").css({
-	     width: _width
-	 });
-});
-</script>
-<!-- E 轮播 -->
-<!-- S 热卖轮播 -->
-<style>
 *{
 	font-family: "Microsoft YaHei";
 }
@@ -299,9 +277,32 @@ $(function(){
 	-moz-animation: bounceIn 1s .2s ease both;
 }
 </style>
-<div class="clearfix" id="homegoods">
-		
-</div><!-- E 热卖轮播 -->
+<!-- E 轮播 -->
+<div class="total_img">
+	<div class="swiper-container">
+		<div class="swiper-wrapper" id="showimage"></div>
+		<div class="previous">Previous</div>
+		<div class="next">Next</div>
+	</div>
+</div>
+<script type="text/javascript">
+$(function(){
+	 var _height = $(window).height();
+	 var _width = $(window).width();
+	 _width = _width > 640 ? 640 : _width;
+	 $(".total_img .swiper-container,.total_img .swiper-wrapper").css({
+	     width: _width
+	 });
+});
+</script>
+<!-- E 轮播 -->
+<!-- S 热卖轮播 -->
+
+<div class="clearfix" id="groupby">
+
+</div><!-- 团购展示 -->
+
+<div class="clearfix" id="homegoods"></div><!-- 产品展示 -->
 </div>
 <!-- S 单品推荐  -->
 <div class="dp-main">

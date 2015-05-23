@@ -22,25 +22,25 @@ $(document).ready(function() {
 	if (userid==null)
         document.location.href="login.html";
 	else
-     	 makelist();
+       makelist();
 });
 
 function makelist(){
-	var username=$.jStorage.get('username');
-	var password=$.jStorage.get('password');					
-    var posturl ="http://www.zgltong.com/api/mobile.php?act=loginusr&mode=test&user="+username+"&password="+password;
+	var username=$.jStorage.get('mytel');
+	var posturl ="http://www.zgltong.com/api/mobile.php?act=logintel&mode=test&tel="+username;
     var xhr = new XMLHttpRequest();
 	xhr.open("GET", posturl, true);
 	xhr.onreadystatechange = function() {
   		 if (xhr.readyState==4 && xhr.status==200){
     		var resultfromphp = xhr.responseText;
-    		//alert (resultfromphp);
     		var objData = jQuery.parseJSON(resultfromphp);
-    		//alert (objData.rsgmsg);
     		if (objData.rsgcode=='000'){
     		    document.getElementById('username').innerHTML=objData.user_name;
-    		    document.getElementById('rankname').innerHTML=objData.rank_name;
-    		    
+    		    //document.getElementById('rankname').innerHTML=objData.rank_name;
+				var jfstrc=objData.jif+"      合："+objData.jif/100+'元';
+				
+				document.getElementById('jfstr').innerHTML=jfstrc;
+
 				$.jStorage.set('mobilephone', objData.mobile_phone , {TTL: 2880000000}); 
 				
 				var sverification=objData.verification;
@@ -51,19 +51,10 @@ function makelist(){
 				
 				sphone+=ss.substr(0,3)+"****"+ss.substr(7,4)+"&nbsp;&nbsp;&nbsp;";
 
-				if (sverification=="1")
-				{
-					sphone+="<span style=\"color: red;\">已验证</span>"
-				}
-				else
-				{
-					sphone+="<a href=\"checktel.html\"  rel=\"external\"  class=\"btn btn-danger\">验证手机</a>"
-				}
-
 				document.getElementById('mobilephone').innerHTML=sphone;
 
-				var strgysa=$.jStorage.get('gysa');
-				var stryqm=$.jStorage.get('yqm');
+				var strgysa=objData.gysa;
+				var stryqm=objData.yqm;
 
 				if ( strgysa =="1")
 				{
@@ -117,15 +108,20 @@ function makelist(){
 	    			<th style="width:30%">用户名：</th>
 	    			<td><div id="username"></div></td>
 	    		</tr>
-	    		<tr>
-	    			<th>会员：</th>
-	    			<td><div id="rankname"></div></td>
-	    		</tr>
-	    		
 				<tr>
 	    			<th>手机号：</th>
 	    			<td><div id="mobilephone"></div></td>
 	    		</tr>
+	    		<tr>
+	    			<th>轮通币：</th>
+	    			<td><div id="jfstr"></div></td>
+	    		</tr>
+				<!--<tr>
+	    			<th>会员：</th>
+	    			<td><div id="rankname"></div></td>
+	    		</tr>-->
+
+	    		
 			</table>
 
 
@@ -133,15 +129,17 @@ function makelist(){
 
 
 		    <div class="list-group public_section">
-		      <a href="modify-user.html" class="list-group-item href_info">修改手机号</a>
-			  <a href="changepwd1.html"  rel="external"  class="list-group-item href_info">修改密码</a>
-			  <br>
 			  <a href="mmember-orders.html"  rel="external"  class="list-group-item href_info">我的订单</a>
 			  <a href="listcollection.html"  rel="external"  class="list-group-item href_info">我的收藏</a>
               <a href="myaddress.html"  rel="external"  class="list-group-item href_info">我的地址</a>
 			</div>
 
 		    <div class="list-group public_section" id="mysale"></div>
+
+		    <div class="list-group public_section">
+		      <a href="modify-user.html" class="list-group-item href_info">修改手机号</a>
+			  <a href="changepwd1.html"  rel="external"  class="list-group-item href_info">修改密码</a>
+			</div>
 
 			<p>
 		    	<a class="btn btn-danger btn-block" href="javascript:void(0)" data-toggle="modal" data-target="#logout_dialog">注销当前账户</a>
@@ -212,7 +210,6 @@ $('#logout_btn').click(function(){
 	$.jStorage.set('gysa', null , {TTL: 2880000000}); 
 	$.jStorage.set('yqm', null, {TTL: 2880000000}); 
 	$.jStorage.set('ischeck', null, {TTL: 2880000000}); 
-
     location.href='login.html';
 });
 

@@ -59,10 +59,9 @@ function genOrder(){
 			html+='<p>收货姓名：'+objData.order.consignee+'</p>';
 		    html+='<p>收货地址：'+objData.order.address+'</p>';
 		    html+='<p>手机号码：'+objData.order.mobile+'</p>';
-		    html+='<p>邮编号码：'+objData.order.zipcode+'</p>';
 		    document.getElementById('shipHtml').innerHTML=html; 
 		       
-		    document.getElementById('memo').innerHTML="<p>"+objData.order.postscript+"</p>"; 
+		    document.getElementById('memo').innerHTML='<input type=\"text\" id=\"editmemo\" name=\"editmemo\" class=\"form-control\" value=\"'+objData.order.postscript+'\">'; 
 			
 			if (objData.goods_list.length>0){
 				html ='';
@@ -222,7 +221,7 @@ function updatecart(newnumber,recid,sorderid,goodsid) {
 	var userid = $.jStorage.get('userid');
 	if (userid==null) { document.location.href="login.html" ;}
 	var urlupdate="http://www.zgltong.com/api/mobile.php?act=changeorder&userid="+userid+"&oid="+sorderid+"&where=update&good_number="+newnumber+"&gid="+goodsid;
-	//alert(urlupdate);
+	alert(urlupdate);
 	var xhr = new XMLHttpRequest();
 	xhr.open("GET", urlupdate, true);
 	xhr.onreadystatechange = function() {
@@ -318,13 +317,13 @@ function showme(){ //测试中间的结果
 		    <h3 class="panel-title">商家留言</h3>
 		  </div>
 		  <div class="panel-body" id="memo"></div>
+		  
 		</div>
 
 
 		<div class="panel panel-default">
 		  <div class="panel-heading">
 			<a class="btn btn-danger btn-block" href="javascript:newchange()">修改订单</a>
-			<!--<a class="btn btn-info mybtn" id="plus_product" onclick="showme()">测试</a>-->
 		  </div>
 		 
 		</div>
