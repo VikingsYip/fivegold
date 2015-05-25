@@ -27,7 +27,7 @@ $(document).ready(function() {
 
 function makelist(){
 	var username=$.jStorage.get('mytel');
-	var posturl ="http://www.zgltong.com/api/mobile.php?act=logintel&mode=test&tel="+username;
+	var posturl ="http://www.zgltong.com/api/mobile2.php?act=logintel&mode=test&tel="+username;
     var xhr = new XMLHttpRequest();
 	xhr.open("GET", posturl, true);
 	xhr.onreadystatechange = function() {

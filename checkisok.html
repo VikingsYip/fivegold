@@ -118,7 +118,7 @@ $(document).ready(function() {
 
 function get_mb_code(){
 	var myteling=$('#mytel').attr("value");
-	var posturl ="http://www.zgltong.com/api/mobile.php?act=checkservice&mode=test&user_tel="+myteling;
+	var posturl ="http://www.zgltong.com/api/mobile2.php?act=checkservice&mode=test&user_tel="+myteling;
 	var xhr = new XMLHttpRequest();
 	xhr.open("GET", posturl, true);
 	xhr.onreadystatechange = function() {

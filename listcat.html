@@ -19,7 +19,7 @@
 
 function checkappversion() {
 	var xhr = new XMLHttpRequest();
-	xhr.open("GET", "http://www.zgltong.com/api/mobile.php?act=appversion&andios=1&version=1.01", true);
+	xhr.open("GET", "http://www.zgltong.com/api/mobile2.php?act=appversion&andios=1&version=1.01", true);
 	xhr.onreadystatechange = function() {
   		 if (xhr.readyState==4 && xhr.status==200){
     		var resultfromphp = xhr.responseText;
@@ -39,7 +39,7 @@ function makeList() {
 	
 	checkappversion();
 
-	var sqlstr = "http://www.zgltong.com/api/mobile.php?act=listallcat"; //B级的查询
+	var sqlstr = "http://www.zgltong.com/api/mobile2.php?act=listallcat"; //B级的查询
 
 	//先判断用户的类型
 	var userid = $.jStorage.get('userid');//403
@@ -94,7 +94,7 @@ function makeList() {
 function makeseList(mycatid) {
 	$.jStorage.set('mycatid', mycatid , {TTL: 2880000000}); //取当前的点击的catid
 	var strgysa=$.jStorage.get('gysa');
-	var findsql="http://www.zgltong.com/api/mobile.php?act=listallcats&id="+mycatid;
+	var findsql="http://www.zgltong.com/api/mobile2.php?act=listallcats&id="+mycatid;
 	if (strgysa=='0')
 	{
 		findsql+='&is_show=1'; //限制C类查看

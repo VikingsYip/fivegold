@@ -88,7 +88,7 @@ function get_mb_code(){
     } 
 	else 
 	{
-		var posturl ="http://www.zgltong.com/api/mobile.php?act=bindingcode3&mode=test&user_tel="+myteling;
+		var posturl ="http://www.zgltong.com/api/mobile2.php?act=bindingcode3&mode=test&user_tel="+myteling;
 		var xhr = new XMLHttpRequest();
 		xhr.open("GET", posturl, true);
 		xhr.onreadystatechange = function() {
@@ -122,7 +122,7 @@ function adduser(){
 		var tel=encodeURIComponent(document.getElementById('tel').value);
 		var yqm=encodeURIComponent(document.getElementById('yqm').value);
 		var salename=encodeURIComponent(document.getElementById('salename').value);
-		var posturl ="http://www.zgltong.com/api/mobile.php?act=users&username="+tel+"&password="+password+"&tel="+tel+"&mode=test&yqm="+yqm+"&salename="+salename;
+		var posturl ="http://www.zgltong.com/api/mobile2.php?act=users&username="+tel+"&password="+password+"&tel="+tel+"&mode=test&yqm="+yqm+"&salename="+salename;
 		var xhr = new XMLHttpRequest();
 		xhr.open("GET", posturl, true);
 		xhr.onreadystatechange = function() {

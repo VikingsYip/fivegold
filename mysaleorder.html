@@ -23,7 +23,7 @@ function makeList() {
 	var userid = $.jStorage.get('userid');
 	if (userid==null) {  document.location.href="login.html"; }
 	var xhr = new XMLHttpRequest();
-	xhr.open("GET", "http://www.zgltong.com/api/mobile.php?act=subordinateorder&mode=test&user_id="+userid, true);
+	xhr.open("GET", "http://www.zgltong.com/api/mobile2.php?act=subordinateorder&mode=test&user_id="+userid, true);
 	xhr.onreadystatechange = function() {
 	if (xhr.readyState==4 && xhr.status==200){
 		var resultfromphp = xhr.responseText;
