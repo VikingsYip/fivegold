@@ -88,7 +88,7 @@ function get_mb_code(){
     } 
 	else 
 	{
-		var posturl ="http://www.zgltong.com/api/mobile2.php?act=bindingcode3&mode=test&user_tel="+myteling;
+		var posturl ="http://www.zgltong.com/api/mobile.php?act=bindingcode3&mode=test&user_tel="+myteling;
 		var xhr = new XMLHttpRequest();
 		xhr.open("GET", posturl, true);
 		xhr.onreadystatechange = function() {
@@ -114,15 +114,17 @@ function get_mb_code(){
 }
 
 function adduser(){
-	var mycodes=encodeURIComponent(document.getElementById('mobile_code').value);
-	var rightcode=$('#mychenckcode').attr("value");
-	if (rightcode==mycodes)
-	{
-		var password='zgltong';
+	//var mycodes=encodeURIComponent(document.getElementById('mobile_code').value);
+	//var rightcode=$('#mychenckcode').attr("value");
+	//if (rightcode==mycodes)
+	//{
+		var password='000000'; //默认密码
 		var tel=encodeURIComponent(document.getElementById('tel').value);
 		var yqm=encodeURIComponent(document.getElementById('yqm').value);
-		var salename=encodeURIComponent(document.getElementById('salename').value);
-		var posturl ="http://www.zgltong.com/api/mobile2.php?act=users&username="+tel+"&password="+password+"&tel="+tel+"&mode=test&yqm="+yqm+"&salename="+salename;
+		var uname=encodeURIComponent(document.getElementById('uname').value);
+		//var salename=encodeURIComponent(document.getElementById('salename').value);
+		var salename='01';
+		var posturl ="http://www.zgltong.com/api/mobile.php?act=users&username="+uname+"&password="+password+"&tel="+tel+"&mode=test&yqm="+yqm+"&salename="+salename;
 		var xhr = new XMLHttpRequest();
 		xhr.open("GET", posturl, true);
 		xhr.onreadystatechange = function() {
@@ -147,11 +149,11 @@ function adduser(){
 		};
 		xhr.send();
 
-	}
-	else
-	{
-		myshow('验证码输入错误！');
-	}
+	//}
+	//else
+	//{
+	//	myshow('验证码输入错误！');
+	//}
 
 }
 
@@ -175,18 +177,28 @@ function myshow(msg){
 <!-- content -->
 <div class="user-ui-content">
 	<form data-role="form"  id="register_form" action="javascript:adduser();" method="post">
+		<!--用户名-->
+		<section class="form-group">
+			<label for="uname">用户名：</label>
+			<input class="form-control" type="text" data-clear-btn="true" name="uname" id="uname" value="" placeholder="请输入用户名(必填)">
+		</section>
+		<!--用户名-->
+
+		
 		<section class="form-group">
 			<label for="tel"><span style="color:red">*</span>手机：</label>
 			<input class="form-control" type="text" data-clear-btn="true" name="tel" id="tel" value="" placeholder="请输入手机(必填)" maxlength="11" onkeyup="telonchange(this)">
 				<p class="alert alert-danger user-ui-warning-text"><a data-inline="true" data-icon="alert" data-role="button" data-iconpos="notext" data-theme="b"></a><span class="msg">请输入手机</span></p>
 		</section>
 
+		<!--
 		<label><a class="btn btn-info btn-xs" onclick="get_mb_code()">点击，获取手机注册码，进行注册帐号</a></label></section>
 
 		<section class="form-group">
 			<label for="password">输入短信注册码</label>
 			<input type="text" class="form-control" name="mobile_code" id="mobile_code" placeholder="请输入验证码" value=""  tabindex="2" maxlength="11">
 		</section>
+		-->
 
 		<!--推荐码-->
 		<section class="form-group">
@@ -196,10 +208,10 @@ function myshow(msg){
 		<!--推荐码-->
 
 		<!--业务员码-->
-		<section class="form-group">
+		<!--<section class="form-group">
 			<label for="salename">业务员编码：</label>
 			<input class="form-control" type="text" data-clear-btn="true" name="salename" id="salename" value="" placeholder="请输入业务员代码(可选)">
-		</section>
+		</section>-->
 		<!--推荐码-->
 
 		<section class="form-group">

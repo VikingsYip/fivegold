@@ -88,7 +88,7 @@ function gonext(){
 		document.getElementById('findpwd_dialog').style.display ='block';
 		setTimeout("document.getElementById('findpwd_dialog').style.display ='none'",800);
 	}else{
-		var posturl ="http://www.zgltong.com/api/mobile2.php?act=tofindthepwd&mode=test&username="+myloginname;
+		var posturl ="http://www.zgltong.com/api/mobile.php?act=tofindthepwd&mode=test&username="+myloginname;
 		var xhr = new XMLHttpRequest();
 		xhr.open("GET", posturl, true);
 		xhr.onreadystatechange = function() {

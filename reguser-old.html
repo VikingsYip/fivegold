@@ -80,7 +80,7 @@ function adduser(){
 	var password_again=encodeURIComponent(document.getElementById('password_again').value);
 	var tel=encodeURIComponent(document.getElementById('tel').value);
 	var yqm=encodeURIComponent(document.getElementById('yqm').value);
-	var posturl ="http://www.zgltong.com/api/mobile2.php?act=users&username="+uname+"&password="+password+"&tel="+tel+"&mode=test&yqm="+yqm;
+	var posturl ="http://www.zgltong.com/api/mobile.php?act=users&username="+uname+"&password="+password+"&tel="+tel+"&mode=test&yqm="+yqm;
 	//alert(posturl);
 	var xhr = new XMLHttpRequest();
 	xhr.open("GET", posturl, true);

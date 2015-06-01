@@ -26,7 +26,7 @@ var shopid = request('goodsid') ;
 function makeList() {
 	 // alert(shopid+specval.label+);
 	var xhr = new XMLHttpRequest();
-	xhr.open("POST", "http://www.zgltong.com/api/mobile2.php?act=goodsdesc&goods_id="+shopid, true);
+	xhr.open("POST", "http://www.zgltong.com/api/mobile.php?act=goodsdesc&goods_id="+shopid, true);
 	xhr.onreadystatechange = function() {
   		 if (xhr.readyState==4 && xhr.status==200){
     		var resultfromphp = xhr.responseText;

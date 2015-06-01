@@ -145,7 +145,7 @@ function mody(){
 		}
     var mytel=$('#tel').val();
 	var useid=$.jStorage.get('userid');
-	var posturl ="http://www.zgltong.com/api/mobile2.php?act=information&mode=test&user_id="+useid+"&tel="+mytel+"&email=fionyxia@qq.com";
+	var posturl ="http://www.zgltong.com/api/mobile.php?act=information&mode=test&user_id="+useid+"&tel="+mytel+"&email=fionyxia@qq.com";
 	//alert(posturl);
 	var xhr = new XMLHttpRequest();
 	xhr.open("GET", posturl, true);

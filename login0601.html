@@ -53,7 +53,7 @@ $(document).ready(function() {
 
 function isPhone(aPhone) {  
     var bValidate = RegExp(/^(0|86|17951)?(13[0-9]|15[012356789]|18[0-9]|14[57])[0-9]{8}$/).test(aPhone);  
-    if (bValidate) {  return true;  }    else  { return true;  }
+    if (bValidate) {  return true;  }  else  { return false;  }
 }  
 
 
@@ -69,7 +69,7 @@ function get_mb_code(){
     } 
 	else 
 	{
-		var posturl ="http://www.zgltong.com/api/mobile.php?act=bindingcode&mode=test&user_tel="+myteling;
+		var posturl ="http://www.zgltong.com/api/mobile.php?act=bindingcode2&mode=test&user_tel="+myteling;
 		var xhr = new XMLHttpRequest();
 		xhr.open("GET", posturl, true);
 		xhr.onreadystatechange = function() {
@@ -90,12 +90,18 @@ function get_mb_code(){
 }
 
 function newlogin(){
+	var username=encodeURIComponent(document.getElementById('username').value);	 //手机号
+	if (isPhone(username)) {}
+	else {
+		document.getElementById('alertmsg-0').innerHTML="验证码输入错误！";
+		document.getElementById('checkcode_dialog').style.display ='block';
+		setTimeout("document.getElementById('checkcode_dialog').style.display ='none'",800);
+	}
 	var mycodes=encodeURIComponent(document.getElementById('mobile_code').value);
 	var rightcode=$('#mychenckcode').attr("value");
 	if (rightcode==mycodes)
 	{
-		var username=encodeURIComponent(document.getElementById('username').value);	
-		var posturl ="http://www.zgltong.com/api/mobile.php?act=logintel&mode=test&tel=="+username;
+		var posturl ="http://www.zgltong.com/api/mobile.php?act=logintel&mode=test&tel="+username;
 		var xhr = new XMLHttpRequest();
 		xhr.open("GET", posturl, true);
 		xhr.onreadystatechange = function() {
@@ -105,10 +111,10 @@ function newlogin(){
 				$('#logout_dialog').show();
 				document.getElementById('alertmsg').innerHTML=objData.rsgmsg;
 				if (objData.rsgcode=='000'){
-					  $.jStorage.set('userid', objData.userid , {TTL: 2880000000}); 
-					  $.jStorage.set('username', username , {TTL: 2880000000});
-					  $.jStorage.set('password', rightcode , {TTL: 2880000000}); //假的密码
-					  alert(objData.gysa);
+					  $.jStorage.set('userid', objData.userid , {TTL: 2880000000});  //用户id号
+					  $.jStorage.set('username', objData.user_name , {TTL: 2880000000});//用户名名称
+					  $.jStorage.set('mytel', objData.mobile_phone , {TTL: 2880000000});//用户名名称
+					  $.jStorage.set('password', '000000' , {TTL: 2880000000}); //假的密码
 					  $.jStorage.set('gysa', objData.gysa , {TTL: 2880000000}); //二级供应商
 					  $.jStorage.set('yqm', objData.yqm , {TTL: 2880000000});   //验证码
 					  $.jStorage.set('xversion', '1' , {TTL: 2880000000});   //版本可用否
@@ -137,7 +143,7 @@ function confirm(){
 </head>
 <body>
 
-<input type="hidden" name="mychenckcode" id="mychenckcode" value=""/>
+<input type="hidden" name="mychenckcode" id="mychenckcode" value="qwer"/>
 
 <!-- page -->
 <div class="user-ui-page">
@@ -209,7 +215,7 @@ function confirm(){
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
         <h4 class="modal-title" id="myModalLabel">提示</h4>
       </div>
-      <div class="modal-body" id="alertmsg-0"></div>
+      <div class="modal-body" id="alertmsg-0">000</div>
     </div>
   </div>
 </div>

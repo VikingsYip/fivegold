@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>轮通惠-产品列表</title>
+	<meta name="keywords" content="">
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<meta content="telephone=no" name="format-detection" />
+	<link rel="stylesheet" href="css/bootstrap.min.css">
+	<script src="css/jquery-1.10.2.min.js"></script>
+	<script src="css/jquery.cookie.js"></script>
+	<script src="css/bootstrap.min.js"></script>
+	<link rel="stylesheet" href="css/idangerous.swiper.css">
+	<script src="css/idangerous.swiper.min.js"></script>
+	<link href="css/base.mobile.css" rel="stylesheet" type="text/css" media="screen, projection" />	
+	<link href="fivegold.css" rel="stylesheet" type="text/css"/>
+	<script type="text/javascript" src="fivegold.js"></script>
+ 
+    <script>	
+function reorder(ordertype){
+  makeList(ordertype);
+ }
+ var sorting = 1;
+function makeList(ordertype) {
+    var catid = request('catid');
+	if (ordertype==null)   ordertype="colligate";
+	var xhr = new XMLHttpRequest();
+	xhr.open("GET", "http://www.zgltong.com/api/mobile.php?act=listcatgoods&cat_id="+catid+"&intro="+ordertype+"&sorting="+sorting, true);
+		if (sorting == 1)
+	    sorting =2;
+	else
+	    sorting =1;
+	xhr.onreadystatechange = function() {
+  		 if (xhr.readyState==4 && xhr.status==200){
+    		var resultfromphp = xhr.responseText;
+			var html ='';
+      		var objData = jQuery.parseJSON(resultfromphp);
+			$.each(objData.listallcat, function (index, term) {
+			html+="<div class=\"center-block goods-item\"><a class=\"href_info\" href=\"goods.html?goodsid="+term.goods_id+"\"><img style=\"margin-right:5px;\" class=\"img-rounded pull-left\" src=\""+term.goods_img+"\" alt=\""+term.goods_name+"\" width=\"100\" height=\"100\"/><div class=\"clearfix\"><p class=\"product_name\">"+term.goods_name+"</p><p class=\"product_name\">所有的参数</p><div class=\"product_price clearfix\" style=\"line-height:30px;\"><span style=\"text-decoration:line-through;color:#c2ccd0;\">￥"+term.market_price+"</span><span style=\"font-size:16px;color:red\">￥"+term.shop_price+"</span></div></div></a></div>";
+			});
+			
+			if (html=='')
+			{
+				html='<section style=\"text-align:center;\"><p style=\"margin:30px 0px;\">暂无商品...<p></section>';
+			}
+
+			document.getElementById('catHtml').innerHTML=html;
+			 
+  		}
+	};
+	xhr.send();
+	
+}
+
+$(document).ready(function() {
+	 makeList('colligate');
+});
+
+function postfind(){
+	var goodsname=document.getElementById('goodsname').value;
+	document.location.href="findgoods.html?goodsname="+encodeURIComponent(goodsname);
+}
+
+</script>
+</head>
+<body>
+<!-- header -->
+<div class="user-ui-header clearfix">
+	<a class="left-bar" href="listcat.html">
+		<span class="glyphicon glyphicon-chevron-left"></span>
+	</a>
+	<span>查询结果</span>
+	<a class="right-bar" href="checkcart.html">
+		<span class="glyphicon glyphicon-shopping-cart"></span>
+	</a>
+</div>
+<!-- /header -->
+
+<!-- search end -->	
+	<div class="dp-main" style="padding-top:70px">
+	<div class="container">
+<style>
+#mytop1 th {text-align:center;border: 1px solid #ffffff; }
+</style>
+		<div id="mytop1">
+		<table id="order_list" class="table table-striped">
+		<tbody>
+			<tr>
+				<th> <a href="javascript:reorder('sales');">销量</a></th>
+				<th><a href="javascript:reorder('price');">价格</a></th>
+				<th><a href="javascript:reorder('colligate');">最新</a></th>
+			</tr>
+		</tbody>
+		</table>
+        </div>
+ <!--产品 begin-->
+ <div id ="catHtml"></div>
+<!--产品 end-->
+
+		
+
+	</div>
+</div>
+<!-- /content -->
+
+<div id="dp_footer" class="dp-footer	">
+		<nav class="navbar navbar-default navbar-fixed-bottom" role="navigation">
+		  <div class="container dp-menu-box">
+		    <a class="pull-left menu-btn" href="go.html">
+		    	<div class="menu-img glyphicon glyphicon-home"></div>
+		    	<div>首页</div>
+		    </a>
+		    <a class="pull-left menu-btn"  style="color:red"  href="listcat.html">
+		    	<div class="menu-img glyphicon glyphicon-th-large"></div>
+		    	<div>分类</div>
+		    </a>
+		    <a class="pull-left menu-btn" href="usercenter.html">
+		    	<div class="menu-img glyphicon glyphicon-user"></div>
+		    	<div>我的</div>
+		    </a>
+		    <a class="pull-left menu-btn" href="gencart.html">
+		    	<div class="menu-img glyphicon glyphicon-shopping-cart"></div>
+		    	<div>购物车</div>
+		    </a>
+		    <a class="pull-left menu-btn" href="mmember-orders.html">
+		    	<div class="menu-img glyphicon glyphicon-th-list"></div>
+		    	<div>订单</div>
+		    </a>
+		  </div>
+		</nav>
+</div>
+</body>
+</html>

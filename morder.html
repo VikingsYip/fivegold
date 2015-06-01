@@ -30,7 +30,7 @@ function genOrder(){
         document.location.href="login.html";
 	var orderid = request('orderid');
 	var xhr = new XMLHttpRequest();
-	xhr.open("GET", "http://www.zgltong.com/api/mobile2.php?act=mysaledesc&user_id="+userid+"&order_id="+orderid, true);
+	xhr.open("GET", "http://www.zgltong.com/api/mobile.php?act=mysaledesc&user_id="+userid+"&order_id="+orderid, true);
 	xhr.onreadystatechange = function() {
   		 if (xhr.readyState==4 && xhr.status==200){
     		var resultfromphp = xhr.responseText;

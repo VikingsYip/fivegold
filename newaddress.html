@@ -88,7 +88,7 @@ function newaddress(){
 	myaddress+=mm;
 	var district=m;//区
     address=myaddress+address;
-	var posturl ="http://www.zgltong.com/api/mobile2.php?act=newaddress&user_id="+userid+"&country=0&province="+province+"&city="+city+"&district="+district+"&address="+address+"&consignee="+consignee+"&email="+email+"&tel="+tel+"&mobile="+mobile+"&zipcode="+zipcode+"&mode=test&default="+defaultval;
+	var posturl ="http://www.zgltong.com/api/mobile.php?act=newaddress&user_id="+userid+"&country=0&province="+province+"&city="+city+"&district="+district+"&address="+address+"&consignee="+consignee+"&email="+email+"&tel="+tel+"&mobile="+mobile+"&zipcode="+zipcode+"&mode=test&default="+defaultval;
 	//alert(posturl);
 	var xhr = new XMLHttpRequest();
 	xhr.open("GET", posturl, true);
@@ -106,7 +106,7 @@ function newaddress(){
 
 function makeselect1List() {
 	var xhr = new XMLHttpRequest();
-	xhr.open("POST", "http://www.zgltong.com/api/mobile2.php?act=regions", true);
+	xhr.open("POST", "http://www.zgltong.com/api/mobile.php?act=regions", true);
 	xhr.onreadystatechange = function() {
   		 if (xhr.readyState==4 && xhr.status==200){
     		var resultfromphp = xhr.responseText;
@@ -124,7 +124,7 @@ function makeselect1List() {
 
 function makeselect2List(sid) {
 	var xhr = new XMLHttpRequest();
-	xhr.open("POST", "http://www.zgltong.com/api/mobile2.php?act=regions&region_id="+sid, true);
+	xhr.open("POST", "http://www.zgltong.com/api/mobile.php?act=regions&region_id="+sid, true);
 	xhr.onreadystatechange = function() {
   		 if (xhr.readyState==4 && xhr.status==200){
     		var resultfromphp = xhr.responseText;
@@ -144,7 +144,7 @@ function makeselect2List(sid) {
 
 function makeselect3List(sid) {
 	var xhr = new XMLHttpRequest();
-	xhr.open("POST", "http://www.zgltong.com/api/mobile2.php?act=regions&region_id="+sid, true);
+	xhr.open("POST", "http://www.zgltong.com/api/mobile.php?act=regions&region_id="+sid, true);
 	xhr.onreadystatechange = function() {
   		 if (xhr.readyState==4 && xhr.status==200){
     		var resultfromphp = xhr.responseText;

@@ -43,7 +43,7 @@ function genOrder(){
 	var orderid = request('orderid');
 	$("#ordersid").attr("value",orderid); 
 	var xhr = new XMLHttpRequest();
-	xhr.open("GET", "http://www.zgltong.com/api/mobile2.php?act=mysaledesc&user_id="+userid+"&order_id="+orderid, true);
+	xhr.open("GET", "http://www.zgltong.com/api/mobile.php?act=mysaledesc&user_id="+userid+"&order_id="+orderid, true);
 	xhr.onreadystatechange = function() {
   		 if (xhr.readyState==4 && xhr.status==200){
     		var resultfromphp = xhr.responseText;
@@ -114,7 +114,7 @@ function genOrder(){
 function traceorder(){
 	var orderid = request('orderid');
 	var xhr = new XMLHttpRequest();
-	xhr.open("GET", "http://www.zgltong.com/api/mobile2.php?act=mysaletrace&order_id="+orderid, true);
+	xhr.open("GET", "http://www.zgltong.com/api/mobile.php?act=mysaletrace&order_id="+orderid, true);
 	xhr.onreadystatechange = function() {
   		 if (xhr.readyState==4 && xhr.status==200){
     		var resultfromphp = xhr.responseText;
@@ -141,7 +141,7 @@ $(document).ready(function() {
 
 function delonegoods(sorderid,recid){
     var uuserid = $.jStorage.get('userid');
-	var strurl="http://www.zgltong.com/api/mobile2.php?act=changeorder&userid="+uuserid+"&oid="+sorderid+"&gid="+recid+"&where=del";
+	var strurl="http://www.zgltong.com/api/mobile.php?act=changeorder&userid="+uuserid+"&oid="+sorderid+"&gid="+recid+"&where=del";
     var xhr = new XMLHttpRequest();
 	xhr.open("GET",strurl , true);
 	xhr.onreadystatechange = function() {
@@ -220,7 +220,7 @@ function updatecart(newnumber,recid,sorderid,goodsid) {
 
 	var userid = $.jStorage.get('userid');
 	if (userid==null) { document.location.href="login.html" ;}
-	var urlupdate="http://www.zgltong.com/api/mobile2.php?act=changeorder&userid="+userid+"&oid="+sorderid+"&where=update&good_number="+newnumber+"&gid="+goodsid;
+	var urlupdate="http://www.zgltong.com/api/mobile.php?act=changeorder&userid="+userid+"&oid="+sorderid+"&where=update&good_number="+newnumber+"&gid="+goodsid;
 	alert(urlupdate);
 	var xhr = new XMLHttpRequest();
 	xhr.open("GET", urlupdate, true);
@@ -255,7 +255,7 @@ function newchange() {
 	if (userid==null) { document.location.href="login.html";}
 	var newnum=$('#qtyeditcount').attr("value");   
 	var ordersid=$('#ordersid').attr("value");
-	var posturl = "http://www.zgltong.com/api/mobile2.php?act=changeordernew&user_id="+userid+"&new_number="+newnum+"&oid="+ordersid;
+	var posturl = "http://www.zgltong.com/api/mobile.php?act=changeordernew&user_id="+userid+"&new_number="+newnum+"&oid="+ordersid;
 	var xhr = new XMLHttpRequest();
 	xhr.open("GET", posturl, true);
 	xhr.onreadystatechange = function() {

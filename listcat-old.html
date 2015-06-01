@@ -18,7 +18,7 @@
 <script>	
 function makeList() {
 	var xhr = new XMLHttpRequest();
-	xhr.open("GET", "http://www.zgltong.com/api/mobile2.php?act=listallcat", true);
+	xhr.open("GET", "http://www.zgltong.com/api/mobile.php?act=listallcat", true);
 	xhr.onreadystatechange = function() {
   		 if (xhr.readyState==4 && xhr.status==200){
     		var resultfromphp = xhr.responseText;
@@ -49,7 +49,7 @@ function makeList() {
 function makeseList(mycatid) {
 
 	var xhr = new XMLHttpRequest();
-	xhr.open("GET", "http://www.zgltong.com/api/mobile2.php?act=listallcats&id="+mycatid, true);
+	xhr.open("GET", "http://www.zgltong.com/api/mobile.php?act=listallcats&id="+mycatid, true);
 	xhr.onreadystatechange = function() {
 		if (xhr.readyState==4 && xhr.status==200){
     		var resultfromphp = xhr.responseText;

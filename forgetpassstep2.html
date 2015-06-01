@@ -160,7 +160,7 @@ function gofinish(){
 	if (mynewpwd==mynewpwd1)
 	{
 		var suserid = $.jStorage.get('userid');
-		var posturl ="http://www.zgltong.com/api/mobile2.php?act=editpassword&mode=test&user_id="+suserid+"&new_pwd="+mynewpwd;
+		var posturl ="http://www.zgltong.com/api/mobile.php?act=editpassword&mode=test&user_id="+suserid+"&new_pwd="+mynewpwd;
 		//alert(posturl);
 		var xhr = new XMLHttpRequest();
 		xhr.open("GET", posturl, true);

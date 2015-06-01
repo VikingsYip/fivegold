@@ -27,10 +27,36 @@ function reorder(ordertype){
 var sorting = 1;
 
 function makeList(ordertype) {
-    var goodsname = request('goodsname');
+    
+	var sqlstr = "http://www.zgltong.com/api/mobile.php?act=findgoods&mode=test"; 
+
+	//先判断用户的类型
+	var userid = $.jStorage.get('userid');
+	var isgysa = $.jStorage.get('gysa');  //是否是B类
+	var mytel  = $.jStorage.get('mytel'); 
+
+	if (userid==null) { sqlstr+="&show=02";} //C级
+    else{
+		$.jStorage.set('userid', userid , {TTL: 2880000000}); 
+		$.jStorage.set('gysa', isgysa , {TTL: 2880000000}); //二级供应商
+		$.jStorage.set('mytel', mytel, {TTL: 2880000000});//用户名名称
+		if (isgysa == '0')
+		{
+			sqlstr+="&show=02";  //C级
+		}
+		else if (isgysa == '1')
+		{
+			sqlstr+="&show=01";  //B级
+		}
+	}
+
+	var goodsname = request('goodsname');
 	if (ordertype==null) {  ordertype="colligate"; }
+
+	sqlstr+="&goodsname="+goodsname+"&intro="+ordertype+"&sorting="+sorting;
+
 	var xhr = new XMLHttpRequest();
-	xhr.open("GET", "http://www.zgltong.com/api/mobile2.php?act=findgoods&goodsname="+goodsname+"&intro="+ordertype+"&sorting="+sorting+"&mode=test", true);
+	xhr.open("GET",sqlstr, true);
 	if (sorting == 1)
 	    sorting =2;
 	else
@@ -98,7 +124,7 @@ function orderbyall(){
 	   }
 	}
 	var userid = $.jStorage.get('userid');
-	var strurl="http://www.zgltong.com/api/mobile2.php?act=batchaddtocart&goods_id="+chestr+"&userid="+userid;
+	var strurl="http://www.zgltong.com/api/mobile.php?act=batchaddtocart&goods_id="+chestr+"&userid="+userid;
 	//alert(strurl);
 	var xhr = new XMLHttpRequest();
 	xhr.open("GET", strurl, true);

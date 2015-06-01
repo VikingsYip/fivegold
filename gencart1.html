@@ -23,7 +23,7 @@ function makeList() {
 	var userid = $.jStorage.get('userid');
 	if (userid==null) { document.location.href="login.html" }
 	var xhr = new XMLHttpRequest();
-	xhr.open("GET", "http://www.zgltong.com/api/mobile2.php?act=buylistcart&user_id="+userid, true);
+	xhr.open("GET", "http://www.zgltong.com/api/mobile.php?act=buylistcart&user_id="+userid, true);
 	xhr.onreadystatechange = function() {
   		 if (xhr.readyState==4 && xhr.status==200){
     		var resultfromphp = xhr.responseText;
@@ -70,7 +70,7 @@ function updatecart(newnumber,recid) {
 	var userid = $.jStorage.get('userid');
 	if (userid==null) { document.location.href="login.html" ;}
 	var xhr = new XMLHttpRequest();
-	xhr.open("GET", "http://www.zgltong.com/api/mobile2.php?act=edltbuycart&user_id="+userid+"&new_number="+newnumber+"&rec_id="+recid+"&mode=test", true);
+	xhr.open("GET", "http://www.zgltong.com/api/mobile.php?act=edltbuycart&user_id="+userid+"&new_number="+newnumber+"&rec_id="+recid+"&mode=test", true);
 	xhr.onreadystatechange = function() {
   		 if (xhr.readyState==4 && xhr.status==200){
 			var resultfromphp = xhr.responseText;
@@ -90,7 +90,7 @@ $(document).ready(function() {
 
 function delcart(recid){
     var xhr = new XMLHttpRequest();
-	xhr.open("GET", "http://www.zgltong.com/api/mobile2.php?act=delbuycart&rec_id="+recid, true);
+	xhr.open("GET", "http://www.zgltong.com/api/mobile.php?act=delbuycart&rec_id="+recid, true);
 	xhr.onreadystatechange = function() {
   		 if (xhr.readyState==4 && xhr.status==200){
     		var resultfromphp = xhr.responseText;
@@ -133,7 +133,7 @@ function emptycart() {
 	var userid = $.jStorage.get('userid');
 	if (userid==null) { document.location.href="login.html" ;}
 	var xhr = new XMLHttpRequest();
-	xhr.open("GET", "http://www.zgltong.com/api/mobile2.php?act=emptycart&user_id="+userid, true);
+	xhr.open("GET", "http://www.zgltong.com/api/mobile.php?act=emptycart&user_id="+userid, true);
 	xhr.onreadystatechange = function() {
   		 if (xhr.readyState==4 && xhr.status==200){
     		var resultfromphp = xhr.responseText;
@@ -171,7 +171,7 @@ function updateqty(){  //更新购物车的数量
 	var userid = $.jStorage.get('userid');
 	if (userid==null) { document.location.href="login.html";}
 	var newnum=$('#qtyeditcount').attr("value");   
-	var posturl = "http://www.zgltong.com/api/mobile2.php?act=edltbuycartnew&user_id="+userid+"&new_number="+newnum;
+	var posturl = "http://www.zgltong.com/api/mobile.php?act=edltbuycartnew&user_id="+userid+"&new_number="+newnum;
 	//alert(posturl); 
 	var xhr = new XMLHttpRequest();
 	xhr.open("GET", posturl, true);
@@ -208,7 +208,7 @@ function updateqty00(){  //更新购物车的数量后继续购物
 	var userid = $.jStorage.get('userid');
 	if (userid==null) { document.location.href="login.html";}
 	var newnum=$('#qtyeditcount').attr("value");   
-	var posturl = "http://www.zgltong.com/api/mobile2.php?act=edltbuycartnew&user_id="+userid+"&new_number="+newnum;
+	var posturl = "http://www.zgltong.com/api/mobile.php?act=edltbuycartnew&user_id="+userid+"&new_number="+newnum;
 	//alert(posturl); 
 	var xhr = new XMLHttpRequest();
 	xhr.open("GET", posturl, true);

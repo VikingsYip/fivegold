@@ -22,7 +22,7 @@ function genOrder(){
 	var orderid = request('orderid');
 	$("#ordersid").attr("value",orderid); 
 	var xhr = new XMLHttpRequest();
-	xhr.open("GET", "http://www.zgltong.com/api/mobile2.php?act=mysaledesc&user_id="+userid+"&order_id="+orderid, true);
+	xhr.open("GET", "http://www.zgltong.com/api/mobile.php?act=mysaledesc&user_id="+userid+"&order_id="+orderid, true);
 	xhr.onreadystatechange = function() {
   		 if (xhr.readyState==4 && xhr.status==200){
     		var resultfromphp = xhr.responseText;
@@ -92,7 +92,7 @@ function genOrder(){
 function traceorder(){
 	var orderid = request('orderid');
 	var xhr = new XMLHttpRequest();
-	xhr.open("GET", "http://www.zgltong.com/api/mobile2.php?act=mysaletrace&order_id="+orderid, true);
+	xhr.open("GET", "http://www.zgltong.com/api/mobile.php?act=mysaletrace&order_id="+orderid, true);
 	xhr.onreadystatechange = function() {
   		 if (xhr.readyState==4 && xhr.status==200){
     		var resultfromphp = xhr.responseText;
@@ -250,7 +250,7 @@ $(document).ready(function() {
 $('#cancel_btn').click(function(){
 	var myorder = $('#ordersid').attr("value"); 
 	var user_id=$.jStorage.get('userid');
-	var posturl = "http://www.zgltong.com/api/mobile2.php?act=cancelorder&user_id="+user_id+"&order_id="+myorder;	 
+	var posturl = "http://www.zgltong.com/api/mobile.php?act=cancelorder&user_id="+user_id+"&order_id="+myorder;	 
 	var xhr = new XMLHttpRequest();
 	xhr.open("POST", posturl, true);
 	xhr.onreadystatechange = function() {

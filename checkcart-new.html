@@ -37,7 +37,7 @@ function genOrder(){
 	if (userid==null) { document.location.href="login.html";}
 	var address_id = request('address_id');
 	var xhr = new XMLHttpRequest();
-	xhr.open("GET", "http://www.zgltong.com/api/mobile2.php?act=generateorders&user_id="+userid+"&address_id="+address_id, true);
+	xhr.open("GET", "http://www.zgltong.com/api/mobile.php?act=generateorders&user_id="+userid+"&address_id="+address_id, true);
 	xhr.onreadystatechange = function() {
 		if (xhr.readyState==4 && xhr.status==200){
 			var resultfromphp = xhr.responseText;
@@ -124,7 +124,7 @@ function addOrder(){
     var userid = $.jStorage.get('userid');
     if (userid==null)
         document.location.href="login.html";
-	var posturl="http://www.zgltong.com/api/mobile2.php?act=orderconfirmation&user_id="+userid+"&mode=test&shipping_id="+shippingid+'&pay_id='+paymentid+'&need_inv='+need_inv+'&address_id='+myaddressid+'&postscript='+memo;
+	var posturl="http://www.zgltong.com/api/mobile.php?act=orderconfirmation&user_id="+userid+"&mode=test&shipping_id="+shippingid+'&pay_id='+paymentid+'&need_inv='+need_inv+'&address_id='+myaddressid+'&postscript='+memo;
     var xhr = new XMLHttpRequest();
 	xhr.open("POST", posturl, true);
 	xhr.onreadystatechange = function() {
