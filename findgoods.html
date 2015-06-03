@@ -28,7 +28,7 @@ var sorting = 1;
 
 function makeList(ordertype) {
     
-	var sqlstr = "http://www.zgltong.com/api/mobile.php?act=findgoods&mode=test"; 
+	var sqlstr = "http://www.zgltong.com/api/mobile2.php?act=findgoods&mode=test"; 
 
 	//先判断用户的类型
 	var userid = $.jStorage.get('userid');
@@ -124,7 +124,7 @@ function orderbyall(){
 	   }
 	}
 	var userid = $.jStorage.get('userid');
-	var strurl="http://www.zgltong.com/api/mobile.php?act=batchaddtocart&goods_id="+chestr+"&userid="+userid;
+	var strurl="http://www.zgltong.com/api/mobile2.php?act=batchaddtocart&goods_id="+chestr+"&userid="+userid;
 	//alert(strurl);
 	var xhr = new XMLHttpRequest();
 	xhr.open("GET", strurl, true);

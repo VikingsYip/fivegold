@@ -49,7 +49,7 @@
 function login(){
 	var username=encodeURIComponent(document.getElementById('username').value);	
 	var password=encodeURIComponent(document.getElementById('password').value);						
-    var posturl ="http://www.zgltong.com/api/mobile.php?act=loginusr&mode=test&user="+username+"&password="+password;
+    var posturl ="http://www.zgltong.com/api/mobile2.php?act=loginusr&mode=test&user="+username+"&password="+password;
     var xhr = new XMLHttpRequest();
 	xhr.open("GET", posturl, true);
 	xhr.onreadystatechange = function() {

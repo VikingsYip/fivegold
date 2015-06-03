@@ -69,7 +69,7 @@ function get_mb_code(){
     } 
 	else 
 	{
-		var posturl ="http://www.zgltong.com/api/mobile.php?act=bindingcode2&mode=test&user_tel="+myteling;
+		var posturl ="http://www.zgltong.com/api/mobile2.php?act=bindingcode2&mode=test&user_tel="+myteling;
 		var xhr = new XMLHttpRequest();
 		xhr.open("GET", posturl, true);
 		xhr.onreadystatechange = function() {
@@ -101,7 +101,7 @@ function newlogin(){
 	var rightcode=$('#mychenckcode').attr("value");
 	if (rightcode==mycodes)
 	{
-		var posturl ="http://www.zgltong.com/api/mobile.php?act=logintel&mode=test&tel="+username;
+		var posturl ="http://www.zgltong.com/api/mobile2.php?act=logintel&mode=test&tel="+username;
 		var xhr = new XMLHttpRequest();
 		xhr.open("GET", posturl, true);
 		xhr.onreadystatechange = function() {

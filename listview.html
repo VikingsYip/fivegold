@@ -31,10 +31,10 @@ function makeList(ordertype) {
 	var sqlstr;
 	if (strgysa =="1")
 	{
-		sqlstr="http://www.zgltong.com/api/mobile.php?act=listcatgoods&show=01&cat_id="+catid+"&intro="+ordertype+"&sorting="+sorting;
+		sqlstr="http://www.zgltong.com/api/mobile2.php?act=listcatgoods&show=01&cat_id="+catid+"&intro="+ordertype+"&sorting="+sorting;
 
 	}else{
-		sqlstr="http://www.zgltong.com/api/mobile.php?act=listcatgoods&show=02&cat_id="+catid+"&intro="+ordertype+"&sorting="+sorting;
+		sqlstr="http://www.zgltong.com/api/mobile2.php?act=listcatgoods&show=02&cat_id="+catid+"&intro="+ordertype+"&sorting="+sorting;
 	}
 	var xhr = new XMLHttpRequest();
 	xhr.open("GET",sqlstr , true);
@@ -112,7 +112,7 @@ function orderbyall(){
 	}
     
 	var userid = $.jStorage.get('userid');
-	var strurl="http://www.zgltong.com/api/mobile.php?act=batchaddtocart&goods_id="+chestr+"&userid="+userid;
+	var strurl="http://www.zgltong.com/api/mobile2.php?act=batchaddtocart&goods_id="+chestr+"&userid="+userid;
 	//alert(strurl);
 	var xhr = new XMLHttpRequest();
 	xhr.open("GET", strurl, true);
